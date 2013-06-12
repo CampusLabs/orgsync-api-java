@@ -1,6 +1,6 @@
 package com.orgsync.api;
 
-public class OrgsyncRestClient {
+public class OrgSyncRestClient {
 	
 	private static final String HOST = "https://api.orgsync.com/api";
 	

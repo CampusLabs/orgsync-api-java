@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class OrgsyncRestClientTest {
+public class OrgSyncRestClientTest {
 
 	@Test
 	public void test() {
