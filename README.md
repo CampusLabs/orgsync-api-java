@@ -8,3 +8,7 @@ Java REST client for the OrgSync API
 - **IntelliJ:** read [this](http://blogs.jetbrains.com/idea/2013/04/gradle-improvements-at-121/)
 - **NetBeans:** read [this](http://plugins.netbeans.org/plugin/41776/gradle)
 - Others probably available. Check out the gradle [documentation](http://www.gradle.org/documentation)
+
+## TODO
+
+* Add timeout and retry
