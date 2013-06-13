@@ -4,24 +4,25 @@ import com.orgsync.api.messages.ApiError;
 
 public class ApiResponse<T> {
 
-    private final T result;
-    private final ApiError error;
+	private final T result;
+	private final ApiError error;
 
-    /* pacakge */ApiResponse(final Object result, final ApiError error) {
-        this.result = (T) result;
-        this.error = error;
-    }
+	/* pacakge */ApiResponse(final Object result, final ApiError error) {
+		// FIXME this can't be right...
+		this.result = (T) result;
+		this.error = error;
+	}
 
-    public boolean isSuccess() {
-        return error == null;
-    }
+	public boolean isSuccess() {
+		return error == null;
+	}
 
-    public final T getResult() {
-        return result;
-    }
+	public final T getResult() {
+		return result;
+	}
 
-    public final ApiError getError() {
-        return error;
-    }
+	public final ApiError getError() {
+		return error;
+	}
 
 }

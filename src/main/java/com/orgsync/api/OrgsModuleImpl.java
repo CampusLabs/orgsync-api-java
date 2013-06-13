@@ -2,6 +2,7 @@ package com.orgsync.api;
 
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.messages.Org;
 
 /*package*/class OrgsModuleImpl implements OrgsModule {
@@ -14,7 +15,9 @@ import com.orgsync.api.messages.Org;
 
 	@Override
 	public ApiResponse<List<Org>> getOrgs() {
-		return null;
+		return client.getResponse("/orgs", new TypeToken<List<Org>>() {
+		}.getType());
+
 	}
 
 }
