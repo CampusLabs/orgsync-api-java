@@ -15,6 +15,7 @@ import com.ning.http.client.ListenableFuture;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
+import com.orgsync.api.messages.ApiError;
 
 public class ApiClientImpl implements ApiClient {
 
@@ -109,7 +110,7 @@ public class ApiClientImpl implements ApiClient {
 		Request request = buildRequest(requestParams);
 		try {
 			return client.executeRequest(request,
-					new ResponseCompletionHandler<ApiResponse<T>>());
+					new ResponseCompletionHandler<ApiResponse<T>>(type));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -140,9 +141,22 @@ public class ApiClientImpl implements ApiClient {
 	private class ResponseCompletionHandler<T> extends
 			AsyncCompletionHandler<T> {
 
+		private final Type type;
+
+		public ResponseCompletionHandler(final Type type) {
+			this.type = type;
+		}
+
 		@Override
+		@SuppressWarnings("unchecked")
 		public T onCompleted(final Response response) throws Exception {
-			return null;
+			String body = response.getResponseBody();
+
+			if (response.getStatusCode() == 200) {
+				return (T) ApiResponse.success(gson.fromJson(body, type));
+			}
+
+			return (T) ApiResponse.error(gson.fromJson(body, ApiError.class));
 		}
 
 	}
