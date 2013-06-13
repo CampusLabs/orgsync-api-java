@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.orgsync.api.messages.Org;
 
-public class OrgsModuleImpl implements OrgsModule {
+/*package*/class OrgsModuleImpl implements OrgsModule {
 
 	private final ApiClientImpl client;
 
-	public OrgsModuleImpl(final ApiClientImpl client) {
+	/* package */OrgsModuleImpl(final ApiClientImpl client) {
 		this.client = client;
 	}
 

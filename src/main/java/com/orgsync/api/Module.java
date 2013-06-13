@@ -1,8 +1,7 @@
 package com.orgsync.api;
 
+/*package*/abstract class Module<T> {
 
-public abstract class Module<T> {
-
-	public abstract T get(ApiClientImpl client);
+	/* package */abstract T get(ApiClientImpl client);
 
 }

@@ -1,6 +1,5 @@
 package com.orgsync.api;
 
-
 public final class OrgSync {
 
 	// So you can't instantiate or extend this class accidently
@@ -8,7 +7,7 @@ public final class OrgSync {
 	}
 
 	public static final ApiClient newApiClient(final String apiKey) {
-		return newApiClient(apiKey, ApiClient.DEFAULT_VERSION);
+		return newApiClient(apiKey, ApiClientImpl.DEFAULT_VERSION);
 	}
 
 	public static final ApiClient newApiClient(final String apiKey,

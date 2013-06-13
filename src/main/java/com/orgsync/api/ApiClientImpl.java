@@ -5,6 +5,10 @@ import com.ning.http.client.AsyncHttpClient;
 
 public class ApiClientImpl implements ApiClient {
 
+	public static final String HOST = "https://api.orgsync.com/api/";
+
+	public static final Version DEFAULT_VERSION = Version.V2;
+
 	private final String apiKey;
 
 	private final Version version;
