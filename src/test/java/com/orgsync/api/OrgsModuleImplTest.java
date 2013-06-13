@@ -17,7 +17,8 @@ public class OrgsModuleImplTest {
 	@Test
 	public void testGetOrgs() {
 		module.getOrgs();
-		verify(client).getResponse(eq("/orgs"), any(Type.class));
+		verify(client).getResponse(eq(RequestParams.get("/orgs")),
+				any(Type.class));
 	}
 
 }

@@ -6,13 +6,16 @@ import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 
+import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.AsyncHttpClient;
 
 public class ApiClientImplTest {
 
 	private final String apiKey = "test";
 	private final Version version = ApiClientImpl.DEFAULT_VERSION;
-	private final ApiClientImpl client = new ApiClientImpl(apiKey, version);
+	private final AsyncHttpClient http = mock(AsyncHttpClient.class);
+	private final ApiClientImpl client = new ApiClientImpl(apiKey, version)
+			.setHttpClient(http);
 
 	@Test
 	public void testGetApiKey() throws Exception {
@@ -21,19 +24,12 @@ public class ApiClientImplTest {
 
 	@Test
 	public void testGetClient() throws Exception {
-		AsyncHttpClient http = mock(AsyncHttpClient.class);
-
-		client.setHttpClient(http);
 		assertEquals(http, client.getHttpClient());
 	}
 
 	@Test
 	public void testDestroy() {
-		AsyncHttpClient http = mock(AsyncHttpClient.class);
-
-		client.setHttpClient(http);
 		client.destroy();
-
 		verify(http).close();
 	}
 
@@ -47,6 +43,10 @@ public class ApiClientImplTest {
 
 	@Test
 	public void testGetResponse() throws Exception {
+		String endpoint = "/test";
+		ApiResponse<String> response = client.getResponse(
+				RequestParams.get(endpoint), new TypeToken<String>() {
+				}.getType());
 
 	}
 }

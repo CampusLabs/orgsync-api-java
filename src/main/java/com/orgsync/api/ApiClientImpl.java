@@ -1,15 +1,11 @@
 package com.orgsync.api;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.concurrent.ExecutionException;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.Response;
-import com.orgsync.api.messages.ApiError;
 
 public class ApiClientImpl implements ApiClient {
 
@@ -48,43 +44,43 @@ public class ApiClientImpl implements ApiClient {
 		return module.get(this);
 	}
 
-	/* package */<T> ApiResponse<T> getResponse(final String endpoint,
-			final Type type) {
-		Response result = makeCall(endpoint);
-		String body = null;
-		try {
-			body = result.getResponseBody();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		if (result.getStatusCode() == 200 && body != null) {
-			return ApiResponse.success(gson.fromJson(body, type));
-		} else {
-			return ApiResponse.error(gson.fromJson(body, ApiError.class));
-		}
-	}
-
-	private Response makeCall(final String endpoint) {
-
-		try {
-			String url = toURL(endpoint);
-			System.out.println("Sending request to: " + url);
-			return getHttpClient().prepareGet(url).execute().get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
-	}
+	// /* package */<T> ApiResponse<T> getResponse(final String method,
+	// final String endpoint, final Type type) {
+	// RequestBuilder result = makeCall(endpoint);
+	// String body = null;
+	// try {
+	// body = result.getResponseBody();
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// if (result.getStatusCode() == 200 && body != null) {
+	// return ApiResponse.success(gson.fromJson(body, type));
+	// } else {
+	// return ApiResponse.error(gson.fromJson(body, ApiError.class));
+	// }
+	// }
+	//
+	// private Response makeCall(final String endpoint) {
+	//
+	// try {
+	// String url = toURL(endpoint);
+	// System.out.println("Sending request to: " + url);
+	// return getHttpClient().prepareGet(url).execute().get();
+	// } catch (InterruptedException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (ExecutionException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// return null;
+	// }
 
 	public AsyncHttpClient getHttpClient() {
 		return client;
@@ -97,6 +93,11 @@ public class ApiClientImpl implements ApiClient {
 
 	public String getApiKey() {
 		return apiKey;
+	}
+
+	/* package */<T> ApiResponse<T> getResponse(
+			final RequestParams requestParams, final Type type) {
+		return null;
 	}
 
 	// TODO gots to go...

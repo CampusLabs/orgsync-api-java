@@ -15,8 +15,9 @@ import com.orgsync.api.messages.Org;
 
 	@Override
 	public ApiResponse<List<Org>> getOrgs() {
-		return client.getResponse("/orgs", new TypeToken<List<Org>>() {
-		}.getType());
+		return client.getResponse(RequestParams.get("/orgs"),
+				new TypeToken<List<Org>>() {
+				}.getType());
 	}
 
 }
