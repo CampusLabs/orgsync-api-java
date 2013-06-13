@@ -37,10 +37,13 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.5'
+
+    examplesRuntime group: 'ch.qos.logback', name: 'logback-core', version: '1.0.13'
+    examplesRuntime group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
 }
 
 task(example, dependsOn: 'classes', type: JavaExec) {
     main = 'com.orgsync.api.examples.SimpleRequest'
-    classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath + fileTree(dir: 'lib/')
+    classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath
 }
 
