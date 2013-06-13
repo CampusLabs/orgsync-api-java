@@ -2,35 +2,64 @@ package com.orgsync.api;
 
 import com.orgsync.api.messages.ApiError;
 
-public class ApiResponse<T> {
-
-	private final T result;
-	private final ApiError error;
+public abstract class ApiResponse<T> {
 
 	public static final <T> ApiResponse<T> error(final ApiError error) {
-		return new ApiResponse<T>(null, error);
+		return new FailureResponse<T>(error);
 	}
 
 	@SuppressWarnings("unchecked")
 	public static final <T> ApiResponse<T> success(final Object result) {
-		return new ApiResponse<T>((T) result, null);
+		// The cast is not awesome... but oh well
+		return new SuccessResponse<T>((T) result);
 	}
 
-	private ApiResponse(final T result, final ApiError error) {
-		this.result = result;
-		this.error = error;
+	public abstract boolean isSuccess();
+
+	public T getResult() {
+		return null;
 	}
 
-	public boolean isSuccess() {
-		return error == null;
+	public ApiError getError() {
+		return null;
 	}
 
-	public final T getResult() {
-		return result;
+	private static final class FailureResponse<T> extends ApiResponse<T> {
+		private final ApiError error;
+
+		public FailureResponse(final ApiError error) {
+			super();
+			this.error = error;
+		}
+
+		@Override
+		public boolean isSuccess() {
+			return false;
+		}
+
+		@Override
+		public ApiError getError() {
+			return error;
+		}
 	}
 
-	public final ApiError getError() {
-		return error;
+	private static final class SuccessResponse<T> extends ApiResponse<T> {
+		private final T result;
+
+		public SuccessResponse(final T result) {
+			super();
+			this.result = result;
+		}
+
+		@Override
+		public boolean isSuccess() {
+			return true;
+		}
+
+		@Override
+		public T getResult() {
+			return result;
+		}
 	}
 
 }
