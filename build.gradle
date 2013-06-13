@@ -1,5 +1,16 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
+    }
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'fatjar'
 
 group = 'com.orgsync'
 version = '0.0.1'
@@ -13,6 +24,12 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    examples {
+        compileClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
 dependencies {
     compile group: 'com.ning', name: 'async-http-client', version: '1.7.17'
     compile group: 'com.google.code.gson', name: 'gson', version: '2.2.4'
@@ -22,4 +39,8 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.5'
 }
 
+task(example, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.orgsync.api.examples.SimpleRequest'
+    classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath + fileTree(dir: 'lib/')
+}
 
