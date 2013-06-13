@@ -1,8 +1,5 @@
-package com.orgsync;
+package com.orgsync.api;
 
-import com.orgsync.api.ApiClient;
-import com.orgsync.api.ApiClientImpl;
-import com.orgsync.api.Version;
 
 public final class OrgSync {
 
