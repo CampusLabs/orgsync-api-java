@@ -54,9 +54,9 @@ public class ApiClientImpl implements ApiClient {
 		}
 
 		if (result.getStatusCode() == 200 && body != null) {
-			return new ApiResponse<T>(gson.fromJson(body, type), null);
+			return ApiResponse.success(gson.fromJson(body, type));
 		} else {
-			return new ApiResponse<T>(null, gson.fromJson(body, ApiError.class));
+			return ApiResponse.error(gson.fromJson(body, ApiError.class));
 		}
 	}
 

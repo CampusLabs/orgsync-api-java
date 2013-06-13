@@ -7,9 +7,17 @@ public class ApiResponse<T> {
 	private final T result;
 	private final ApiError error;
 
-	/* pacakge */ApiResponse(final Object result, final ApiError error) {
-		// FIXME this can't be right...
-		this.result = (T) result;
+	public static final <T> ApiResponse<T> error(final ApiError error) {
+		return new ApiResponse<T>(null, error);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static final <T> ApiResponse<T> success(final Object result) {
+		return new ApiResponse<T>((T) result, null);
+	}
+
+	private ApiResponse(final T result, final ApiError error) {
+		this.result = result;
 		this.error = error;
 	}
 
