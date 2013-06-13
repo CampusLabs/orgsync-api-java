@@ -1,7 +1,5 @@
 package com.orgsync.api;
 
-import com.orgsync.api.impl.ApiClientImpl;
-import com.orgsync.api.impl.OrgsModuleImpl;
 
 public final class Modules {
 

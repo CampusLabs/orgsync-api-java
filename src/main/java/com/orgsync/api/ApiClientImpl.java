@@ -1,10 +1,7 @@
-package com.orgsync.api.impl;
+package com.orgsync.api;
 
 import com.google.gson.Gson;
 import com.ning.http.client.AsyncHttpClient;
-import com.orgsync.api.ApiClient;
-import com.orgsync.api.Module;
-import com.orgsync.api.Version;
 
 public class ApiClientImpl implements ApiClient {
 

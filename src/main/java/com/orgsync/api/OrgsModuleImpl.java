@@ -1,9 +1,7 @@
-package com.orgsync.api.impl;
+package com.orgsync.api;
 
 import java.util.List;
 
-import com.orgsync.api.ApiResponse;
-import com.orgsync.api.OrgsModule;
 import com.orgsync.api.messages.Org;
 
 public class OrgsModuleImpl implements OrgsModule {
