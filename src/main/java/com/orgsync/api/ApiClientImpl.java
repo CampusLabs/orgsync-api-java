@@ -74,12 +74,9 @@ public class ApiClientImpl implements ApiClient {
 			return client.executeRequest(request,
 					new ResponseCompletionHandler<ApiResponse<T>>(type));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ApiClientException(
+					"Exception while making http request!", e);
 		}
-
-		// TODO obviously not good
-		return null;
 	}
 
 	private Request buildRequest(final RequestParams requestParams) {
