@@ -17,7 +17,6 @@ import com.orgsync.api.messages.Org;
 	public ApiResponse<List<Org>> getOrgs() {
 		return client.getResponse("/orgs", new TypeToken<List<Org>>() {
 		}.getType());
-
 	}
 
 }
