@@ -2,10 +2,11 @@ package com.orgsync.api;
 
 import java.util.List;
 
+import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.messages.Org;
 
 public interface OrgsModule {
 
-	public ApiResponse<List<Org>> getOrgs();
+	public ListenableFuture<ApiResponse<List<Org>>> getOrgs();
 
 }

@@ -1,11 +1,20 @@
 package com.orgsync.api;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Map;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.ning.http.client.AsyncCompletionHandler;
 import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.FluentStringsMap;
+import com.ning.http.client.ListenableFuture;
+import com.ning.http.client.Request;
+import com.ning.http.client.RequestBuilder;
+import com.ning.http.client.Response;
 
 public class ApiClientImpl implements ApiClient {
 
@@ -95,15 +104,47 @@ public class ApiClientImpl implements ApiClient {
 		return apiKey;
 	}
 
-	/* package */<T> ApiResponse<T> getResponse(
+	/* package */<T> ListenableFuture<ApiResponse<T>> getResponse(
 			final RequestParams requestParams, final Type type) {
+		Request request = buildRequest(requestParams);
+		try {
+			return client.executeRequest(request,
+					new ResponseCompletionHandler<ApiResponse<T>>());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// TODO obviously not good
 		return null;
+	}
+
+	private Request buildRequest(final RequestParams requestParams) {
+		return new RequestBuilder(requestParams.method)
+				.setUrl(toURL(requestParams.endpoint))
+				.setQueryParameters(mergeParams(requestParams.queryParams))
+				.build();
+	}
+
+	private FluentStringsMap mergeParams(
+			final Map<String, Collection<String>> queryParams) {
+		return new FluentStringsMap(queryParams).add("key", apiKey);
 	}
 
 	// TODO gots to go...
 	private String toURL(final String endpoint) {
 		return new StringBuilder().append(HOST).append(version.getPath())
-				.append(endpoint).append("?key=").append(apiKey).toString();
+				.append(endpoint).toString();
+	}
+
+	private class ResponseCompletionHandler<T> extends
+			AsyncCompletionHandler<T> {
+
+		@Override
+		public T onCompleted(final Response response) throws Exception {
+			return null;
+		}
+
 	}
 
 }

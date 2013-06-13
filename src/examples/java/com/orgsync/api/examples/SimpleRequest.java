@@ -1,6 +1,7 @@
 package com.orgsync.api.examples;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import com.orgsync.api.ApiClient;
 import com.orgsync.api.ApiResponse;
@@ -11,13 +12,14 @@ import com.orgsync.api.messages.Org;
 
 public class SimpleRequest {
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws InterruptedException,
+			ExecutionException {
 		ApiClient client = OrgSync
 				.newApiClient("dd6b9d2beb614611c5eb9f56c34b743d1d86f385");
 
 		System.out.println("Requesting orgs");
 		OrgsModule module = client.getModule(Modules.ORGS);
-		ApiResponse<List<Org>> result = module.getOrgs();
+		ApiResponse<List<Org>> result = module.getOrgs().get();
 
 		if (result.isSuccess()) {
 			System.out.println("Recieved following orgs:");

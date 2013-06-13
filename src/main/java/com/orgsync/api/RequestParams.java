@@ -1,25 +1,26 @@
 package com.orgsync.api;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /*package*/class RequestParams {
 
 	static final String GET = "GET";
 	static final String PUT = "PUT";
-	static final Map<String, List<String>> NO_PARAMS = Collections.emptyMap();
+	static final Map<String, Collection<String>> NO_PARAMS = Collections
+			.emptyMap();
 
 	final String method;
 	final String endpoint;
-	final Map<String, List<String>> queryParams;
+	final Map<String, Collection<String>> queryParams;
 
 	final static RequestParams get(final String endpoint) {
 		return new RequestParams(GET, endpoint, NO_PARAMS);
 	}
 
 	RequestParams(final String method, final String endpoint,
-			final Map<String, List<String>> queryParams) {
+			final Map<String, Collection<String>> queryParams) {
 		super();
 		this.method = method;
 		this.endpoint = endpoint;
@@ -34,7 +35,7 @@ import java.util.Map;
 		return endpoint;
 	}
 
-	public final Map<String, List<String>> getQueryParams() {
+	public final Map<String, Collection<String>> getQueryParams() {
 		return queryParams;
 	}
 

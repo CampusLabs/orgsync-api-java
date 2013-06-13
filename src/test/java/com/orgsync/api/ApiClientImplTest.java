@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.ListenableFuture;
 
 public class ApiClientImplTest {
 
@@ -44,7 +45,7 @@ public class ApiClientImplTest {
 	@Test
 	public void testGetResponse() throws Exception {
 		String endpoint = "/test";
-		ApiResponse<String> response = client.getResponse(
+		ListenableFuture<ApiResponse<String>> response = client.getResponse(
 				RequestParams.get(endpoint), new TypeToken<String>() {
 				}.getType());
 
