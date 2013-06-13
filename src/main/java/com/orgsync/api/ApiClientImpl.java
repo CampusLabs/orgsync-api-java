@@ -17,24 +17,26 @@ public class ApiClientImpl implements ApiClient {
 
 	public static final Version DEFAULT_VERSION = Version.V2;
 
+	private static final AsyncHttpClient DEFAULT_CLIENT = new AsyncHttpClient();
+
 	private final String apiKey;
 
 	private final Version version;
 
-	private final AsyncHttpClient client;
+	private AsyncHttpClient client;
 
 	private final Gson gson;
 
 	public ApiClientImpl(final String apiKey, final Version version) {
 		this.apiKey = apiKey;
 		this.version = version;
-		this.client = new AsyncHttpClient();
+		setHttpClient(DEFAULT_CLIENT);
 		this.gson = createGson();
 	}
 
 	@Override
 	public void destroy() {
-		getClient().close();
+		getHttpClient().close();
 	}
 
 	@Override
@@ -65,7 +67,7 @@ public class ApiClientImpl implements ApiClient {
 		try {
 			String url = toURL(endpoint);
 			System.out.println("Sending request to: " + url);
-			return getClient().prepareGet(url).execute().get();
+			return getHttpClient().prepareGet(url).execute().get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -80,8 +82,17 @@ public class ApiClientImpl implements ApiClient {
 		return null;
 	}
 
-	private AsyncHttpClient getClient() {
+	public AsyncHttpClient getHttpClient() {
 		return client;
+	}
+
+	public ApiClientImpl setHttpClient(final AsyncHttpClient client) {
+		this.client = client;
+		return this;
+	}
+
+	public String getApiKey() {
+		return apiKey;
 	}
 
 	private Gson createGson() {
