@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.concurrent.ExecutionException;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
 import com.orgsync.api.messages.ApiError;
@@ -83,7 +85,8 @@ public class ApiClientImpl implements ApiClient {
 	}
 
 	private Gson createGson() {
-		return new Gson();
+		return new GsonBuilder().setFieldNamingPolicy(
+				FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 	}
 
 	// TODO gots to go...
