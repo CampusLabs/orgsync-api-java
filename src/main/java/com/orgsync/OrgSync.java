@@ -6,6 +6,7 @@ import com.orgsync.api.impl.ApiClientImpl;
 
 public final class OrgSync {
 
+	// So you can't instantiate or extend this class accidently
 	private OrgSync() {
 	}
 

@@ -6,4 +6,6 @@ public interface ApiClient {
 
 	public static final Version DEFAULT_VERSION = Version.V2;
 
+	public <T> T getModule(Module<T> module);
+
 }

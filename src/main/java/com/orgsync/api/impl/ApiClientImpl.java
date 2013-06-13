@@ -3,6 +3,7 @@ package com.orgsync.api.impl;
 import com.google.gson.Gson;
 import com.ning.http.client.AsyncHttpClient;
 import com.orgsync.api.ApiClient;
+import com.orgsync.api.Module;
 import com.orgsync.api.Version;
 
 public class ApiClientImpl implements ApiClient {
@@ -20,4 +21,8 @@ public class ApiClientImpl implements ApiClient {
 		this.version = version;
 	}
 
+	@Override
+	public <T> T getModule(final Module<T> module) {
+		return module.get(this);
+	}
 }
