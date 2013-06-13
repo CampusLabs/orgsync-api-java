@@ -19,6 +19,10 @@ public class ApiClientImpl implements ApiClient {
 
 	private static final AsyncHttpClient DEFAULT_CLIENT = new AsyncHttpClient();
 
+	private static final Gson DEFAULT_GSON = new GsonBuilder()
+			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+			.create();
+
 	private final String apiKey;
 
 	private final Version version;
@@ -31,7 +35,7 @@ public class ApiClientImpl implements ApiClient {
 		this.apiKey = apiKey;
 		this.version = version;
 		setHttpClient(DEFAULT_CLIENT);
-		this.gson = createGson();
+		this.gson = DEFAULT_GSON;
 	}
 
 	@Override
@@ -93,11 +97,6 @@ public class ApiClientImpl implements ApiClient {
 
 	public String getApiKey() {
 		return apiKey;
-	}
-
-	private Gson createGson() {
-		return new GsonBuilder().setFieldNamingPolicy(
-				FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create();
 	}
 
 	// TODO gots to go...
