@@ -42,8 +42,13 @@ dependencies {
     examplesRuntime group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
 }
 
-task(example, dependsOn: 'classes', type: JavaExec) {
+task(getOrgs, dependsOn: 'classes', type: JavaExec) {
     main = 'com.orgsync.api.examples.SimpleRequest'
+    classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath
+}
+
+task(addAccounts, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.orgsync.api.examples.AddAccountsRequest'
     classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath
 }
 
