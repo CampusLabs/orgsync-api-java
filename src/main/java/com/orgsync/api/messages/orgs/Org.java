@@ -1,4 +1,4 @@
-package com.orgsync.api.messages;
+package com.orgsync.api.messages.orgs;
 
 import java.util.Date;
 

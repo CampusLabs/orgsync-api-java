@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.ListenableFuture;
-import com.orgsync.api.messages.Org;
+import com.orgsync.api.messages.orgs.Org;
 
 /*package*/class OrgsModuleImpl implements OrgsModule {
 

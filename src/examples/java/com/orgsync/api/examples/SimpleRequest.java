@@ -9,7 +9,7 @@ import com.orgsync.api.Modules;
 import com.orgsync.api.OrgSync;
 import com.orgsync.api.OrgsModule;
 import com.orgsync.api.Version;
-import com.orgsync.api.messages.Org;
+import com.orgsync.api.messages.orgs.Org;
 
 public class SimpleRequest {
 
