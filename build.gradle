@@ -47,3 +47,8 @@ task(example, dependsOn: 'classes', type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath
 }
 
+eclipse {
+    classpath {
+        plusConfigurations += configurations.examplesRuntime
+    }
+}
