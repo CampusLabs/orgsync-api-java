@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +20,7 @@ import org.mockito.ArgumentCaptor;
 import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.AsyncHandler;
 import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
 import com.ning.http.client.Request;
 
@@ -98,8 +97,8 @@ public class ApiClientImplTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void testCreatesCorrectRequest() throws Exception {
-		HashMap<String, Collection<String>> queryParams = new HashMap<String, Collection<String>>();
-		queryParams.put("test", Arrays.asList("foo"));
+		FluentStringsMap queryParams = new FluentStringsMap()
+				.add("test", "foo");
 		RequestParams params = RequestParams.get(endpoint, queryParams);
 
 		ArgumentCaptor<Request> captor = ArgumentCaptor.forClass(Request.class);

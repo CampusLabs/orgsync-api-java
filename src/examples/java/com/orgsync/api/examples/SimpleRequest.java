@@ -8,6 +8,7 @@ import com.orgsync.api.ApiResponse;
 import com.orgsync.api.Modules;
 import com.orgsync.api.OrgSync;
 import com.orgsync.api.OrgsModule;
+import com.orgsync.api.Util;
 import com.orgsync.api.Version;
 import com.orgsync.api.messages.orgs.Org;
 
@@ -25,7 +26,7 @@ public class SimpleRequest {
 			ApiResponse<List<Org>> result = module.getOrgs().get();
 			if (result.isSuccess()) {
 				System.out.println("Recieved following orgs:");
-				System.out.println(joinList(result.getResult(), "\n"));
+				System.out.println(Util.joinList(result.getResult(), "\n"));
 			} else {
 				System.err.println("Error attempting to retrieve orgs!");
 				System.err.println(result.getError());
@@ -36,18 +37,6 @@ public class SimpleRequest {
 		}
 
 		System.out.println("Exiting...");
-	}
-
-	private static <T> String joinList(final List<T> list, final String sep) {
-		StringBuilder str = new StringBuilder();
-		for (int i = 0; i < list.size(); i++) {
-			str.append(list.get(i).toString());
-			if (i < list.size() - 1) {
-				str.append(sep);
-			}
-		}
-
-		return str.toString();
 	}
 
 }

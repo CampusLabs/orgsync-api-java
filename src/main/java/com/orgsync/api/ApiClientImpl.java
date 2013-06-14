@@ -2,8 +2,6 @@ package com.orgsync.api;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,8 +99,7 @@ public class ApiClientImpl implements ApiClient {
 				.build();
 	}
 
-	private FluentStringsMap mergeParams(
-			final Map<String, Collection<String>> queryParams) {
+	private FluentStringsMap mergeParams(final FluentStringsMap queryParams) {
 		return new FluentStringsMap(queryParams).add("key", apiKey);
 	}
 

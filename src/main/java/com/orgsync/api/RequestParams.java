@@ -1,31 +1,34 @@
 package com.orgsync.api;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
+import com.ning.http.client.FluentStringsMap;
 
 /*package*/class RequestParams {
 
 	static final String GET = "GET";
+	static final String POST = "POST";
 	static final String PUT = "PUT";
-	static final Map<String, Collection<String>> NO_PARAMS = Collections
-			.emptyMap();
+	static final FluentStringsMap NO_PARAMS = new FluentStringsMap();
 
 	final String method;
 	final String endpoint;
-	final Map<String, Collection<String>> queryParams;
+	final FluentStringsMap queryParams;
 
 	final static RequestParams get(final String endpoint) {
 		return get(endpoint, NO_PARAMS);
 	}
 
 	final static RequestParams get(final String endpoint,
-			final Map<String, Collection<String>> params) {
+			final FluentStringsMap params) {
 		return new RequestParams(GET, endpoint, params);
 	}
 
+	final static RequestParams post(final String endpoint,
+			final FluentStringsMap params) {
+		return new RequestParams(POST, endpoint, params);
+	}
+
 	RequestParams(final String method, final String endpoint,
-			final Map<String, Collection<String>> queryParams) {
+			final FluentStringsMap queryParams) {
 		super();
 		this.method = method;
 		this.endpoint = endpoint;
@@ -40,7 +43,7 @@ import java.util.Map;
 		return endpoint;
 	}
 
-	public final Map<String, Collection<String>> getQueryParams() {
+	public final FluentStringsMap getQueryParams() {
 		return queryParams;
 	}
 

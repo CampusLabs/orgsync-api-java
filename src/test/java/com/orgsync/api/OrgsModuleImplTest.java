@@ -6,8 +6,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
+
+import com.ning.http.client.FluentStringsMap;
+import com.orgsync.api.messages.orgs.AddAccounts;
 
 public class OrgsModuleImplTest {
 
@@ -21,4 +26,16 @@ public class OrgsModuleImplTest {
 				any(Type.class));
 	}
 
+	@Test
+	public void testAddAccounts() throws Exception {
+		int orgId = 1;
+		List<Integer> accountIds = Arrays.asList(1, 2, 3);
+		AddAccounts message = new AddAccounts(orgId, accountIds);
+		module.addAccounts(message);
+
+		String endpoint = String.format("/orgs/%d/accounts/add", orgId);
+		FluentStringsMap params = new FluentStringsMap().add("ids", "1,2,3");
+		verify(client).getResponse(eq(RequestParams.post(endpoint, params)),
+				any(Type.class));
+	}
 }
