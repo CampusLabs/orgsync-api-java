@@ -32,6 +32,7 @@ public class ApiClientImplTest {
 	private final Type type = new TypeToken<String>() {
 	}.getType();
 	private final Version version = ApiClientImpl.DEFAULT_VERSION;
+	private final String host = ApiClientImpl.DEFAULT_HOST;
 
 	private AsyncHttpClient http;
 	private ApiClientImpl client;
@@ -39,7 +40,7 @@ public class ApiClientImplTest {
 	@Before
 	public void setup() {
 		http = mock(AsyncHttpClient.class);
-		client = new ApiClientImpl(apiKey, version).setHttpClient(http);
+		client = new ApiClientImpl(apiKey, version, host).setHttpClient(http);
 	}
 
 	@Test

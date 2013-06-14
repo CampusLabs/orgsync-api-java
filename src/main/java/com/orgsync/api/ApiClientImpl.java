@@ -25,7 +25,7 @@ public class ApiClientImpl implements ApiClient {
 	private static final Logger log = LoggerFactory
 			.getLogger(ApiClientImpl.class);
 
-	public static final String HOST = "https://api.orgsync.com/api/";
+	public static final String DEFAULT_HOST = "https://api.orgsync.com/api/";
 
 	public static final Version DEFAULT_VERSION = Version.V2;
 
@@ -37,13 +37,16 @@ public class ApiClientImpl implements ApiClient {
 
 	private final String apiKey;
 
+	private final String host;
 	private final Version version;
 
 	private AsyncHttpClient client;
 
 	private final Gson gson;
 
-	public ApiClientImpl(final String apiKey, final Version version) {
+	public ApiClientImpl(final String apiKey, final Version version,
+			final String host) {
+		this.host = host;
 		this.apiKey = apiKey;
 		this.version = version;
 		setHttpClient(DEFAULT_CLIENT);
@@ -104,7 +107,7 @@ public class ApiClientImpl implements ApiClient {
 	}
 
 	private String toURL(final String endpoint) {
-		return new StringBuilder().append(HOST).append(version.getPath())
+		return new StringBuilder().append(host).append(version.getPath())
 				.append(endpoint).toString();
 	}
 
