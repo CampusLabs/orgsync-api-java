@@ -1,22 +1,46 @@
 package com.orgsync.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import com.google.gson.reflect.TypeToken;
+import com.ning.http.client.AsyncHandler;
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.ListenableFuture;
+import com.ning.http.client.Request;
 
 public class ApiClientImplTest {
 
 	private final String apiKey = "test";
+	private final String endpoint = "/test";
+	private final Type type = new TypeToken<String>() {
+	}.getType();
 	private final Version version = ApiClientImpl.DEFAULT_VERSION;
-	private final AsyncHttpClient http = mock(AsyncHttpClient.class);
-	private final ApiClientImpl client = new ApiClientImpl(apiKey, version)
-			.setHttpClient(http);
+
+	private AsyncHttpClient http;
+	private ApiClientImpl client;
+
+	@Before
+	public void setup() {
+		http = mock(AsyncHttpClient.class);
+		client = new ApiClientImpl(apiKey, version).setHttpClient(http);
+	}
 
 	@Test
 	public void testGetApiKey() throws Exception {
@@ -42,12 +66,58 @@ public class ApiClientImplTest {
 		verify(module).get(client);
 	}
 
-	@Test
-	public void testGetResponse() throws Exception {
-		String endpoint = "/test";
-		ListenableFuture<ApiResponse<String>> response = client.getResponse(
-				RequestParams.get(endpoint), new TypeToken<String>() {
-				}.getType());
+	@SuppressWarnings("unchecked")
+	@Test(expected = ApiClientException.class)
+	public void testGetResponseFailsForHttpException() throws Exception {
 
+		RequestParams params = RequestParams.get(endpoint);
+
+		when(http.executeRequest(any(Request.class), any(AsyncHandler.class)))
+				.thenThrow(new IOException("bang"));
+
+		client.getResponse(params, type);
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testSucessfulRequest() throws Exception {
+		ListenableFuture<ApiResponse<String>> expected = mock(ListenableFuture.class);
+
+		RequestParams params = RequestParams.get(endpoint);
+
+		when(http.executeRequest(any(Request.class), any(AsyncHandler.class)))
+				.thenReturn(expected);
+
+		ListenableFuture<ApiResponse<Object>> result = client.getResponse(
+				params, type);
+
+		assertEquals(expected, result);
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testCreatesCorrectRequest() throws Exception {
+		HashMap<String, Collection<String>> queryParams = new HashMap<String, Collection<String>>();
+		queryParams.put("test", Arrays.asList("foo"));
+		RequestParams params = RequestParams.get(endpoint, queryParams);
+
+		ArgumentCaptor<Request> captor = ArgumentCaptor.forClass(Request.class);
+		when(http.executeRequest(captor.capture(), any(AsyncHandler.class)))
+				.thenReturn(null);
+
+		client.getResponse(params, type);
+
+		Request request = captor.getValue();
+		assertEquals("GET", request.getMethod());
+
+		URL url = new URL(request.getUrl());
+		assertEquals("api.orgsync.com", url.getHost());
+		assertEquals("/api/" + version.getPath() + endpoint, url.getPath());
+
+		Set<String> qParams = new HashSet<String>(Arrays.asList(url.getQuery()
+				.split("&")));
+		assertEquals(
+				new HashSet<String>(Arrays.asList("key=" + apiKey, "test=foo")),
+				qParams);
 	}
 }

@@ -16,7 +16,12 @@ import java.util.Map;
 	final Map<String, Collection<String>> queryParams;
 
 	final static RequestParams get(final String endpoint) {
-		return new RequestParams(GET, endpoint, NO_PARAMS);
+		return get(endpoint, NO_PARAMS);
+	}
+
+	final static RequestParams get(final String endpoint,
+			final Map<String, Collection<String>> params) {
+		return new RequestParams(GET, endpoint, params);
 	}
 
 	RequestParams(final String method, final String endpoint,

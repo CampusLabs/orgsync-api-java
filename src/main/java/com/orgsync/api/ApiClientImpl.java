@@ -5,6 +5,9 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,6 +21,9 @@ import com.ning.http.client.Response;
 import com.orgsync.api.messages.ApiError;
 
 public class ApiClientImpl implements ApiClient {
+
+	private static final Logger log = LoggerFactory
+			.getLogger(ApiClientImpl.class);
 
 	public static final String HOST = "https://api.orgsync.com/api/";
 
@@ -69,11 +75,17 @@ public class ApiClientImpl implements ApiClient {
 
 	/* package */<T> ListenableFuture<ApiResponse<T>> getResponse(
 			final RequestParams requestParams, final Type type) {
+		log.debug("Call with request params: {}", requestParams);
+
 		Request request = buildRequest(requestParams);
+
 		try {
+			log.debug("Executing request: {}", request);
 			return client.executeRequest(request,
 					new ResponseCompletionHandler<ApiResponse<T>>(type));
 		} catch (IOException e) {
+			log.error("IOException making http request (message={})! "
+					+ " Throwing ApiClientException!", e.getMessage());
 			throw new ApiClientException(
 					"Exception while making http request!", e);
 		}
