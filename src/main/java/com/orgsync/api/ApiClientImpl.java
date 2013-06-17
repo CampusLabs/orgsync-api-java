@@ -121,6 +121,7 @@ public class ApiClientImpl implements ApiClient {
 		@SuppressWarnings("unchecked")
 		public T onCompleted(final Response response) throws Exception {
 			String body = response.getResponseBody();
+			log.debug("Received response string: {}", body);
 
 			if (response.getStatusCode() == 200) {
 				return (T) ApiResponse.success(gson.fromJson(body, type));

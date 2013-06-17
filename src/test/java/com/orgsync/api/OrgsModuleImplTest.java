@@ -38,4 +38,11 @@ public class OrgsModuleImplTest {
 		verify(client).getResponse(eq(RequestParams.post(endpoint, params)),
 				any(Type.class));
 	}
+
+	@Test
+	public void testListAccounts() throws Exception {
+		module.listAccounts(123);
+		verify(client).getResponse(eq(RequestParams.get("/orgs/123/accounts")),
+				any(Type.class));
+	}
 }

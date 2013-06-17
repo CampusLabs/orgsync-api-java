@@ -11,26 +11,35 @@ import com.orgsync.api.OrgsModule;
 import com.orgsync.api.Util;
 import com.orgsync.api.Version;
 import com.orgsync.api.messages.orgs.Org;
+import com.orgsync.api.messages.orgs.OrgAccount;
 
 public class SimpleRequest {
 
 	public static void main(final String[] args) throws InterruptedException,
 			ExecutionException {
-		String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385"; // public api test key
+		String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385"; // public
+																	// api test
+																	// key
 		String host = "https://api.orgsync.com/api/";
 		ApiClient client = OrgSync.newApiClient(apiKey, Version.V2, host);
 
 		try {
 			System.out.println("Requesting orgs");
 			OrgsModule module = client.getModule(Modules.ORGS);
-			ApiResponse<List<Org>> result = module.getOrgs().get();
-			if (result.isSuccess()) {
+			ApiResponse<List<Org>> orgsResponse = module.getOrgs().get();
+			if (isSuccess(orgsResponse)) {
 				System.out.println("Recieved following orgs:");
-				System.out.println(Util.joinList(result.getResult(), "\n"));
-			} else {
-				System.err.println("Error attempting to retrieve orgs!");
-				System.err.println(result.getError());
+				System.out
+						.println(Util.joinList(orgsResponse.getResult(), "\n"));
 			}
+
+			ApiResponse<List<OrgAccount>> accountsResponse = module
+					.listAccounts(225).get();
+			if (isSuccess(accountsResponse)) {
+				System.out.println("Received list of accounts: \n"
+						+ Util.joinList(accountsResponse.getResult(), "\n"));
+			}
+
 			System.out.println("Cleanup client");
 		} finally {
 			client.destroy();
@@ -39,4 +48,11 @@ public class SimpleRequest {
 		System.out.println("Exiting...");
 	}
 
+	private static boolean isSuccess(final ApiResponse<?> response) {
+		if (response.isSuccess())
+			return true;
+
+		System.out.println("Error making request: " + response.getError());
+		return false;
+	}
 }

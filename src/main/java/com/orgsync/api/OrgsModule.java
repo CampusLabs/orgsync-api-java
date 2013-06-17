@@ -6,6 +6,7 @@ import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.messages.Success;
 import com.orgsync.api.messages.orgs.AddAccounts;
 import com.orgsync.api.messages.orgs.Org;
+import com.orgsync.api.messages.orgs.OrgAccount;
 
 public interface OrgsModule {
 
@@ -14,4 +15,6 @@ public interface OrgsModule {
 	public ListenableFuture<ApiResponse<Success>> addAccounts(
 			AddAccounts message);
 
+	public ListenableFuture<ApiResponse<List<OrgAccount>>> listAccounts(
+			int groupId);
 }
