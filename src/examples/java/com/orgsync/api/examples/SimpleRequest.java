@@ -16,8 +16,8 @@ public class SimpleRequest {
 
 	public static void main(final String[] args) throws InterruptedException,
 			ExecutionException {
-		String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385";
-		String host = "http://localhost:8080/api/";
+		String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385"; // public api test key
+		String host = "https://api.orgsync.com/api/";
 		ApiClient client = OrgSync.newApiClient(apiKey, Version.V2, host);
 
 		try {
