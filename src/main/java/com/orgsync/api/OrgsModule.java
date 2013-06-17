@@ -10,11 +10,11 @@ import com.orgsync.api.messages.orgs.OrgAccount;
 
 public interface OrgsModule {
 
-	public ListenableFuture<ApiResponse<List<Org>>> getOrgs();
+    public ListenableFuture<ApiResponse<List<Org>>> getOrgs();
 
-	public ListenableFuture<ApiResponse<Success>> addAccounts(
-			AddAccounts message);
+    public ListenableFuture<ApiResponse<Success>> addAccounts(
+            AddAccounts message);
 
-	public ListenableFuture<ApiResponse<List<OrgAccount>>> listAccounts(
-			int groupId);
+    public ListenableFuture<ApiResponse<List<OrgAccount>>> listAccounts(
+            int groupId);
 }

@@ -20,116 +20,116 @@ import com.orgsync.api.messages.ApiError;
 
 public class ApiClientImpl implements ApiClient {
 
-	private static final Logger log = LoggerFactory
-			.getLogger(ApiClientImpl.class);
+    private static final Logger log = LoggerFactory
+            .getLogger(ApiClientImpl.class);
 
-	public static final String DEFAULT_HOST = "https://api.orgsync.com/api/";
+    public static final String DEFAULT_HOST = "https://api.orgsync.com/api/";
 
-	public static final Version DEFAULT_VERSION = Version.V2;
+    public static final Version DEFAULT_VERSION = Version.V2;
 
-	private static final AsyncHttpClient DEFAULT_CLIENT = new AsyncHttpClient();
+    private static final AsyncHttpClient DEFAULT_CLIENT = new AsyncHttpClient();
 
-	private static final Gson DEFAULT_GSON = new GsonBuilder()
-			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-			.create();
+    private static final Gson DEFAULT_GSON = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create();
 
-	private final String apiKey;
+    private final String apiKey;
 
-	private final String host;
-	private final Version version;
+    private final String host;
+    private final Version version;
 
-	private AsyncHttpClient client;
+    private AsyncHttpClient client;
 
-	private final Gson gson;
+    private final Gson gson;
 
-	public ApiClientImpl(final String apiKey, final Version version,
-			final String host) {
-		this.host = host;
-		this.apiKey = apiKey;
-		this.version = version;
-		setHttpClient(DEFAULT_CLIENT);
-		this.gson = DEFAULT_GSON;
-	}
+    public ApiClientImpl(final String apiKey, final Version version,
+            final String host) {
+        this.host = host;
+        this.apiKey = apiKey;
+        this.version = version;
+        setHttpClient(DEFAULT_CLIENT);
+        this.gson = DEFAULT_GSON;
+    }
 
-	@Override
-	public void destroy() {
-		getHttpClient().close();
-	}
+    @Override
+    public void destroy() {
+        getHttpClient().close();
+    }
 
-	@Override
-	public <T> T getModule(final Module<T> module) {
-		return module.get(this);
-	}
+    @Override
+    public <T> T getModule(final Module<T> module) {
+        return module.get(this);
+    }
 
-	public AsyncHttpClient getHttpClient() {
-		return client;
-	}
+    public AsyncHttpClient getHttpClient() {
+        return client;
+    }
 
-	public ApiClientImpl setHttpClient(final AsyncHttpClient client) {
-		this.client = client;
-		return this;
-	}
+    public ApiClientImpl setHttpClient(final AsyncHttpClient client) {
+        this.client = client;
+        return this;
+    }
 
-	public String getApiKey() {
-		return apiKey;
-	}
+    public String getApiKey() {
+        return apiKey;
+    }
 
-	/* package */<T> ListenableFuture<ApiResponse<T>> getResponse(
-			final RequestParams requestParams, final Type type) {
-		log.debug("Call with request params: {}", requestParams);
+    /* package */<T> ListenableFuture<ApiResponse<T>> getResponse(
+            final RequestParams requestParams, final Type type) {
+        log.debug("Call with request params: {}", requestParams);
 
-		Request request = buildRequest(requestParams);
+        Request request = buildRequest(requestParams);
 
-		try {
-			log.debug("Executing request: {}", request);
-			return client.executeRequest(request,
-					new ResponseCompletionHandler<ApiResponse<T>>(type));
-		} catch (IOException e) {
-			log.error("IOException making http request (message={})! "
-					+ " Throwing ApiClientException!", e.getMessage());
-			throw new ApiClientException(
-					"Exception while making http request!", e);
-		}
-	}
+        try {
+            log.debug("Executing request: {}", request);
+            return client.executeRequest(request,
+                    new ResponseCompletionHandler<ApiResponse<T>>(type));
+        } catch (IOException e) {
+            log.error("IOException making http request (message={})! "
+                    + " Throwing ApiClientException!", e.getMessage());
+            throw new ApiClientException(
+                    "Exception while making http request!", e);
+        }
+    }
 
-	private Request buildRequest(final RequestParams requestParams) {
-		return new RequestBuilder(requestParams.method)
-				.setUrl(toURL(requestParams.endpoint))
-				.setQueryParameters(mergeParams(requestParams.queryParams))
-				.build();
-	}
+    private Request buildRequest(final RequestParams requestParams) {
+        return new RequestBuilder(requestParams.method)
+                .setUrl(toURL(requestParams.endpoint))
+                .setQueryParameters(mergeParams(requestParams.queryParams))
+                .build();
+    }
 
-	private FluentStringsMap mergeParams(final FluentStringsMap queryParams) {
-		return new FluentStringsMap(queryParams).add("key", apiKey);
-	}
+    private FluentStringsMap mergeParams(final FluentStringsMap queryParams) {
+        return new FluentStringsMap(queryParams).add("key", apiKey);
+    }
 
-	private String toURL(final String endpoint) {
-		return new StringBuilder().append(host).append(version.getPath())
-				.append(endpoint).toString();
-	}
+    private String toURL(final String endpoint) {
+        return new StringBuilder().append(host).append(version.getPath())
+                .append(endpoint).toString();
+    }
 
-	private class ResponseCompletionHandler<T> extends
-			AsyncCompletionHandler<T> {
+    private class ResponseCompletionHandler<T> extends
+            AsyncCompletionHandler<T> {
 
-		private final Type type;
+        private final Type type;
 
-		public ResponseCompletionHandler(final Type type) {
-			this.type = type;
-		}
+        public ResponseCompletionHandler(final Type type) {
+            this.type = type;
+        }
 
-		@Override
-		@SuppressWarnings("unchecked")
-		public T onCompleted(final Response response) throws Exception {
-			String body = response.getResponseBody();
-			log.debug("Received response string: {}", body);
+        @Override
+        @SuppressWarnings("unchecked")
+        public T onCompleted(final Response response) throws Exception {
+            String body = response.getResponseBody();
+            log.debug("Received response string: {}", body);
 
-			if (response.getStatusCode() == 200) {
-				return (T) ApiResponse.success(gson.fromJson(body, type));
-			}
+            if (response.getStatusCode() == 200) {
+                return (T) ApiResponse.success(gson.fromJson(body, type));
+            }
 
-			return (T) ApiResponse.error(gson.fromJson(body, ApiError.class));
-		}
+            return (T) ApiResponse.error(gson.fromJson(body, ApiError.class));
+        }
 
-	}
+    }
 
 }

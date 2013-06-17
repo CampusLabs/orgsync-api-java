@@ -15,34 +15,34 @@ import com.orgsync.api.messages.orgs.AddAccounts;
 
 public class AddAccountsRequest {
 
-	public static void main(final String[] args) throws InterruptedException,
-			ExecutionException {
-		String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385";
-		String host = "http://localhost:8080/api/";
-		ApiClient client = OrgSync.newApiClient(apiKey, Version.V2, host);
+    public static void main(final String[] args) throws InterruptedException,
+            ExecutionException {
+        String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385";
+        String host = "http://localhost:8080/api/";
+        ApiClient client = OrgSync.newApiClient(apiKey, Version.V2, host);
 
-		try {
-			System.out.println("Requesting orgs");
-			OrgsModule module = client.getModule(Modules.ORGS);
+        try {
+            System.out.println("Requesting orgs");
+            OrgsModule module = client.getModule(Modules.ORGS);
 
-			int orgId = 46052;
-			List<Integer> ids = Arrays.asList(5666, 1575);
+            int orgId = 46052;
+            List<Integer> ids = Arrays.asList(5666, 1575);
 
-			AddAccounts message = new AddAccounts(orgId, ids);
+            AddAccounts message = new AddAccounts(orgId, ids);
 
-			ApiResponse<Success> result = module.addAccounts(message).get();
-			if (result.isSuccess()) {
-				System.out.println(result.getResult());
-			} else {
-				System.err.println("Error attempting to retrieve orgs!");
-				System.err.println(result.getError());
-			}
-			System.out.println("Cleanup client");
-		} finally {
-			client.destroy();
-		}
+            ApiResponse<Success> result = module.addAccounts(message).get();
+            if (result.isSuccess()) {
+                System.out.println(result.getResult());
+            } else {
+                System.err.println("Error attempting to retrieve orgs!");
+                System.err.println(result.getError());
+            }
+            System.out.println("Cleanup client");
+        } finally {
+            client.destroy();
+        }
 
-		System.out.println("Exiting...");
-	}
+        System.out.println("Exiting...");
+    }
 
 }
