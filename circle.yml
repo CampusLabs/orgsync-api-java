@@ -1,0 +1,13 @@
+machine:
+  java:
+    version: oraclejdk6
+
+dependencies:
+  pre:
+    - if [[ ! -e gradle-1.6 ]]; then wget http://services.gradle.org/distributions/gradle-1.6-bin.zip && unzip gradle-1.6-bin.zip
+  cache_directories:
+    - gradle-1.6
+
+test:
+  override:
+    - gradle-1.6/bin/gradle test
