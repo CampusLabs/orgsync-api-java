@@ -10,7 +10,7 @@ import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Resources;
 import com.orgsync.api.Util;
 import com.orgsync.api.Version;
-import com.orgsync.api.model.Account;
+import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.orgs.Org;
 
 public class SimpleRequest {

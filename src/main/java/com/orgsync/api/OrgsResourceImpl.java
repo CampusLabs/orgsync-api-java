@@ -5,8 +5,8 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
-import com.orgsync.api.model.Account;
 import com.orgsync.api.model.Success;
+import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.orgs.AddAccounts;
 import com.orgsync.api.model.orgs.Org;
 

@@ -1,4 +1,4 @@
-package com.orgsync.api.model;
+package com.orgsync.api.model.accounts;
 
 import java.util.Date;
 
