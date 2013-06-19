@@ -9,23 +9,43 @@ public class MembershipLogEntryRequest {
 
     private Date startDate;
     private Date endDate;
-    private final int accountId = NO_ACCOUNT_ID;
-    private final int orgId = NO_ORG_ID;
+    private int accountId = NO_ACCOUNT_ID;
+    private int orgId = NO_ORG_ID;
 
     public final Date getStartDate() {
         return startDate;
+    }
+
+    public final MembershipLogEntryRequest setStartDate(final Date startDate) {
+        this.startDate = startDate;
+        return this;
     }
 
     public final Date getEndDate() {
         return endDate;
     }
 
+    public final MembershipLogEntryRequest setEndDate(final Date endDate) {
+        this.endDate = endDate;
+        return this;
+    }
+
     public final int getAccountId() {
         return accountId;
     }
 
+    public final MembershipLogEntryRequest setAccountId(final int accountId) {
+        this.accountId = accountId;
+        return this;
+    }
+
     public final int getOrgId() {
         return orgId;
+    }
+
+    public final MembershipLogEntryRequest setOrgId(final int orgId) {
+        this.orgId = orgId;
+        return this;
     }
 
     @Override

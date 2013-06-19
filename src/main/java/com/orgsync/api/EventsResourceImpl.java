@@ -2,7 +2,6 @@ package com.orgsync.api;
 
 import static com.orgsync.api.Util.checkNotNull;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
@@ -12,8 +11,6 @@ import com.orgsync.api.model.events.Event;
 import com.orgsync.api.model.events.EventQueryParams;
 
 /*package*/class EventsResourceImpl extends BaseResource implements EventsResource {
-
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     /* package */EventsResourceImpl(final ApiClientImpl client) {
         super(client);
@@ -44,11 +41,11 @@ import com.orgsync.api.model.events.EventQueryParams;
         }
 
         if (params.getStartDate() != null) {
-            map.add("start_date", dateFormat.format(params.getStartDate()));
+            map.add("start_date", dateToQueryParam(params.getStartDate()));
         }
 
         if (params.getEndDate() != null) {
-            map.add("end_date", dateFormat.format(params.getEndDate()));
+            map.add("end_date", dateToQueryParam(params.getEndDate()));
         }
 
         return map;
