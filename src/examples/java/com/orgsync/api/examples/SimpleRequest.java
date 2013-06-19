@@ -5,12 +5,14 @@ import java.util.concurrent.ExecutionException;
 
 import com.orgsync.api.ApiClient;
 import com.orgsync.api.ApiResponse;
+import com.orgsync.api.FormsResource;
 import com.orgsync.api.OrgSync;
 import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Resources;
 import com.orgsync.api.Util;
 import com.orgsync.api.Version;
 import com.orgsync.api.model.accounts.Account;
+import com.orgsync.api.model.forms.FormSubmission;
 import com.orgsync.api.model.orgs.Org;
 
 public class SimpleRequest {
@@ -36,6 +38,12 @@ public class SimpleRequest {
             if (isSuccess(accountsResponse)) {
                 System.out.println("Received list of accounts: \n"
                         + Util.joinList(accountsResponse.getResult(), "\n"));
+            }
+
+            FormsResource forms = client.getResource(Resources.FORMS);
+            ApiResponse<FormSubmission> submissionResponse = forms.getFormSubmission(3827851).get();
+            if (isSuccess(submissionResponse)) {
+                System.out.println("Recived form info: " + submissionResponse.getResult());
             }
 
             System.out.println("Cleanup client");
