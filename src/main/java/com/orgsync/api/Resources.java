@@ -27,4 +27,11 @@ public final class Resources {
         }
     };
 
+    public static final Resource<EventsResource> EVENTS = new Resource<EventsResource>() {
+        @Override
+        EventsResource get(final ApiClientImpl client) {
+            return new EventsResourceImpl(client);
+        }
+    };
+
 }
