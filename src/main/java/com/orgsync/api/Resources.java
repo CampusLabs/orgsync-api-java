@@ -20,4 +20,11 @@ public final class Resources {
         }
     };
 
+    public static final Resource<CheckbooksResource> CHECKBOOKS = new Resource<CheckbooksResource>() {
+        @Override
+        CheckbooksResource get(final ApiClientImpl client) {
+            return new CheckbooksResourceImpl(client);
+        }
+    };
+
 }
