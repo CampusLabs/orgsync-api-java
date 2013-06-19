@@ -17,4 +17,10 @@ public class Util {
         return str.toString();
     }
 
+    // Another reason for Guava...
+    /* package */static void checkNotNull(final Object obj) {
+        if (obj == null) {
+            throw new NullPointerException("Argument cannot be null!");
+        }
+    }
 }
