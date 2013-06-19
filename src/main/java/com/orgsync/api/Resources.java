@@ -41,4 +41,11 @@ public final class Resources {
         }
     };
 
+    public static final Resource<GroupsResource> GROUPS = new Resource<GroupsResource>() {
+        @Override
+        GroupsResource get(final ApiClientImpl client) {
+            return new GroupsResourceImpl(client);
+        }
+    };
+
 }
