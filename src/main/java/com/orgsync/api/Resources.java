@@ -6,13 +6,6 @@ public final class Resources {
         // no create...
     }
 
-    public static final Resource<OrgsResource> ORGS = new Resource<OrgsResource>() {
-        @Override
-        public OrgsResource get(final ApiClientImpl client) {
-            return new OrgsResourceImpl(client);
-        }
-    };
-
     public static final Resource<AccountsResource> ACCOUNTS = new Resource<AccountsResource>() {
         @Override
         AccountsResource get(final ApiClientImpl client) {
@@ -59,6 +52,13 @@ public final class Resources {
         @Override
         MembershipLogsResource get(final ApiClientImpl client) {
             return new MembershipLogsResourceImpl(client);
+        }
+    };
+
+    public static final Resource<OrgsResource> ORGS = new Resource<OrgsResource>() {
+        @Override
+        public OrgsResource get(final ApiClientImpl client) {
+            return new OrgsResourceImpl(client);
         }
     };
 }
