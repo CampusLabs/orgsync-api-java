@@ -6,7 +6,7 @@ public interface ApiClient {
 
     public void destroy();
 
-    public <T> T getModule(Module<T> module);
+    public <T> T getResource(Resource<T> resource);
 
     public Version getVersion();
 

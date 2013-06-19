@@ -6,9 +6,9 @@ import java.util.concurrent.ExecutionException;
 
 import com.orgsync.api.ApiClient;
 import com.orgsync.api.ApiResponse;
-import com.orgsync.api.Modules;
+import com.orgsync.api.Resources;
 import com.orgsync.api.OrgSync;
-import com.orgsync.api.OrgsModule;
+import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Version;
 import com.orgsync.api.messages.Success;
 import com.orgsync.api.messages.orgs.AddAccounts;
@@ -23,14 +23,14 @@ public class AddAccountsRequest {
 
         try {
             System.out.println("Requesting orgs");
-            OrgsModule module = client.getModule(Modules.ORGS);
+            OrgsResource resource = client.getResource(Resources.ORGS);
 
             int orgId = 46052;
             List<Integer> ids = Arrays.asList(5666, 1575);
 
             AddAccounts message = new AddAccounts(orgId, ids);
 
-            ApiResponse<Success> result = module.addAccounts(message).get();
+            ApiResponse<Success> result = resource.addAccounts(message).get();
             if (result.isSuccess()) {
                 System.out.println(result.getResult());
             } else {

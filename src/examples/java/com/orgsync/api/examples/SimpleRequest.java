@@ -5,9 +5,9 @@ import java.util.concurrent.ExecutionException;
 
 import com.orgsync.api.ApiClient;
 import com.orgsync.api.ApiResponse;
-import com.orgsync.api.Modules;
 import com.orgsync.api.OrgSync;
-import com.orgsync.api.OrgsModule;
+import com.orgsync.api.OrgsResource;
+import com.orgsync.api.Resources;
 import com.orgsync.api.Util;
 import com.orgsync.api.Version;
 import com.orgsync.api.messages.orgs.Org;
@@ -23,14 +23,15 @@ public class SimpleRequest {
 
         try {
             System.out.println("Requesting orgs");
-            OrgsModule module = client.getModule(Modules.ORGS);
-            ApiResponse<List<Org>> orgsResponse = module.getOrgs().get();
+            OrgsResource resource = client.getResource(Resources.ORGS);
+            ApiResponse<List<Org>> orgsResponse = resource.getOrgs().get();
+
             if (isSuccess(orgsResponse)) {
                 System.out.println("Recieved following orgs:");
                 System.out.println(Util.joinList(orgsResponse.getResult(), "\n"));
             }
 
-            ApiResponse<List<OrgAccount>> accountsResponse = module
+            ApiResponse<List<OrgAccount>> accountsResponse = resource
                     .listAccounts(225).get();
             if (isSuccess(accountsResponse)) {
                 System.out.println("Received list of accounts: \n"

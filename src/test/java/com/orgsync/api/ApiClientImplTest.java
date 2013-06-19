@@ -60,10 +60,10 @@ public class ApiClientImplTest {
 
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void testGetModule() throws Exception {
-        Module module = mock(Module.class);
-        client.getModule(module);
-        verify(module).get(client);
+    public void testGetResource() throws Exception {
+        Resource resource = mock(Resource.class);
+        client.getResource(resource);
+        verify(resource).get(client);
     }
 
     @SuppressWarnings("unchecked")

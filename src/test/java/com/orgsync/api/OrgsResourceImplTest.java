@@ -14,14 +14,14 @@ import org.junit.Test;
 import com.ning.http.client.FluentStringsMap;
 import com.orgsync.api.messages.orgs.AddAccounts;
 
-public class OrgsModuleImplTest {
+public class OrgsResourceImplTest {
 
     private final ApiClientImpl client = mock(ApiClientImpl.class);
-    private final OrgsModuleImpl module = new OrgsModuleImpl(client);
+    private final OrgsResourceImpl resource = new OrgsResourceImpl(client);
 
     @Test
     public void testGetOrgs() {
-        module.getOrgs();
+        resource.getOrgs();
         verify(client).getResponse(eq(RequestParams.get("/orgs")),
                 any(Type.class));
     }
@@ -31,7 +31,7 @@ public class OrgsModuleImplTest {
         int orgId = 1;
         List<Integer> accountIds = Arrays.asList(1, 2, 3);
         AddAccounts message = new AddAccounts(orgId, accountIds);
-        module.addAccounts(message);
+        resource.addAccounts(message);
 
         String endpoint = String.format("/orgs/%d/accounts/add", orgId);
         FluentStringsMap params = new FluentStringsMap().add("ids", "1,2,3");
@@ -41,7 +41,7 @@ public class OrgsModuleImplTest {
 
     @Test
     public void testListAccounts() throws Exception {
-        module.listAccounts(123);
+        resource.listAccounts(123);
         verify(client).getResponse(eq(RequestParams.get("/orgs/123/accounts")),
                 any(Type.class));
     }

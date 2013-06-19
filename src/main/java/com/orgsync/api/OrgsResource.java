@@ -8,7 +8,7 @@ import com.orgsync.api.messages.orgs.AddAccounts;
 import com.orgsync.api.messages.orgs.Org;
 import com.orgsync.api.messages.orgs.OrgAccount;
 
-public interface OrgsModule {
+public interface OrgsResource {
 
     public ListenableFuture<ApiResponse<List<Org>>> getOrgs();
 

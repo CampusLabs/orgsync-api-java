@@ -57,8 +57,8 @@ import com.orgsync.api.messages.ApiError;
     }
 
     @Override
-    public <T> T getModule(final Module<T> module) {
-        return module.get(this);
+    public <T> T getResource(final Resource<T> resource) {
+        return resource.get(this);
     }
 
     @Override

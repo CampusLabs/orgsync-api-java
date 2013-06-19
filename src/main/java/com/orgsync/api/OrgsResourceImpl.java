@@ -10,11 +10,11 @@ import com.orgsync.api.messages.orgs.AddAccounts;
 import com.orgsync.api.messages.orgs.Org;
 import com.orgsync.api.messages.orgs.OrgAccount;
 
-/*package*/class OrgsModuleImpl implements OrgsModule {
+/*package*/class OrgsResourceImpl implements OrgsResource {
 
     private final ApiClientImpl client;
 
-    /* package */OrgsModuleImpl(final ApiClientImpl client) {
+    /* package */OrgsResourceImpl(final ApiClientImpl client) {
         this.client = client;
     }
 
