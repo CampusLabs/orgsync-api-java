@@ -61,4 +61,11 @@ public final class Resources {
             return new OrgsResourceImpl(client);
         }
     };
+
+    public static final Resource<TimesheetsResource> TIMESHEETS = new Resource<TimesheetsResource>() {
+        @Override
+        TimesheetsResource get(final ApiClientImpl client) {
+            return new TimesheetsResourceImpl(client);
+        }
+    };
 }
