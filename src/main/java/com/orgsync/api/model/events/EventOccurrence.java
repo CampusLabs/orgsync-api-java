@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class EventOccurrence {
 
+    // TODO blows up for allDay events... not full dates
     private Date startsAt;
     private Date endsAt;
     private boolean isAllDay;
