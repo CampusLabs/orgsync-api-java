@@ -4,10 +4,13 @@ import java.util.Date;
 
 public class MembershipLogEntryRequest {
 
+    public static final int NO_ACCOUNT_ID = -1;
+    public static final int NO_ORG_ID = -1;
+
     private Date startDate;
     private Date endDate;
-    private int accountId;
-    private int orgId;
+    private final int accountId = NO_ACCOUNT_ID;
+    private final int orgId = NO_ORG_ID;
 
     public final Date getStartDate() {
         return startDate;
