@@ -13,4 +13,11 @@ public final class Resources {
         }
     };
 
+    public static final Resource<AccountsResource> ACCOUNTS = new Resource<AccountsResource>() {
+        @Override
+        AccountsResource get(final ApiClientImpl client) {
+            return new AccountsResourceImpl(client);
+        }
+    };
+
 }
