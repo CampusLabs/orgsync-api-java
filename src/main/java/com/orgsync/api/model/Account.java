@@ -1,8 +1,8 @@
-package com.orgsync.api.model.orgs;
+package com.orgsync.api.model;
 
 import java.util.Date;
 
-public class OrgAccount {
+public class Account {
 
     private int id;
     private String username;
@@ -79,7 +79,7 @@ public class OrgAccount {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        OrgAccount other = (OrgAccount) obj;
+        Account other = (Account) obj;
         if (city == null) {
             if (other.city != null)
                 return false;

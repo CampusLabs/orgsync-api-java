@@ -10,8 +10,8 @@ import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Resources;
 import com.orgsync.api.Util;
 import com.orgsync.api.Version;
+import com.orgsync.api.model.Account;
 import com.orgsync.api.model.orgs.Org;
-import com.orgsync.api.model.orgs.OrgAccount;
 
 public class SimpleRequest {
 
@@ -31,7 +31,7 @@ public class SimpleRequest {
                 System.out.println(Util.joinList(orgsResponse.getResult(), "\n"));
             }
 
-            ApiResponse<List<OrgAccount>> accountsResponse = resource
+            ApiResponse<List<Account>> accountsResponse = resource
                     .listAccounts(225).get();
             if (isSuccess(accountsResponse)) {
                 System.out.println("Received list of accounts: \n"
