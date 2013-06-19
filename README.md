@@ -11,5 +11,7 @@ Java REST client for the OrgSync API
 
 ## TODO
 
+* Include Joda for local date?  Or just use string and let clients handle?
+* Include apache commons for toStringBuilder, equalsBuilder, etc?  Or just keep generating?
 * Models aren't versioned with the api...
 * Add timeout and retry
