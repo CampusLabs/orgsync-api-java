@@ -5,15 +5,15 @@ import java.util.Date;
 public class EventOccurrence {
 
     private Date startsAt;
-    private Date endAt;
+    private Date endsAt;
     private boolean isAllDay;
 
     public final Date getStartsAt() {
         return startsAt;
     }
 
-    public final Date getEndAt() {
-        return endAt;
+    public final Date getEndsAt() {
+        return endsAt;
     }
 
     public final boolean isAllDay() {
@@ -24,7 +24,7 @@ public class EventOccurrence {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((endAt == null) ? 0 : endAt.hashCode());
+        result = prime * result + ((endsAt == null) ? 0 : endsAt.hashCode());
         result = prime * result + (isAllDay ? 1231 : 1237);
         result = prime * result + ((startsAt == null) ? 0 : startsAt.hashCode());
         return result;
@@ -39,10 +39,10 @@ public class EventOccurrence {
         if (getClass() != obj.getClass())
             return false;
         EventOccurrence other = (EventOccurrence) obj;
-        if (endAt == null) {
-            if (other.endAt != null)
+        if (endsAt == null) {
+            if (other.endsAt != null)
                 return false;
-        } else if (!endAt.equals(other.endAt))
+        } else if (!endsAt.equals(other.endsAt))
             return false;
         if (isAllDay != other.isAllDay)
             return false;
@@ -56,7 +56,7 @@ public class EventOccurrence {
 
     @Override
     public String toString() {
-        return "EventOcurrence [startsAt=" + startsAt + ", endAt=" + endAt + ", isAllDay=" + isAllDay + "]";
+        return "EventOcurrence [startsAt=" + startsAt + ", endAt=" + endsAt + ", isAllDay=" + isAllDay + "]";
     }
 
 }
