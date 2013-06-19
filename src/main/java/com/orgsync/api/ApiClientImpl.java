@@ -132,10 +132,10 @@ import com.orgsync.api.messages.ApiError;
             log.debug("Received response string: {}", body);
 
             if (response.getStatusCode() == 200) {
-                return (T) ApiResponse.success(gson.fromJson(body, type));
+                return (T) ApiResponseFactory.success(gson.fromJson(body, type));
             }
 
-            return (T) ApiResponse.error(gson.fromJson(body, ApiError.class));
+            return (T) ApiResponseFactory.error(gson.fromJson(body, ApiError.class));
         }
 
     }
