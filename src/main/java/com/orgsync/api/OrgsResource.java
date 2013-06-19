@@ -3,10 +3,10 @@ package com.orgsync.api;
 import java.util.List;
 
 import com.ning.http.client.ListenableFuture;
-import com.orgsync.api.messages.Success;
-import com.orgsync.api.messages.orgs.AddAccounts;
-import com.orgsync.api.messages.orgs.Org;
-import com.orgsync.api.messages.orgs.OrgAccount;
+import com.orgsync.api.model.Success;
+import com.orgsync.api.model.orgs.AddAccounts;
+import com.orgsync.api.model.orgs.Org;
+import com.orgsync.api.model.orgs.OrgAccount;
 
 public interface OrgsResource {
 

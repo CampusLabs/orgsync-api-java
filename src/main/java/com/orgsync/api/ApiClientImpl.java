@@ -16,7 +16,7 @@ import com.ning.http.client.ListenableFuture;
 import com.ning.http.client.Request;
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
-import com.orgsync.api.messages.ApiError;
+import com.orgsync.api.model.ApiError;
 
 /*package*/class ApiClientImpl implements ApiClient {
 

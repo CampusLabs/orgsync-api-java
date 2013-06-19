@@ -12,7 +12,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.ning.http.client.FluentStringsMap;
-import com.orgsync.api.messages.orgs.AddAccounts;
+import com.orgsync.api.model.orgs.AddAccounts;
 
 public class OrgsResourceImplTest {
 
@@ -30,8 +30,8 @@ public class OrgsResourceImplTest {
     public void testAddAccounts() throws Exception {
         int orgId = 1;
         List<Integer> accountIds = Arrays.asList(1, 2, 3);
-        AddAccounts message = new AddAccounts(orgId, accountIds);
-        resource.addAccounts(message);
+        AddAccounts accounts = new AddAccounts(orgId, accountIds);
+        resource.addAccounts(accounts);
 
         String endpoint = String.format("/orgs/%d/accounts/add", orgId);
         FluentStringsMap params = new FluentStringsMap().add("ids", "1,2,3");

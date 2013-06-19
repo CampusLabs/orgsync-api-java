@@ -6,12 +6,12 @@ import java.util.concurrent.ExecutionException;
 
 import com.orgsync.api.ApiClient;
 import com.orgsync.api.ApiResponse;
-import com.orgsync.api.Resources;
 import com.orgsync.api.OrgSync;
 import com.orgsync.api.OrgsResource;
+import com.orgsync.api.Resources;
 import com.orgsync.api.Version;
-import com.orgsync.api.messages.Success;
-import com.orgsync.api.messages.orgs.AddAccounts;
+import com.orgsync.api.model.Success;
+import com.orgsync.api.model.orgs.AddAccounts;
 
 public class AddAccountsRequest {
 
@@ -28,9 +28,9 @@ public class AddAccountsRequest {
             int orgId = 46052;
             List<Integer> ids = Arrays.asList(5666, 1575);
 
-            AddAccounts message = new AddAccounts(orgId, ids);
+            AddAccounts accounts = new AddAccounts(orgId, ids);
 
-            ApiResponse<Success> result = resource.addAccounts(message).get();
+            ApiResponse<Success> result = resource.addAccounts(accounts).get();
             if (result.isSuccess()) {
                 System.out.println(result.getResult());
             } else {

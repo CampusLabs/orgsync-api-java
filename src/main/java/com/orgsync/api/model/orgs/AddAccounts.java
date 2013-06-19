@@ -1,4 +1,4 @@
-package com.orgsync.api.messages.orgs;
+package com.orgsync.api.model.orgs;
 
 import java.util.List;
 

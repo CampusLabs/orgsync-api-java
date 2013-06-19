@@ -10,8 +10,8 @@ import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Resources;
 import com.orgsync.api.Util;
 import com.orgsync.api.Version;
-import com.orgsync.api.messages.orgs.Org;
-import com.orgsync.api.messages.orgs.OrgAccount;
+import com.orgsync.api.model.orgs.Org;
+import com.orgsync.api.model.orgs.OrgAccount;
 
 public class SimpleRequest {
 

@@ -1,6 +1,6 @@
 package com.orgsync.api;
 
-import com.orgsync.api.messages.ApiError;
+import com.orgsync.api.model.ApiError;
 
 /*package*/final class ApiResponseFactory {
 
