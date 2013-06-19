@@ -48,4 +48,10 @@ public final class Resources {
         }
     };
 
+    public static final Resource<IdentificationCardsResource> IDENTIFICATIONS_CARDS = new Resource<IdentificationCardsResource>() {
+        @Override
+        IdentificationCardsResource get(final ApiClientImpl client) {
+            return new IdentificationCardsResourceImpl(client);
+        }
+    };
 }
