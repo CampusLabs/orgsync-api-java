@@ -11,4 +11,5 @@ Java REST client for the OrgSync API
 
 ## TODO
 
+* Models aren't versioned with the api...
 * Add timeout and retry
