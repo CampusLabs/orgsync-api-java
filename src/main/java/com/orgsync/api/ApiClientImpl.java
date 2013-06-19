@@ -18,7 +18,7 @@ import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
 import com.orgsync.api.messages.ApiError;
 
-public class ApiClientImpl implements ApiClient {
+/*package*/class ApiClientImpl implements ApiClient {
 
     private static final Logger log = LoggerFactory
             .getLogger(ApiClientImpl.class);
@@ -42,7 +42,7 @@ public class ApiClientImpl implements ApiClient {
 
     private final Gson gson;
 
-    public ApiClientImpl(final String apiKey, final Version version,
+    /* package */ApiClientImpl(final String apiKey, final Version version,
             final String host) {
         this.host = host;
         this.apiKey = apiKey;
@@ -61,17 +61,25 @@ public class ApiClientImpl implements ApiClient {
         return module.get(this);
     }
 
+    @Override
     public AsyncHttpClient getHttpClient() {
         return client;
     }
 
+    @Override
     public ApiClientImpl setHttpClient(final AsyncHttpClient client) {
         this.client = client;
         return this;
     }
 
+    @Override
     public String getApiKey() {
         return apiKey;
+    }
+
+    @Override
+    public Version getVersion() {
+        return version;
     }
 
     /* package */<T> ListenableFuture<ApiResponse<T>> getResponse(
