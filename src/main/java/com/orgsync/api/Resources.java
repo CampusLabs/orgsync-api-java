@@ -54,4 +54,11 @@ public final class Resources {
             return new IdentificationCardsResourceImpl(client);
         }
     };
+
+    public static final Resource<MembershipLogsResource> MEMBERSHIP_LOGS = new Resource<MembershipLogsResource>() {
+        @Override
+        MembershipLogsResource get(final ApiClientImpl client) {
+            return new MembershipLogsResourceImpl(client);
+        }
+    };
 }
