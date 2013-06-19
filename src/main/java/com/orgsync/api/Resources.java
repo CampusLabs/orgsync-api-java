@@ -34,4 +34,11 @@ public final class Resources {
         }
     };
 
+    public static final Resource<FormsResource> FORMS = new Resource<FormsResource>() {
+        @Override
+        FormsResource get(final ApiClientImpl client) {
+            return new FormsResourceImpl(client);
+        }
+    };
+
 }
