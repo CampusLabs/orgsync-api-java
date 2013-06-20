@@ -35,4 +35,12 @@ import com.ning.http.client.ListenableFuture;
         return String.format("%s/%d", endpoint, id);
     }
 
+    <T> ListenableFuture<ApiResponse<T>> list(final Type type) {
+        return getResponse(RequestParams.get(endpoint), type);
+    }
+
+    <T> ListenableFuture<ApiResponse<T>> list(final String prefix, final Type type) {
+        return getResponse(RequestParams.get(prefix + endpoint), type);
+    }
+
 }
