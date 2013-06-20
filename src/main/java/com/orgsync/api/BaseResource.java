@@ -48,6 +48,14 @@ import com.ning.http.client.ListenableFuture;
         return getResponse(RequestParams.get(shorFor(id)), type);
     }
 
+    <T> ListenableFuture<ApiResponse<T>> update(final int id, final FluentStringsMap params, final Type type) {
+        return getResponse(RequestParams.put(shorFor(id), params), type);
+    }
+
+    <T> ListenableFuture<ApiResponse<T>> delete(final int id, final Type type) {
+        return getResponse(RequestParams.delete(shorFor(id)), type);
+    }
+
     void checkAddField(final FluentStringsMap params, final String field, final Object value) {
         if (value != null) {
             params.add(field, value.toString());

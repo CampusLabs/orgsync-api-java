@@ -1,8 +1,18 @@
 package com.orgsync.api.model.checkbooks;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
 public class Checkbook {
+
+    public static final Type TYPE = new TypeToken<Checkbook>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<Checkbook>>() {
+    }.getType();
 
     private int id;
     private String name;

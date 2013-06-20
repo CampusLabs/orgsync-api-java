@@ -1,6 +1,14 @@
 package com.orgsync.api.model;
 
+import java.lang.reflect.Type;
+
+import com.google.gson.reflect.TypeToken;
+
 public class Success {
+
+    public static final Type TYPE = new TypeToken<Success>() {
+    }.getType();
+
     private boolean success;
 
     public final boolean isSuccess() {

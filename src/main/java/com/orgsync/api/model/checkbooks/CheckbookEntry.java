@@ -1,10 +1,19 @@
 package com.orgsync.api.model.checkbooks;
 
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
 public class CheckbookEntry {
+
+    public static final Type TYPE = new TypeToken<CheckbookEntry>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<CheckbookEntry>>() {
+    }.getType();
 
     private int id;
     private String description;
