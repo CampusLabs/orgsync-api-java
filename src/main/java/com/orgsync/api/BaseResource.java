@@ -32,7 +32,7 @@ import com.ning.http.client.ListenableFuture;
         return endpoint;
     }
 
-    String shorFor(final int id) {
+    String showFor(final int id) {
         return String.format("%s/%d", endpoint, id);
     }
 
@@ -45,15 +45,15 @@ import com.ning.http.client.ListenableFuture;
     }
 
     <T> ListenableFuture<ApiResponse<T>> show(final int id, final Type type) {
-        return getResponse(RequestParams.get(shorFor(id)), type);
+        return getResponse(RequestParams.get(showFor(id)), type);
     }
 
     <T> ListenableFuture<ApiResponse<T>> update(final int id, final FluentStringsMap params, final Type type) {
-        return getResponse(RequestParams.put(shorFor(id), params), type);
+        return getResponse(RequestParams.put(showFor(id), params), type);
     }
 
     <T> ListenableFuture<ApiResponse<T>> delete(final int id, final Type type) {
-        return getResponse(RequestParams.delete(shorFor(id)), type);
+        return getResponse(RequestParams.delete(showFor(id)), type);
     }
 
     void checkAddField(final FluentStringsMap params, final String field, final Object value) {

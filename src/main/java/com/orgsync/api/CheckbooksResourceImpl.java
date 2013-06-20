@@ -58,7 +58,7 @@ import com.orgsync.api.model.checkbooks.CheckbookEntry;
 
     @Override
     public ListenableFuture<ApiResponse<List<CheckbookEntry>>> getCheckbookEntries(final int checkbookId) {
-        return getResponse(RequestParams.get(shorFor(checkbookId) + "/entries"), CheckbookEntry.LIST_TYPE);
+        return getResponse(RequestParams.get(showFor(checkbookId) + "/entries"), CheckbookEntry.LIST_TYPE);
     }
 
     @Override
@@ -75,7 +75,7 @@ import com.orgsync.api.model.checkbooks.CheckbookEntry;
 
         FluentStringsMap params = new FluentStringsMap().add("amount", amount).add("description", description);
 
-        return getResponse(RequestParams.post(shorFor(checkbookId) + "/entries", params), CheckbookEntry.TYPE);
+        return getResponse(RequestParams.post(showFor(checkbookId) + "/entries", params), CheckbookEntry.TYPE);
     }
 
     @Override

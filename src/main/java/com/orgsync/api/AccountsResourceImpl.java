@@ -56,7 +56,7 @@ import com.orgsync.api.model.accounts.CustomProfileField;
             final AccountUpdateRequest request) {
         checkNotNull(request);
 
-        return getResponse(RequestParams.put(shorFor(accountId), toParams(request)), AccountFull.TYPE);
+        return getResponse(RequestParams.put(showFor(accountId), toParams(request)), AccountFull.TYPE);
     }
 
     private FluentStringsMap toParams(final AccountUpdateRequest request) {
