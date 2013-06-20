@@ -4,15 +4,15 @@ import com.ning.http.client.FluentStringsMap;
 
 /*package*/class RequestParams {
 
-    static final String GET = "GET";
-    static final String POST = "POST";
-    static final String PUT = "PUT";
-    static final String DELETE = "DELETE";
-    static final FluentStringsMap NO_PARAMS = new FluentStringsMap();
+    private static final String GET = "GET";
+    private static final String POST = "POST";
+    private static final String PUT = "PUT";
+    private static final String DELETE = "DELETE";
+    private static final FluentStringsMap NO_PARAMS = new FluentStringsMap();
 
-    final String method;
-    final String endpoint;
-    final FluentStringsMap queryParams;
+    private final String method;
+    private final String endpoint;
+    private final FluentStringsMap queryParams;
 
     final static RequestParams get(final String endpoint) {
         return get(endpoint, NO_PARAMS);
