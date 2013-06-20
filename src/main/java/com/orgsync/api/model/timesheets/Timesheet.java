@@ -1,27 +1,35 @@
 package com.orgsync.api.model.timesheets;
 
-import java.util.Date;
+import java.lang.reflect.Type;
+import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
 public class Timesheet {
 
+    public static final Type TYPE = new TypeToken<Timesheet>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<Timesheet>>() {
+    }.getType();
+
     private int id;
-    private Date startDate;
+    private String startDate;
+    private String endDate;
     private String alternateOrgName;
     private TimesheetAccount account;
     private IdAndName org;
     private IdAndName event;
     private String description;
-    private int hours;
-    private Date endDate;
+    private float hours;
     private String status;
 
     public final int getId() {
         return id;
     }
 
-    public final Date getStartDate() {
+    public final String getStartDate() {
         return startDate;
     }
 
@@ -45,11 +53,11 @@ public class Timesheet {
         return description;
     }
 
-    public final int getHours() {
+    public final float getHours() {
         return hours;
     }
 
-    public final Date getEndDate() {
+    public final String getEndDate() {
         return endDate;
     }
 
@@ -66,7 +74,7 @@ public class Timesheet {
         result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
         result = prime * result + ((event == null) ? 0 : event.hashCode());
-        result = prime * result + hours;
+        result = prime * result + Float.floatToIntBits(hours);
         result = prime * result + id;
         result = prime * result + ((org == null) ? 0 : org.hashCode());
         result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
@@ -108,7 +116,7 @@ public class Timesheet {
                 return false;
         } else if (!event.equals(other.event))
             return false;
-        if (hours != other.hours)
+        if (Float.floatToIntBits(hours) != Float.floatToIntBits(other.hours))
             return false;
         if (id != other.id)
             return false;
@@ -132,9 +140,9 @@ public class Timesheet {
 
     @Override
     public String toString() {
-        return "Timesheet [id=" + id + ", startDate=" + startDate + ", alternateOrgName=" + alternateOrgName
-                + ", account=" + account + ", org=" + org + ", event=" + event + ", description=" + description
-                + ", hours=" + hours + ", endDate=" + endDate + ", status=" + status + "]";
+        return "Timesheet [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", alternateOrgName="
+                + alternateOrgName + ", account=" + account + ", org=" + org + ", event=" + event + ", description="
+                + description + ", hours=" + hours + ", status=" + status + "]";
     }
 
 }
