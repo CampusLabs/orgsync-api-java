@@ -1,8 +1,18 @@
 package com.orgsync.api.model.accounts;
 
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
+
+import com.google.gson.reflect.TypeToken;
 
 public class Account {
+
+    public static final Type TYPE = new TypeToken<Account>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<Account>>() {
+    }.getType();
 
     private int id;
     private String username;

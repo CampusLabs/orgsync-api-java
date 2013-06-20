@@ -1,10 +1,18 @@
 package com.orgsync.api.model.accounts;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
 public class CustomProfileField {
+
+    public static final Type TYPE = new TypeToken<CustomProfileField>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<CustomProfileField>>() {
+    }.getType();
 
     private int id;
     private String name;

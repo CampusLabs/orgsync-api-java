@@ -1,10 +1,15 @@
 package com.orgsync.api.model.accounts;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.forms.FormResponse;
 
 public class AccountFull extends AccountDetail {
+
+    public static final Type TYPE = new TypeToken<AccountFull>() {
+    }.getType();
 
     private List<FormResponse> profileResponses;
 

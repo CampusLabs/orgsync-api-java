@@ -1,8 +1,14 @@
 package com.orgsync.api.model.accounts;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
+
 public class AccountDetail extends Account {
+
+    public static final Type TYPE = new TypeToken<AccountDetail>() {
+    }.getType();
 
     private String picUrl;
     private List<Integer> orgIds;
