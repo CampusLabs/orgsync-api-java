@@ -7,6 +7,7 @@ import com.ning.http.client.FluentStringsMap;
     static final String GET = "GET";
     static final String POST = "POST";
     static final String PUT = "PUT";
+    static final String DELETE = "DELETE";
     static final FluentStringsMap NO_PARAMS = new FluentStringsMap();
 
     final String method;
@@ -27,7 +28,11 @@ import com.ning.http.client.FluentStringsMap;
         return new RequestParams(POST, endpoint, params);
     }
 
-    RequestParams(final String method, final String endpoint,
+    public static RequestParams delete(final String endpoint) {
+        return new RequestParams(DELETE, endpoint, NO_PARAMS);
+    }
+
+    private RequestParams(final String method, final String endpoint,
             final FluentStringsMap queryParams) {
         super();
         this.method = method;
