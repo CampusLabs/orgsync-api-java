@@ -13,7 +13,7 @@ import com.orgsync.api.model.membership_logs.MembershipLogEntryRequest;
 /*package*/class MembershipLogsResourceImpl extends BaseResource implements MembershipLogsResource {
 
     /* package */MembershipLogsResourceImpl(final ApiClientImpl client) {
-        super(client);
+        super(client, "/org_membership_log_entries");
     }
 
     @Override

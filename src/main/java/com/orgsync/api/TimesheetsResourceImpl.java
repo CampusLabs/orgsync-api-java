@@ -12,7 +12,7 @@ import com.orgsync.api.model.timesheets.Timesheet;
 /*package*/class TimesheetsResourceImpl extends BaseResource implements TimesheetsResource {
 
     /* package */TimesheetsResourceImpl(final ApiClientImpl client) {
-        super(client);
+        super(client, "/timesheets");
     }
 
     @Override

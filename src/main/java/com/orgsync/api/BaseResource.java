@@ -12,8 +12,11 @@ import com.ning.http.client.ListenableFuture;
 
     private final ApiClientImpl client;
 
-    /* package */BaseResource(final ApiClientImpl client) {
+    private final String endpoint;
+
+    /* package */BaseResource(final ApiClientImpl client, final String endpoint) {
         this.client = client;
+        this.endpoint = endpoint;
     }
 
     /* package */<T> ListenableFuture<ApiResponse<T>> getResponse(final RequestParams params, final Type type) {
@@ -22,6 +25,14 @@ import com.ning.http.client.ListenableFuture;
 
     /* package */String dateToQueryParam(final Date date) {
         return dateFormat.format(date);
+    }
+
+    String getEndpoint() {
+        return endpoint;
+    }
+
+    String shorFor(final int id) {
+        return String.format("%s/%d", endpoint, id);
     }
 
 }

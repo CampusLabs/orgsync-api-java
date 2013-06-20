@@ -13,7 +13,7 @@ import com.orgsync.api.model.orgs.Org;
 /*package*/class OrgsResourceImpl extends BaseResource implements OrgsResource {
 
     /* package */OrgsResourceImpl(final ApiClientImpl client) {
-        super(client);
+        super(client, "/orgs");
     }
 
     @Override

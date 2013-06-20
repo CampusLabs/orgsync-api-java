@@ -17,7 +17,7 @@ import com.orgsync.api.model.groups.Group;
     private static final String ENDPOINT = "/groups";
 
     /* package */GroupsResourceImpl(final ApiClientImpl client) {
-        super(client);
+        super(client, "/groups");
     }
 
     @Override

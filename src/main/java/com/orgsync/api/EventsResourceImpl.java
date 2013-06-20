@@ -13,7 +13,7 @@ import com.orgsync.api.model.events.EventQueryParams;
 /*package*/class EventsResourceImpl extends BaseResource implements EventsResource {
 
     /* package */EventsResourceImpl(final ApiClientImpl client) {
-        super(client);
+        super(client, "/events");
     }
 
     @Override

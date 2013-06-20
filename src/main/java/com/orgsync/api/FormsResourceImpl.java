@@ -8,7 +8,7 @@ import com.orgsync.api.model.forms.FormSubmission;
 /*package*/class FormsResourceImpl extends BaseResource implements FormsResource {
 
     /* package */FormsResourceImpl(final ApiClientImpl client) {
-        super(client);
+        super(client, "/forms");
     }
 
     @Override

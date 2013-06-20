@@ -13,7 +13,7 @@ import com.orgsync.api.model.identification_cards.IdentificationCard;
     private static final String ENDPOINT = "/identification_cards";
 
     /* package */IdentificationCardsResourceImpl(final ApiClientImpl client) {
-        super(client);
+        super(client, "/identifications_cards");
     }
 
     @Override
