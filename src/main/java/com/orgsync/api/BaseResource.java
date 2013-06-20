@@ -37,7 +37,7 @@ import com.ning.http.client.ListenableFuture;
     }
 
     <T> ListenableFuture<ApiResponse<T>> list(final Type type) {
-        return getResponse(RequestParams.get(endpoint), type);
+        return list("", type);
     }
 
     <T> ListenableFuture<ApiResponse<T>> list(final String prefix, final Type type) {
