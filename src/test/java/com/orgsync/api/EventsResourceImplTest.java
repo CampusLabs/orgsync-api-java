@@ -15,12 +15,10 @@ public class EventsResourceImplTest extends BaseResourceTest {
 
     @Test
     public void testGetEvents() throws Exception {
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("CST"));
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         cal.set(2013, 0, 1, 10, 25, 35); // 0th month is Jan...
 
         Date startTime = cal.getTime();
-
-        System.out.println(startTime);
         String keyword = "test";
 
         EventQueryParams params = new EventQueryParams().setStartDate(startTime).setKeyword(keyword);

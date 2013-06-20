@@ -3,6 +3,7 @@ package com.orgsync.api;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
@@ -10,6 +11,10 @@ import com.ning.http.client.ListenableFuture;
 /*package*/abstract class BaseResource {
 
     /* package */static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+    static {
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     private final ApiClientImpl client;
 
