@@ -28,7 +28,11 @@ import com.ning.http.client.FluentStringsMap;
         return new RequestParams(POST, endpoint, params);
     }
 
-    public static RequestParams delete(final String endpoint) {
+    static RequestParams put(final String endpoint, final FluentStringsMap params) {
+        return new RequestParams(PUT, endpoint, params);
+    }
+
+    static RequestParams delete(final String endpoint) {
         return new RequestParams(DELETE, endpoint, NO_PARAMS);
     }
 
