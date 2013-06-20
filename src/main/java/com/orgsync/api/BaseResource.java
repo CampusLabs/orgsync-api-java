@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
 
 /*package*/abstract class BaseResource {
@@ -41,6 +42,16 @@ import com.ning.http.client.ListenableFuture;
 
     <T> ListenableFuture<ApiResponse<T>> list(final String prefix, final Type type) {
         return getResponse(RequestParams.get(prefix + endpoint), type);
+    }
+
+    <T> ListenableFuture<ApiResponse<T>> show(final int id, final Type type) {
+        return getResponse(RequestParams.get(shorFor(id)), type);
+    }
+
+    void checkAddField(final FluentStringsMap params, final String field, final Object value) {
+        if (value != null) {
+            params.add(field, value.toString());
+        }
     }
 
 }

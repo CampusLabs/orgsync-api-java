@@ -2,10 +2,8 @@ package com.orgsync.api.model.accounts;
 
 public class AccountUpdateRequest {
 
-    public static final int NO_ELEMENT_ID = -1;
-
     private String username;
-    private int elementId = NO_ELEMENT_ID;
+    private ElementPair element;
     private String firstName;
     private String lastName;
     private String middleInitial;
@@ -25,12 +23,12 @@ public class AccountUpdateRequest {
         return this;
     }
 
-    public final int getElementId() {
-        return elementId;
+    public final ElementPair getElement() {
+        return element;
     }
 
-    public final AccountUpdateRequest setElementId(final int elementId) {
-        this.elementId = elementId;
+    public final AccountUpdateRequest setElement(final ElementPair element) {
+        this.element = element;
         return this;
     }
 
@@ -121,7 +119,7 @@ public class AccountUpdateRequest {
         int result = 1;
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + elementId;
+        result = prime * result + ((element == null) ? 0 : element.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -152,7 +150,10 @@ public class AccountUpdateRequest {
                 return false;
         } else if (!city.equals(other.city))
             return false;
-        if (elementId != other.elementId)
+        if (element == null) {
+            if (other.element != null)
+                return false;
+        } else if (!element.equals(other.element))
             return false;
         if (email == null) {
             if (other.email != null)
@@ -199,9 +200,59 @@ public class AccountUpdateRequest {
 
     @Override
     public String toString() {
-        return "AccountUpdateRequest [username=" + username + ", elementId=" + elementId + ", firstName=" + firstName
+        return "AccountUpdateRequest [username=" + username + ", elementId=" + element + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", middleInitial=" + middleInitial + ", email=" + email + ", phoneNumber="
                 + phoneNumber + ", address=" + address + ", city=" + city + ", state=" + state + ", zip=" + zip + "]";
+    }
+
+    public static final class ElementPair {
+        private final int elementId;
+        private final int elementValue;
+
+        public ElementPair(final int elementId, final int elementValue) {
+            super();
+            this.elementId = elementId;
+            this.elementValue = elementValue;
+        }
+
+        public final int getElementId() {
+            return elementId;
+        }
+
+        public final int getElementValue() {
+            return elementValue;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + elementId;
+            result = prime * result + elementValue;
+            return result;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            ElementPair other = (ElementPair) obj;
+            if (elementId != other.elementId)
+                return false;
+            if (elementValue != other.elementValue)
+                return false;
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "ElementPair [elementId=" + elementId + ", elementValue=" + elementValue + "]";
+        }
+
     }
 
 }
