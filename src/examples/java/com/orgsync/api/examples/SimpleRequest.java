@@ -10,7 +10,6 @@ import com.orgsync.api.OrgSync;
 import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Resources;
 import com.orgsync.api.Util;
-import com.orgsync.api.Version;
 import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.forms.FormSubmission;
 import com.orgsync.api.model.orgs.Org;
@@ -20,8 +19,8 @@ public class SimpleRequest {
     public static void main(final String[] args) throws InterruptedException,
             ExecutionException {
         String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385";
-        String host = "https://api.orgsync.com/api/";
-        ApiClient client = OrgSync.newApiClient(apiKey, Version.V2, host);
+        String host = "https://api.orgsync.com/api/v2";
+        ApiClient client = OrgSync.newApiClient(apiKey, host);
 
         try {
             System.out.println("Requesting orgs");

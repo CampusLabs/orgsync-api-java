@@ -23,9 +23,7 @@ import com.orgsync.api.model.ApiError;
     private static final Logger log = LoggerFactory
             .getLogger(ApiClientImpl.class);
 
-    public static final String DEFAULT_HOST = "https://api.orgsync.com/api/";
-
-    public static final Version DEFAULT_VERSION = Version.V2;
+    public static final String DEFAULT_HOST = "https://api.orgsync.com/api/v2";
 
     private static final AsyncHttpClient DEFAULT_CLIENT = new AsyncHttpClient();
 
@@ -36,17 +34,14 @@ import com.orgsync.api.model.ApiError;
     private final String apiKey;
 
     private final String host;
-    private final Version version;
 
     private AsyncHttpClient client;
 
     private final Gson gson;
 
-    /* package */ApiClientImpl(final String apiKey, final Version version,
-            final String host) {
+    /* package */ApiClientImpl(final String apiKey, final String host) {
         this.host = host;
         this.apiKey = apiKey;
-        this.version = version;
         setHttpClient(DEFAULT_CLIENT);
         this.gson = DEFAULT_GSON;
     }
@@ -75,11 +70,6 @@ import com.orgsync.api.model.ApiError;
     @Override
     public String getApiKey() {
         return apiKey;
-    }
-
-    @Override
-    public Version getVersion() {
-        return version;
     }
 
     /* package */<T> ListenableFuture<ApiResponse<T>> getResponse(
@@ -112,8 +102,7 @@ import com.orgsync.api.model.ApiError;
     }
 
     private String toURL(final String endpoint) {
-        return new StringBuilder().append(host).append(version.getPath())
-                .append(endpoint).toString();
+        return new StringBuilder().append(host).append(endpoint).toString();
     }
 
     private class ResponseCompletionHandler<T> extends
@@ -132,10 +121,12 @@ import com.orgsync.api.model.ApiError;
             log.debug("Received response string: {}", body);
 
             if (response.getStatusCode() == 200) {
-                return (T) ApiResponseFactory.success(gson.fromJson(body, type));
+                return (T) ApiResponseFactory
+                        .success(gson.fromJson(body, type));
             }
 
-            return (T) ApiResponseFactory.error(gson.fromJson(body, ApiError.class));
+            return (T) ApiResponseFactory.error(gson.fromJson(body,
+                    ApiError.class));
         }
 
     }

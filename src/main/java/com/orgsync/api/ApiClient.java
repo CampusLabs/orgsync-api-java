@@ -8,8 +8,6 @@ public interface ApiClient {
 
     public <T> T getResource(Resource<T> resource);
 
-    public Version getVersion();
-
     public String getApiKey();
 
     public AsyncHttpClient getHttpClient();

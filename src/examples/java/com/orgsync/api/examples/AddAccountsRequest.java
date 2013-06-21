@@ -9,7 +9,6 @@ import com.orgsync.api.ApiResponse;
 import com.orgsync.api.OrgSync;
 import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Resources;
-import com.orgsync.api.Version;
 import com.orgsync.api.model.Success;
 
 public class AddAccountsRequest {
@@ -18,7 +17,7 @@ public class AddAccountsRequest {
             ExecutionException {
         String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385";
         String host = "http://localhost:8080/api/";
-        ApiClient client = OrgSync.newApiClient(apiKey, Version.V2, host);
+        ApiClient client = OrgSync.newApiClient(apiKey, host);
 
         try {
             System.out.println("Requesting orgs");
@@ -27,7 +26,8 @@ public class AddAccountsRequest {
             int orgId = 46052;
             List<Integer> ids = Arrays.asList(5666, 1575);
 
-            ApiResponse<Success> result = resource.addAccounts(orgId, ids).get();
+            ApiResponse<Success> result = resource.addAccounts(orgId, ids)
+                    .get();
             if (result.isSuccess()) {
                 System.out.println(result.getResult());
             } else {

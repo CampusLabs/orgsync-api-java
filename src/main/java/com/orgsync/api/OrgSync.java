@@ -7,17 +7,11 @@ public final class OrgSync {
     }
 
     public static final ApiClient newApiClient(final String apiKey) {
-        return newApiClient(apiKey, ApiClientImpl.DEFAULT_VERSION);
+        return newApiClient(apiKey);
     }
 
-    public static final ApiClient newApiClient(final String apiKey,
-            final Version version) {
-        return newApiClient(apiKey, version, ApiClientImpl.DEFAULT_HOST);
-    }
-
-    public static ApiClient newApiClient(final String apiKey,
-            final Version version, final String host) {
-        return new ApiClientImpl(apiKey, version, host);
+    public static ApiClient newApiClient(final String apiKey, final String host) {
+        return new ApiClientImpl(apiKey, host);
     }
 
 }
