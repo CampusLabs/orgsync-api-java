@@ -1,8 +1,18 @@
 package com.orgsync.api.model.orgs;
 
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
+
+import com.google.gson.reflect.TypeToken;
 
 public class Org {
+
+    public static final Type TYPE = new TypeToken<Org>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<Org>>() {
+    }.getType();
 
     private int id;
     private String shortName;

@@ -11,7 +11,6 @@ import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Resources;
 import com.orgsync.api.Version;
 import com.orgsync.api.model.Success;
-import com.orgsync.api.model.orgs.AddAccounts;
 
 public class AddAccountsRequest {
 
@@ -28,9 +27,7 @@ public class AddAccountsRequest {
             int orgId = 46052;
             List<Integer> ids = Arrays.asList(5666, 1575);
 
-            AddAccounts accounts = new AddAccounts(orgId, ids);
-
-            ApiResponse<Success> result = resource.addAccounts(accounts).get();
+            ApiResponse<Success> result = resource.addAccounts(orgId, ids).get();
             if (result.isSuccess()) {
                 System.out.println(result.getResult());
             } else {
