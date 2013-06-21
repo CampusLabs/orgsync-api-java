@@ -28,6 +28,8 @@ sourceSets {
     examples {
         compileClasspath += sourceSets.main.runtimeClasspath
     }
+
+    integration
 }
 
 dependencies {
@@ -40,6 +42,10 @@ dependencies {
 
     examplesRuntime group: 'ch.qos.logback', name: 'logback-core', version: '1.0.13'
     examplesRuntime group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
+
+    integrationCompile group: 'com.typesafe', name: 'config', version: '1.0.1'
+	integrationCompile configurations.testCompile
+	integrationRuntime configurations.testRuntime
 }
 
 task(getOrgs, dependsOn: 'classes', type: JavaExec) {
@@ -52,8 +58,19 @@ task(addAccounts, dependsOn: 'classes', type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath
 }
 
+task integrationTest(type: Test) {
+  testClassesDir = sourceSets.integration.output.classesDir
+  classpath = sourceSets.integration.runtimeClasspath
+}
+
+task generateDbTemplate(dependsOn: 'classes', type: JavaExec) {
+    main = 'com.orgsync.api.integration.DbTemplate'
+    classpath = sourceSets.integration.runtimeClasspath + sourceSets.test.runtimeClasspath
+}
+
 eclipse {
     classpath {
         plusConfigurations += configurations.examplesRuntime
+        plusConfigurations += configurations.integrationRuntime
     }
 }
