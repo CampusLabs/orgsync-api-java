@@ -40,6 +40,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.5'
 
+    examplesCompile configurations.runtime
     examplesRuntime group: 'ch.qos.logback', name: 'logback-core', version: '1.0.13'
     examplesRuntime group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
 
@@ -48,12 +49,12 @@ dependencies {
 	integrationRuntime configurations.testRuntime
 }
 
-task(getOrgs, dependsOn: 'classes', type: JavaExec) {
+task simpleRequests(dependsOn: 'classes', type: JavaExec) {
     main = 'com.orgsync.api.examples.SimpleRequest'
     classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath
 }
 
-task(addAccounts, dependsOn: 'classes', type: JavaExec) {
+task addAccounts(dependsOn: 'classes', type: JavaExec) {
     main = 'com.orgsync.api.examples.AddAccountsRequest'
     classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath
 }
@@ -65,7 +66,7 @@ task integrationTest(type: Test) {
 
 task generateDbTemplate(dependsOn: 'classes', type: JavaExec) {
     main = 'com.orgsync.api.integration.DbTemplate'
-    classpath = sourceSets.integration.runtimeClasspath + sourceSets.test.runtimeClasspath
+    classpath = sourceSets.integration.runtimeClasspath
 }
 
 eclipse {
