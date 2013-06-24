@@ -62,7 +62,7 @@ import com.orgsync.api.model.accounts.CustomProfileField;
             final AccountUpdateRequest request) {
         checkNotNull(request);
 
-        return getResponse(RequestParams.put(showFor(accountId), toParams(request)), AccountFull.TYPE);
+        return update(accountId, toParams(request), AccountFull.TYPE);
     }
 
     /**

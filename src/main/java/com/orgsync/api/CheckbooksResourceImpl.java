@@ -36,7 +36,7 @@ import com.orgsync.api.model.checkbooks.CheckbookEntry;
     public ListenableFuture<ApiResponse<Checkbook>> createCheckbook(final int orgId, final String name) {
         checkNotNull(name);
 
-        String endpoint = String.format("/orgs/%d/checkbooks", orgId);
+        String endpoint = listFor("/orgs/%d", orgId);
         FluentStringsMap params = new FluentStringsMap().add("name", name);
 
         return getResponse(RequestParams.post(endpoint, params), Checkbook.TYPE);
@@ -58,7 +58,7 @@ import com.orgsync.api.model.checkbooks.CheckbookEntry;
 
     @Override
     public ListenableFuture<ApiResponse<List<Checkbook>>> getOrgCheckbooks(final int orgId) {
-        String endpoint = String.format("/orgs/%d%s", orgId, getEndpoint());
+        String endpoint = listFor("/orgs/%d", orgId);
         return getResponse(RequestParams.get(endpoint), Checkbook.LIST_TYPE);
     }
 

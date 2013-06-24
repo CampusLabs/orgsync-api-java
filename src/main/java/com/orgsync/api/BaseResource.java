@@ -111,6 +111,19 @@ import com.ning.http.client.ListenableFuture;
     }
 
     /**
+     * Get the list URL for a given prefix format and args.
+     * 
+     * @param prefixFormat
+     *            the format string for the prefix
+     * @param args
+     *            the args to pass to format
+     * @return the prefixed list URL
+     */
+    String listFor(final String prefixFormat, final Object... args) {
+        return String.format(prefixFormat, args) + endpoint;
+    }
+
+    /**
      * List this resource by calling the endpoint and use the given type.
      * 
      * @param type

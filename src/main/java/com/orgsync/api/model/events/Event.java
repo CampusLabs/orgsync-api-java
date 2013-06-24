@@ -1,10 +1,15 @@
 package com.orgsync.api.model.events;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
 public class Event {
+
+    public static final Type LIST_TYPE = new TypeToken<List<Event>>() {
+    }.getType();
 
     private int id;
     private String name;
