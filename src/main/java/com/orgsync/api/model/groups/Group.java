@@ -1,8 +1,17 @@
 package com.orgsync.api.model.groups;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
+
 public class Group {
+
+    public static final Type TYPE = new TypeToken<Group>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<Group>>() {
+    }.getType();
 
     private int id;
     private String name;

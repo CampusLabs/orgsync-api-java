@@ -176,6 +176,19 @@ import com.ning.http.client.ListenableFuture;
     }
 
     /**
+     * Create for the resource using the given params.
+     * 
+     * @param params
+     *            the params to create with
+     * @param type
+     *            the returned type
+     * @return a future to the response of the type
+     */
+    <T> ListenableFuture<ApiResponse<T>> create(final FluentStringsMap params, final Type type) {
+        return getResponse(RequestParams.post(getEndpoint(), params), type);
+    }
+
+    /**
      * Delete the given id.
      * 
      * @param id

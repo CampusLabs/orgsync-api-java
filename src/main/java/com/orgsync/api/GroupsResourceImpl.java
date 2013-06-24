@@ -5,16 +5,19 @@ import static com.orgsync.api.Util.joinList;
 
 import java.util.List;
 
-import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.Success;
 import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.groups.Group;
 
-/*package*/class GroupsResourceImpl extends BaseResource implements GroupsResource {
-
-    private static final String ENDPOINT = "/groups";
+/**
+ * The groups resource implementation.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class GroupsResourceImpl extends BaseResource implements GroupsResource {
 
     /* package */GroupsResourceImpl(final ApiClientImpl client) {
         super(client, "/groups");
@@ -22,15 +25,13 @@ import com.orgsync.api.model.groups.Group;
 
     @Override
     public ListenableFuture<ApiResponse<List<Group>>> getOrgGroups(final int orgId) {
-        String endpoint = String.format("/orgs/%d/groups", orgId);
-        return getResponse(RequestParams.get(endpoint), new TypeToken<List<Group>>() {
-        }.getType());
+        String prefix = String.format("/orgs/%d", orgId);
+        return list(prefix, Group.LIST_TYPE);
     }
 
     @Override
     public ListenableFuture<ApiResponse<Group>> getGroup(final int groupId) {
-        return getResponse(RequestParams.get(endpointForGroup(groupId)), new TypeToken<Group>() {
-        }.getType());
+        return show(groupId, Group.TYPE);
     }
 
     @Override
@@ -40,14 +41,12 @@ import com.orgsync.api.model.groups.Group;
         FluentStringsMap params = new FluentStringsMap();
         params.add("name", name).add("org_id", String.valueOf(orgId));
 
-        return getResponse(RequestParams.post(ENDPOINT, params), new TypeToken<Group>() {
-        }.getType());
+        return create(params, Group.TYPE);
     }
 
     @Override
     public ListenableFuture<ApiResponse<Success>> deleteGroup(final int groupId) {
-        return getResponse(RequestParams.delete(endpointForGroup(groupId)), new TypeToken<Success>() {
-        }.getType());
+        return delete(groupId, Success.TYPE);
     }
 
     @Override
@@ -55,14 +54,12 @@ import com.orgsync.api.model.groups.Group;
         checkNotNull(name);
 
         FluentStringsMap params = new FluentStringsMap().add("name", name);
-        return getResponse(RequestParams.put(endpointForGroup(groupId), params), new TypeToken<Group>() {
-        }.getType());
+        return update(groupId, params, Group.TYPE);
     }
 
     @Override
     public ListenableFuture<ApiResponse<List<Account>>> listAccounts(final int groupId) {
-        return getResponse(RequestParams.get(endpointForGroup(groupId) + "/accounts"), new TypeToken<List<Account>>() {
-        }.getType());
+        return getResponse(RequestParams.get(showFor(groupId) + "/accounts"), Account.LIST_TYPE);
     }
 
     @Override
@@ -70,9 +67,7 @@ import com.orgsync.api.model.groups.Group;
         checkNotNull(accountIds);
 
         FluentStringsMap params = new FluentStringsMap().add("ids", joinList(accountIds, ","));
-        return getResponse(RequestParams.post(endpointForGroup(groupId) + "/accounts/add", params),
-                new TypeToken<Success>() {
-                }.getType());
+        return getResponse(RequestParams.post(showFor(groupId) + "/accounts/add", params), Success.TYPE);
     }
 
     @Override
@@ -81,13 +76,6 @@ import com.orgsync.api.model.groups.Group;
         checkNotNull(accountIds);
 
         FluentStringsMap params = new FluentStringsMap().add("ids", joinList(accountIds, ","));
-        return getResponse(RequestParams.post(endpointForGroup(groupId) + "/accounts/remove", params),
-                new TypeToken<Success>() {
-                }.getType());
+        return getResponse(RequestParams.post(showFor(groupId) + "/accounts/remove", params), Success.TYPE);
     }
-
-    private static String endpointForGroup(final int groupId) {
-        return ENDPOINT + "/" + groupId;
-    }
-
 }
