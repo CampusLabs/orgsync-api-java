@@ -5,7 +5,13 @@ import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.forms.Form;
 import com.orgsync.api.model.forms.FormSubmission;
 
-/*package*/class FormsResourceImpl extends BaseResource implements FormsResource {
+/**
+ * The forms resource implementation.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class FormsResourceImpl extends BaseResource implements FormsResource {
 
     /* package */FormsResourceImpl(final ApiClientImpl client) {
         super(client, "/forms");
