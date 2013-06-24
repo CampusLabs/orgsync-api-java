@@ -2,19 +2,38 @@ package com.orgsync.api;
 
 import com.orgsync.api.model.ApiError;
 
-/*package*/final class ApiResponseFactory {
+/**
+ * A factory for creating {@link ApiResponse}s. Use {@link #error(ApiError)} to create an error and use
+ * {@link #success(Object)} to create a success.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */final class ApiResponseFactory {
 
     private ApiResponseFactory() {
     }
 
+    /**
+     * Create an api response of type error.
+     * 
+     * @param error
+     *            the error that was returned.
+     * @return the api response
+     */
     /* package */static final <T> ApiResponse<T> error(final ApiError error) {
         return new FailureResponse<T>(error);
     }
 
-    @SuppressWarnings("unchecked")
-    /* package */static final <T> ApiResponse<T> success(final Object result) {
-        // The cast is not awesome... but oh well
-        return new SuccessResponse<T>((T) result);
+    /**
+     * Get a success for the given result.
+     * 
+     * @param result
+     *            the returned result
+     * @return the api response
+     */
+    /* package */static final <T> ApiResponse<T> success(final T result) {
+        return new SuccessResponse<T>(result);
     }
 
     private static final class FailureResponse<T> implements ApiResponse<T> {
