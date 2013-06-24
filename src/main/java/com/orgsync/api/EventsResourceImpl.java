@@ -10,7 +10,13 @@ import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.events.Event;
 import com.orgsync.api.model.events.EventQueryParams;
 
-/*package*/class EventsResourceImpl extends BaseResource implements EventsResource {
+/**
+ * Implementation of events resource.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class EventsResourceImpl extends BaseResource implements EventsResource {
 
     /* package */EventsResourceImpl(final ApiClientImpl client) {
         super(client, "/events");
@@ -33,6 +39,13 @@ import com.orgsync.api.model.events.EventQueryParams;
         }.getType());
     }
 
+    /**
+     * Create the query params map for the given event query.
+     * 
+     * @param params
+     *            the event query
+     * @return the query params map
+     */
     private FluentStringsMap toParamsMap(final EventQueryParams params) {
         FluentStringsMap map = new FluentStringsMap();
 

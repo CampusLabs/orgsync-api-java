@@ -10,7 +10,13 @@ import com.orgsync.api.model.Success;
 import com.orgsync.api.model.checkbooks.Checkbook;
 import com.orgsync.api.model.checkbooks.CheckbookEntry;
 
-/*package*/class CheckbooksResourceImpl extends BaseResource implements CheckbooksResource {
+/**
+ * Implementation of the Checkbooks resource.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class CheckbooksResourceImpl extends BaseResource implements CheckbooksResource {
 
     /* package */CheckbooksResourceImpl(final ApiClientImpl client) {
         super(client, "/checkbooks");
