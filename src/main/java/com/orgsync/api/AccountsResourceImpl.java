@@ -12,7 +12,13 @@ import com.orgsync.api.model.accounts.AccountFull;
 import com.orgsync.api.model.accounts.AccountUpdateRequest;
 import com.orgsync.api.model.accounts.CustomProfileField;
 
-/*package*/class AccountsResourceImpl extends BaseResource implements AccountsResource {
+/**
+ * The implementation of the accounts resource.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class AccountsResourceImpl extends BaseResource implements AccountsResource {
 
     /* package */AccountsResourceImpl(final ApiClientImpl client) {
         super(client, "/accounts");
@@ -59,6 +65,13 @@ import com.orgsync.api.model.accounts.CustomProfileField;
         return getResponse(RequestParams.put(showFor(accountId), toParams(request)), AccountFull.TYPE);
     }
 
+    /**
+     * Convert the account update request into a query param map.
+     * 
+     * @param request
+     *            the update request
+     * @return the map with query params
+     */
     private FluentStringsMap toParams(final AccountUpdateRequest request) {
         FluentStringsMap params = new FluentStringsMap();
 
