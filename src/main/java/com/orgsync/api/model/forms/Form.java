@@ -1,11 +1,19 @@
 package com.orgsync.api.model.forms;
 
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
 public class Form {
+
+    public static final Type TYPE = new TypeToken<Form>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<Form>>() {
+    }.getType();
 
     private int id;
     private String name;

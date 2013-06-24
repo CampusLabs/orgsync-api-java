@@ -1,9 +1,15 @@
 package com.orgsync.api.model.forms;
 
+import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
+
 public class FormSubmission {
+
+    public static final Type TYPE = new TypeToken<FormSubmission>() {
+    }.getType();
 
     private int id;
     private int submitterId;

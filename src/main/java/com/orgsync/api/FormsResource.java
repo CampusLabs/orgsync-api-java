@@ -1,5 +1,7 @@
 package com.orgsync.api;
 
+import java.util.List;
+
 import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.forms.Form;
 import com.orgsync.api.model.forms.FormSubmission;
@@ -21,7 +23,7 @@ public interface FormsResource {
      * 
      * @return a future to the response with all forms
      */
-    public ListenableFuture<ApiResponse<Form>>
+    public ListenableFuture<ApiResponse<List<Form>>>
             getForms();
 
     /**
@@ -31,7 +33,7 @@ public interface FormsResource {
      *            the org to get forms for
      * @return a future to the response of forms
      */
-    public ListenableFuture<ApiResponse<Form>>
+    public ListenableFuture<ApiResponse<List<Form>>>
             getOrgForms(int orgId);
 
     /**
