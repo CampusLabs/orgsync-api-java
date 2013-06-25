@@ -49,6 +49,13 @@ dependencies {
 	integrationRuntime configurations.testRuntime
 }
 
+javadoc {
+    options.links = [ 
+        'http://sonatype.github.io/async-http-client/apidocs/reference/', 
+        'http://download.oracle.com/javase/6/docs/api/' 
+    ]
+}
+
 task simpleRequests(dependsOn: 'classes', type: JavaExec) {
     main = 'com.orgsync.api.examples.SimpleRequest'
     classpath = sourceSets.main.runtimeClasspath + sourceSets.examples.runtimeClasspath
