@@ -8,18 +8,82 @@ import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.orgs.Org;
 import com.orgsync.api.model.orgs.OrgUpdateRequest;
 
+/**
+ * <p>
+ * Access to the organizations resource from the OrgSync API. This allows a client to list and update orgs, as well as
+ * add and remove accounts from an org.
+ * 
+ * <p>
+ * See: <a href="https://api.orgsync.com/api/docs/v2/orgs">https://api.orgsync.com/api/docs/v2/orgs</a>
+ * 
+ * 
+ * @author steffyj
+ * 
+ */
 public interface OrgsResource {
 
-    public ListenableFuture<ApiResponse<List<Org>>> getOrgs();
+    /**
+     * Get all of the orgs for this community.
+     * 
+     * @return a future to a resposne with all of the orgs
+     */
+    public ListenableFuture<ApiResponse<List<Org>>>
+            getOrgs();
 
-    public ListenableFuture<ApiResponse<Org>> getOrg(int orgId);
+    /**
+     * Get an org by its id.
+     * 
+     * @param orgId
+     *            the id of the org to get
+     * @return a future to the response with the org
+     */
+    public ListenableFuture<ApiResponse<Org>>
+            getOrg(int orgId);
 
-    public ListenableFuture<ApiResponse<Org>> updateOrg(int orgId, OrgUpdateRequest request);
+    /**
+     * Update an org with the fields specified in the {@link OrgUpdateRequest}.
+     * 
+     * @param orgId
+     *            the id of the org to update
+     * @param request
+     *            the fields to update
+     * @return a future to a response with the updated orgs
+     */
+    public ListenableFuture<ApiResponse<Org>>
+            updateOrg(int orgId, OrgUpdateRequest request);
 
-    public ListenableFuture<ApiResponse<List<Account>>> listAccounts(int orgId);
+    /**
+     * List all of the accounts for an org based on id.
+     * 
+     * @param orgId
+     *            the id of the org to list accounts for
+     * @return a future to a resposne with the list of accounts
+     */
+    public ListenableFuture<ApiResponse<List<Account>>>
+            listAccounts(int orgId);
 
-    public ListenableFuture<ApiResponse<Success>> addAccounts(int orgId, List<Integer> accountIds);
+    /**
+     * Add a list of accounts to an org.
+     * 
+     * @param orgId
+     *            the org to add the accounts to
+     * @param accountIds
+     *            the account ids to add to this org
+     * @return a future to the response
+     */
+    public ListenableFuture<ApiResponse<Success>>
+            addAccounts(int orgId, List<Integer> accountIds);
 
-    public ListenableFuture<ApiResponse<Success>> removeAccounts(int orgId, List<Integer> accountIds);
+    /**
+     * Remove a list of accounts from an org.
+     * 
+     * @param orgId
+     *            the org to remove accounts for
+     * @param accountIds
+     *            the list of account ids to remove
+     * @return a future to the response
+     */
+    public ListenableFuture<ApiResponse<Success>>
+            removeAccounts(int orgId, List<Integer> accountIds);
 
 }

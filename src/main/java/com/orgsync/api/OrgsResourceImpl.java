@@ -12,7 +12,13 @@ import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.orgs.Org;
 import com.orgsync.api.model.orgs.OrgUpdateRequest;
 
-/*package*/class OrgsResourceImpl extends BaseResource implements OrgsResource {
+/**
+ * The implementation of the orgs endpoint.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class OrgsResourceImpl extends BaseResource implements OrgsResource {
 
     /* package */OrgsResourceImpl(final ApiClientImpl client) {
         super(client, "/orgs");
@@ -22,18 +28,6 @@ import com.orgsync.api.model.orgs.OrgUpdateRequest;
     public ListenableFuture<ApiResponse<List<Org>>> getOrgs() {
         return list(Org.LIST_TYPE);
     }
-
-    // @Override
-    // public ListenableFuture<ApiResponse<Success>> addAccounts(
-    // final AddAccounts accounts) {
-    // String endpoint = String.format("/orgs/%d/accounts/add",
-    // accounts.getId());
-    // FluentStringsMap params = new FluentStringsMap().add("ids",
-    // Util.joinList(accounts.getIds(), ","));
-    // return getResponse(RequestParams.post(endpoint, params),
-    // new TypeToken<Success>() {
-    // }.getType());
-    // }
 
     @Override
     public ListenableFuture<ApiResponse<Org>> getOrg(final int orgId) {
