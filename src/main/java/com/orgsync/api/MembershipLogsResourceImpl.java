@@ -4,13 +4,18 @@ import static com.orgsync.api.Util.checkNotNull;
 
 import java.util.List;
 
-import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.membership_logs.MembershipLogEntry;
 import com.orgsync.api.model.membership_logs.MembershipLogEntryRequest;
 
-/*package*/class MembershipLogsResourceImpl extends BaseResource implements MembershipLogsResource {
+/**
+ * The implementation of the membership log entries
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class MembershipLogsResourceImpl extends BaseResource implements MembershipLogsResource {
 
     /* package */MembershipLogsResourceImpl(final ApiClientImpl client) {
         super(client, "/org_membership_log_entries");
@@ -21,10 +26,16 @@ import com.orgsync.api.model.membership_logs.MembershipLogEntryRequest;
         checkNotNull(request);
 
         return getResponse(RequestParams.get("/org_membership_log_entries", toParams(request)),
-                new TypeToken<List<MembershipLogEntry>>() {
-                }.getType());
+                MembershipLogEntry.LIST_TYPE);
     }
 
+    /**
+     * Convert the request into the necessary query params
+     * 
+     * @param request
+     *            the request to convert
+     * @return the query params to use
+     */
     private FluentStringsMap toParams(final MembershipLogEntryRequest request) {
         FluentStringsMap map = new FluentStringsMap();
 

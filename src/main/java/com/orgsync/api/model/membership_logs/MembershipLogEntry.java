@@ -1,8 +1,18 @@
 package com.orgsync.api.model.membership_logs;
 
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
+
+import com.google.gson.reflect.TypeToken;
 
 public class MembershipLogEntry {
+
+    public static final Type TYPE = new TypeToken<MembershipLogEntry>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<MembershipLogEntry>>() {
+    }.getType();
 
     private int accountId;
     private String action; // TODO enum type?
