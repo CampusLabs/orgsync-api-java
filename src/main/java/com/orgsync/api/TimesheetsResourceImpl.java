@@ -8,7 +8,13 @@ import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.timesheets.Timesheet;
 
-/*package*/class TimesheetsResourceImpl extends BaseResource implements TimesheetsResource {
+/**
+ * The implementation of the timesheets endpoint.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class TimesheetsResourceImpl extends BaseResource implements TimesheetsResource {
 
     /* package */TimesheetsResourceImpl(final ApiClientImpl client) {
         super(client, "/timesheets");
@@ -21,14 +27,12 @@ import com.orgsync.api.model.timesheets.Timesheet;
 
     @Override
     public ListenableFuture<ApiResponse<List<Timesheet>>> getAccountTimesheets(final int accountId) {
-        String endpoint = String.format("/accounts/%d/timesheets", accountId);
-        return getResponse(RequestParams.get(endpoint), Timesheet.LIST_TYPE);
+        return list("/accounts/%d", Timesheet.LIST_TYPE, accountId);
     }
 
     @Override
     public ListenableFuture<ApiResponse<List<Timesheet>>> getOrgTimesheets(final int orgId) {
-        String endpoint = String.format("/orgs/%d/timesheets", orgId);
-        return getResponse(RequestParams.get(endpoint), Timesheet.TYPE);
+        return list("/orgs/%d", Timesheet.LIST_TYPE, orgId);
     }
 
     @Override
@@ -36,7 +40,7 @@ import com.orgsync.api.model.timesheets.Timesheet;
             final String occurrenceDate) {
         checkNotNull(occurrenceDate);
 
-        String endpoint = String.format("/events/%d/timesheets", eventId);
+        String endpoint = listFor("/events/%d", eventId);
         FluentStringsMap params = new FluentStringsMap().add("occurrence", occurrenceDate);
 
         return getResponse(RequestParams.get(endpoint, params), Timesheet.TYPE);

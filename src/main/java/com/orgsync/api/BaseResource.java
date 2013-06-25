@@ -143,8 +143,8 @@ import com.ning.http.client.ListenableFuture;
      *            the type that is returned
      * @return the future to the response
      */
-    <T> ListenableFuture<ApiResponse<T>> list(final String prefix, final Type type) {
-        return getResponse(RequestParams.get(prefix + endpoint), type);
+    <T> ListenableFuture<ApiResponse<T>> list(final String prefix, final Type type, final Object... args) {
+        return getResponse(RequestParams.get(listFor(prefix, args)), type);
     }
 
     /**
