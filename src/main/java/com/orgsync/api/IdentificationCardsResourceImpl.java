@@ -2,44 +2,43 @@ package com.orgsync.api;
 
 import java.util.List;
 
-import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.Success;
 import com.orgsync.api.model.identification_cards.IdentificationCard;
 
-/*package*/class IdentificationCardsResourceImpl extends BaseResource implements IdentificationCardsResource {
-
-    private static final String ENDPOINT = "/identification_cards";
+/**
+ * The implementation of the identification cards resource.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class IdentificationCardsResourceImpl extends BaseResource implements IdentificationCardsResource {
 
     /* package */IdentificationCardsResourceImpl(final ApiClientImpl client) {
-        super(client, "/identifications_cards");
+        super(client, "/identification_cards");
     }
 
     @Override
     public ListenableFuture<ApiResponse<List<IdentificationCard>>> getIdentificationCards() {
-        return getResponse(RequestParams.get(ENDPOINT), new TypeToken<List<IdentificationCard>>() {
-        }.getType());
+        return list(IdentificationCard.LIST_TYPE);
     }
 
     @Override
     public ListenableFuture<ApiResponse<IdentificationCard>> getIdentificationCard(final int cardId) {
-        return getResponse(RequestParams.get(ENDPOINT + "/" + cardId), new TypeToken<IdentificationCard>() {
-        }.getType());
+        return show(cardId, IdentificationCard.TYPE);
     }
 
     @Override
     public ListenableFuture<ApiResponse<List<IdentificationCard>>> getIdentificationCardByAccount(final int accountId) {
-        String endpoint = String.format("%s/account_id/%d", ENDPOINT, accountId);
-        return getResponse(RequestParams.get(endpoint), new TypeToken<IdentificationCard>() {
-        }.getType());
+        String endpoint = String.format("%s/account_id/%d", getEndpoint(), accountId);
+        return getResponse(RequestParams.get(endpoint), IdentificationCard.TYPE);
     }
 
     @Override
     public ListenableFuture<ApiResponse<IdentificationCard>> getIdentificationCardByCardNumber(final String cardNumber) {
-        String endpoint = String.format("%s/number/%s", ENDPOINT, cardNumber);
-        return getResponse(RequestParams.get(endpoint), new TypeToken<IdentificationCard>() {
-        }.getType());
+        String endpoint = String.format("%s/number/%s", getEndpoint(), cardNumber);
+        return getResponse(RequestParams.get(endpoint), IdentificationCard.TYPE);
     }
 
     @Override
@@ -48,15 +47,12 @@ import com.orgsync.api.model.identification_cards.IdentificationCard;
         FluentStringsMap params = new FluentStringsMap();
         params.add("account_id", String.valueOf(accountId)).add("number", cardNumber);
 
-        return getResponse(RequestParams.post(ENDPOINT, params), new TypeToken<IdentificationCard>() {
-        }.getType());
+        return create(params, IdentificationCard.TYPE);
     }
 
     @Override
     public ListenableFuture<ApiResponse<Success>> removeIdentificationCardFromAccount(final int cardId) {
-        String endpoint = String.format("%s/%d", ENDPOINT, cardId);
-        return getResponse(RequestParams.delete(endpoint), new TypeToken<Success>() {
-        }.getType());
+        return delete(cardId, Success.TYPE);
     }
 
 }

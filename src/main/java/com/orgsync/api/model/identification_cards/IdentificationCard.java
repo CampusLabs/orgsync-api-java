@@ -1,6 +1,17 @@
 package com.orgsync.api.model.identification_cards;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import com.google.gson.reflect.TypeToken;
+
 public class IdentificationCard {
+
+    public static final Type TYPE = new TypeToken<IdentificationCard>() {
+    }.getType();
+
+    public static final Type LIST_TYPE = new TypeToken<List<IdentificationCard>>() {
+    }.getType();
 
     private int id;
     private String number;
