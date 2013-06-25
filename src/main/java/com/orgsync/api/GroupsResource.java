@@ -9,7 +9,7 @@ import com.orgsync.api.model.groups.Group;
 
 /**
  * <p>
- * Access to the accounts resource from the OrgSync API. This allows a client to list, update, create, and delete orgs.
+ * Access to the groups resource from the OrgSync API. This allows a client to list, update, create, and delete groups.
  * It also allows the client to get the accounts in a group, as well as add and remove accounts from the group.
  * 
  * <p>
