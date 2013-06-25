@@ -2,7 +2,15 @@ package com.orgsync.api;
 
 import com.ning.http.client.FluentStringsMap;
 
-/*package*/class RequestParams {
+/**
+ * A representation of the API requests. This includes the method, endpoint, and any query params. The various
+ * {@link #get(String)}, {@link #post(String, FluentStringsMap)}, {@link #delete(String)} factory method create a
+ * request of the given method.
+ * 
+ * @author steffyj
+ * 
+ */
+/* package */class RequestParams {
 
     private static final String GET = "GET";
     private static final String POST = "POST";
@@ -14,24 +22,65 @@ import com.ning.http.client.FluentStringsMap;
     private final String endpoint;
     private final FluentStringsMap queryParams;
 
+    /**
+     * Create a GET request to the given endpoint.
+     * 
+     * @param endpoint
+     *            the endpoint to use
+     * @return the GET request
+     */
     final static RequestParams get(final String endpoint) {
         return get(endpoint, NO_PARAMS);
     }
 
+    /**
+     * Create a GET request to an endpoint with the given query params.
+     * 
+     * @param endpoint
+     *            the endpoint to use
+     * @param params
+     *            the query params to pass
+     * @return the GET request
+     */
     final static RequestParams get(final String endpoint,
             final FluentStringsMap params) {
         return new RequestParams(GET, endpoint, params);
     }
 
+    /**
+     * Create a POST request to a given endpoint with the query params.
+     * 
+     * @param endpoint
+     *            the endpoint to use
+     * @param params
+     *            the query params to pass
+     * @return the new POST request
+     */
     final static RequestParams post(final String endpoint,
             final FluentStringsMap params) {
         return new RequestParams(POST, endpoint, params);
     }
 
+    /**
+     * Create a PUT request to an endpoint with the given query params.
+     * 
+     * @param endpoint
+     *            the endpoint to use
+     * @param params
+     *            the query params to pass
+     * @return the new PUT request
+     */
     static RequestParams put(final String endpoint, final FluentStringsMap params) {
         return new RequestParams(PUT, endpoint, params);
     }
 
+    /**
+     * Create a DELETE request to the given endpoint.
+     * 
+     * @param endpoint
+     *            the endpoint to use
+     * @return the new DELETE request
+     */
     static RequestParams delete(final String endpoint) {
         return new RequestParams(DELETE, endpoint, NO_PARAMS);
     }
@@ -44,14 +93,29 @@ import com.ning.http.client.FluentStringsMap;
         this.queryParams = queryParams;
     }
 
+    /**
+     * The method of this request (e.g. GET, PUT, etc.).
+     * 
+     * @return the method
+     */
     public final String getMethod() {
         return method;
     }
 
+    /**
+     * The path to the endpoint to hit (e.g. /accounts/123).
+     * 
+     * @return the endpoint path
+     */
     public final String getEndpoint() {
         return endpoint;
     }
 
+    /**
+     * The query params for the given request.
+     * 
+     * @return the query params
+     */
     public final FluentStringsMap getQueryParams() {
         return queryParams;
     }
