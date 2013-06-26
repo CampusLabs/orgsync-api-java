@@ -1,5 +1,11 @@
 package com.orgsync.api.model.accounts;
 
+/**
+ * A request to update an account.
+ * 
+ * @author steffyj
+ * 
+ */
 public class AccountUpdateRequest {
 
     private String username;

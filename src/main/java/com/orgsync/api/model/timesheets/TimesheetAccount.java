@@ -1,5 +1,11 @@
 package com.orgsync.api.model.timesheets;
 
+/**
+ * Account information on a timesheet.
+ * 
+ * @author steffyj
+ * 
+ */
 public class TimesheetAccount {
 
     private int id;

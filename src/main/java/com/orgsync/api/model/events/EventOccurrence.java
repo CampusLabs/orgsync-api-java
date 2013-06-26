@@ -2,6 +2,12 @@ package com.orgsync.api.model.events;
 
 import java.util.Date;
 
+/**
+ * Information about a single occurence of an event.
+ * 
+ * @author steffyj
+ * 
+ */
 public class EventOccurrence {
 
     // TODO blows up for allDay events... not full dates

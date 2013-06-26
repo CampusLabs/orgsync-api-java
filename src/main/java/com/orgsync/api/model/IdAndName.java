@@ -1,5 +1,11 @@
 package com.orgsync.api.model;
 
+/**
+ * A response with an id and a name.
+ * 
+ * @author steffyj
+ * 
+ */
 public class IdAndName {
 
     private int id;

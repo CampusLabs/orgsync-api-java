@@ -6,6 +6,12 @@ import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * A single form submission.
+ * 
+ * @author steffyj
+ * 
+ */
 public class FormSubmission {
 
     public static final Type TYPE = new TypeToken<FormSubmission>() {

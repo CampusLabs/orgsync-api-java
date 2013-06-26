@@ -1,5 +1,11 @@
 package com.orgsync.api.model.forms;
 
+/**
+ * A single question of a form.
+ * 
+ * @author steffyj
+ * 
+ */
 public class FormQuestion {
 
     private int id;

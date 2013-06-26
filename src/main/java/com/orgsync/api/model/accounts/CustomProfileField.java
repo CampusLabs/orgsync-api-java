@@ -6,6 +6,12 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
+/**
+ * A single custom profile field.
+ * 
+ * @author steffyj
+ * 
+ */
 public class CustomProfileField {
 
     public static final Type TYPE = new TypeToken<CustomProfileField>() {

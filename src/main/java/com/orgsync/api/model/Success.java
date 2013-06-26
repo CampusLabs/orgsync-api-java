@@ -4,6 +4,12 @@ import java.lang.reflect.Type;
 
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * A boolean response for whether or not the call succeeded.
+ * 
+ * @author steffyj
+ * 
+ */
 public class Success {
 
     public static final Type TYPE = new TypeToken<Success>() {

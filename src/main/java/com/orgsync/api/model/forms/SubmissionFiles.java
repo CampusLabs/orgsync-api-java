@@ -1,5 +1,11 @@
 package com.orgsync.api.model.forms;
 
+/**
+ * Information about a submitted file.
+ * 
+ * @author steffyj
+ * 
+ */
 public class SubmissionFiles {
 
     private String fileName;

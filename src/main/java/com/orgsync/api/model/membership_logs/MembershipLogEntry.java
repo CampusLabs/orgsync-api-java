@@ -6,6 +6,12 @@ import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * A single membership log entry.
+ * 
+ * @author steffyj
+ * 
+ */
 public class MembershipLogEntry {
 
     public static final Type TYPE = new TypeToken<MembershipLogEntry>() {

@@ -2,6 +2,12 @@ package com.orgsync.api.model.membership_logs;
 
 import java.util.Date;
 
+/**
+ * A search request for membership log entries.
+ * 
+ * @author steffyj
+ * 
+ */
 public class MembershipLogEntryRequest {
 
     public static final int NO_ACCOUNT_ID = -1;

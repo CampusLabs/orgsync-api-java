@@ -6,6 +6,12 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
+/**
+ * A model for a checkbook.
+ * 
+ * @author steffyj
+ * 
+ */
 public class Checkbook {
 
     public static final Type TYPE = new TypeToken<Checkbook>() {

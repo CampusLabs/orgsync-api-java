@@ -6,6 +6,12 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.forms.FormResponse;
 
+/**
+ * Full information about an account.
+ * 
+ * @author steffyj
+ * 
+ */
 public class AccountFull extends AccountDetail {
 
     public static final Type TYPE = new TypeToken<AccountFull>() {

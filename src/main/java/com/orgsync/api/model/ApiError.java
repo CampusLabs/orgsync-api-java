@@ -1,5 +1,11 @@
 package com.orgsync.api.model;
 
+/**
+ * An error response from the API.
+ * 
+ * @author steffyj
+ * 
+ */
 public class ApiError {
 
     public final String message;

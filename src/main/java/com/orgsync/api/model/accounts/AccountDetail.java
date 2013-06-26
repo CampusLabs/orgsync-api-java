@@ -5,6 +5,12 @@ import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * Detailed view of an account.
+ * 
+ * @author steffyj
+ * 
+ */
 public class AccountDetail extends Account {
 
     public static final Type TYPE = new TypeToken<AccountDetail>() {

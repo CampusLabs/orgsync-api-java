@@ -7,6 +7,12 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
+/**
+ * A model for a form.
+ * 
+ * @author steffyj
+ * 
+ */
 public class Form {
 
     public static final Type TYPE = new TypeToken<Form>() {

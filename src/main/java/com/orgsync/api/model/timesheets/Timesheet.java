@@ -6,6 +6,12 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
+/**
+ * A model for a timesheet.
+ * 
+ * @author steffyj
+ * 
+ */
 public class Timesheet {
 
     public static final Type TYPE = new TypeToken<Timesheet>() {

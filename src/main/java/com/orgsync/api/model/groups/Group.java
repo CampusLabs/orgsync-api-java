@@ -5,6 +5,12 @@ import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * A group within an org.
+ * 
+ * @author steffyj
+ * 
+ */
 public class Group {
 
     public static final Type TYPE = new TypeToken<Group>() {

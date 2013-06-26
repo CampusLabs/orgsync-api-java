@@ -6,6 +6,12 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
+/**
+ * A model for an event.
+ * 
+ * @author steffyj
+ * 
+ */
 public class Event {
 
     public static final Type LIST_TYPE = new TypeToken<List<Event>>() {

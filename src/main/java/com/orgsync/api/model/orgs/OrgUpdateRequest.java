@@ -1,5 +1,11 @@
 package com.orgsync.api.model.orgs;
 
+/**
+ * A request to update an org.
+ * 
+ * @author steffyj
+ * 
+ */
 public class OrgUpdateRequest {
 
     private Boolean isDisabled;

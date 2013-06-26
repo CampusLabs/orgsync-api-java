@@ -1,5 +1,11 @@
 package com.orgsync.api.model.forms;
 
+/**
+ * Score for a submission.
+ * 
+ * @author steffyj
+ * 
+ */
 public class SubmissionScore {
 
     private String notes;

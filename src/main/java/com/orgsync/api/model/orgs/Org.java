@@ -5,7 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
+import com.orgsync.api.model.IdAndName;
 
+/**
+ * A model for a single organization.
+ * 
+ * @author steffyj
+ * 
+ */
 public class Org {
 
     public static final Type TYPE = new TypeToken<Org>() {
@@ -18,7 +25,7 @@ public class Org {
     private String shortName;
     private String longName;
     private Date createdAt;
-    private OrgCategory category;
+    private IdAndName category;
     private boolean isDisabled;
     private String description;
     private String picUrl;
@@ -44,7 +51,7 @@ public class Org {
         return createdAt;
     }
 
-    public OrgCategory getCategory() {
+    public IdAndName getCategory() {
         return category;
     }
 
@@ -84,27 +91,19 @@ public class Org {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((alternateId == null) ? 0 : alternateId.hashCode());
-        result = prime * result
-                + ((category == null) ? 0 : category.hashCode());
-        result = prime * result
-                + ((createdAt == null) ? 0 : createdAt.hashCode());
-        result = prime * result
-                + ((description == null) ? 0 : description.hashCode());
+        result = prime * result + ((alternateId == null) ? 0 : alternateId.hashCode());
+        result = prime * result + ((category == null) ? 0 : category.hashCode());
+        result = prime * result + ((createdAt == null) ? 0 : createdAt.hashCode());
+        result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + id;
         result = prime * result + (isDisabled ? 1231 : 1237);
-        result = prime * result
-                + ((longName == null) ? 0 : longName.hashCode());
+        result = prime * result + ((longName == null) ? 0 : longName.hashCode());
         result = prime * result + memberCount;
         result = prime * result + ((picUrl == null) ? 0 : picUrl.hashCode());
-        result = prime * result
-                + ((renewedAt == null) ? 0 : renewedAt.hashCode());
-        result = prime * result
-                + ((shortName == null) ? 0 : shortName.hashCode());
+        result = prime * result + ((renewedAt == null) ? 0 : renewedAt.hashCode());
+        result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
         result = prime * result + umbrellaId;
-        result = prime * result
-                + ((websiteUrl == null) ? 0 : websiteUrl.hashCode());
+        result = prime * result + ((websiteUrl == null) ? 0 : websiteUrl.hashCode());
         return result;
     }
 
@@ -175,13 +174,10 @@ public class Org {
 
     @Override
     public String toString() {
-        return "Org [id=" + id + ", shortName=" + shortName + ", longName="
-                + longName + ", createdAt=" + createdAt + ", category="
-                + category + ", isDisabled=" + isDisabled + ", description="
-                + description + ", picUrl=" + picUrl + ", alternateId="
-                + alternateId + ", websiteUrl=" + websiteUrl + ", memberCount="
-                + memberCount + ", renewedAt=" + renewedAt + ", umbrellaId="
-                + umbrellaId + "]";
+        return "Org [id=" + id + ", shortName=" + shortName + ", longName=" + longName + ", createdAt=" + createdAt
+                + ", category=" + category + ", isDisabled=" + isDisabled + ", description=" + description
+                + ", picUrl=" + picUrl + ", alternateId=" + alternateId + ", websiteUrl=" + websiteUrl
+                + ", memberCount=" + memberCount + ", renewedAt=" + renewedAt + ", umbrellaId=" + umbrellaId + "]";
     }
 
 }

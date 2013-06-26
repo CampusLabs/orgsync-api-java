@@ -5,6 +5,12 @@ import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 
+/**
+ * An identification card.
+ * 
+ * @author steffyj
+ * 
+ */
 public class IdentificationCard {
 
     public static final Type TYPE = new TypeToken<IdentificationCard>() {

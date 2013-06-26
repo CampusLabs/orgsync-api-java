@@ -1,8 +1,15 @@
 package com.orgsync.api.model.forms;
 
+/**
+ * A response to a single form question.
+ * 
+ * @author steffyj
+ * 
+ */
 public class FormResponse {
 
     private FormQuestion element;
+    // TODO object here is not great... look into custom deserializer
     private Object data;
 
     public final FormQuestion getElement() {

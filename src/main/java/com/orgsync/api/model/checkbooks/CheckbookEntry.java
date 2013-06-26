@@ -7,6 +7,12 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.orgsync.api.model.IdAndName;
 
+/**
+ * A single entry in a checkbook.
+ * 
+ * @author steffyj
+ * 
+ */
 public class CheckbookEntry {
 
     public static final Type TYPE = new TypeToken<CheckbookEntry>() {

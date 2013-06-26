@@ -2,6 +2,12 @@ package com.orgsync.api.model.events;
 
 import java.util.Date;
 
+/**
+ * Parameters used to query an event.
+ * 
+ * @author steffyj
+ * 
+ */
 public class EventQueryParams {
 
     private Date startDate;
