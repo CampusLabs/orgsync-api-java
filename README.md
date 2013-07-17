@@ -1,5 +1,7 @@
 # Java OrgSync API Client
 
+[![Build Status][]][1]
+
 Java REST client for the OrgSync API
 
 ## Dev setup
@@ -15,3 +17,6 @@ Java REST client for the OrgSync API
 * Include apache commons for toStringBuilder, equalsBuilder, etc?  Or just keep generating?
 * Models aren't versioned with the api...
 * Add timeout and retry
+
+  [1]: https://circleci.com/gh/orgsync/orgsync-api-java "Build Status"
+  [build status]: https://circleci.com/gh/orgsync/orgsync-api-java.png?circle-token=672ada70345a132d9351bc9692f7b157d66ae137
