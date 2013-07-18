@@ -29,7 +29,9 @@ sourceSets {
         compileClasspath += sourceSets.main.runtimeClasspath
     }
 
-    integration
+    integration {
+        compileClasspath += sourceSets.main.runtimeClasspath
+    }
 }
 
 dependencies {
@@ -68,12 +70,12 @@ task addAccounts(dependsOn: 'classes', type: JavaExec) {
 
 task integrationTest(type: Test) {
   testClassesDir = sourceSets.integration.output.classesDir
-  classpath = sourceSets.integration.runtimeClasspath
+  classpath = sourceSets.main.runtimeClasspath + sourceSets.integration.runtimeClasspath
 }
 
 task generateDbTemplate(dependsOn: 'classes', type: JavaExec) {
     main = 'com.orgsync.api.integration.DbTemplate'
-    classpath = sourceSets.integration.runtimeClasspath
+    classpath = sourceSets.main.runtimeClasspath + sourceSets.integration.runtimeClasspath
 }
 
 eclipse {

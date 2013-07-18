@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -13,6 +14,14 @@ public class DbTemplate {
 
     public static final Config CONFIG =
             ConfigFactory.load("db_template.conf").resolve();
+
+    public static String getString(final String path) {
+        return CONFIG.getString("template.community." + path);
+    }
+
+    public static List<? extends Config> getList(final String path) {
+        return CONFIG.getConfigList("template.community." + path);
+    }
 
     public static void main(final String[] args) throws IOException {
         File file = new File("build/db_template.json");
