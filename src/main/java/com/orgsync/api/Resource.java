@@ -10,7 +10,7 @@ package com.orgsync.api;
  * @param <T>
  *            the type of resource to return
  */
-/* package */abstract class Resource<T> {
+public abstract class Resource<T> {
 
     /**
      * Get the resource of this type.

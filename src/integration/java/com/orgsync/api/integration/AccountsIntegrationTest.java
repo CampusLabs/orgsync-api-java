@@ -2,46 +2,86 @@ package com.orgsync.api.integration;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.orgsync.api.AccountsResource;
-import com.orgsync.api.ApiClient;
 import com.orgsync.api.ApiResponse;
-import com.orgsync.api.OrgSync;
 import com.orgsync.api.Resources;
 import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.accounts.AccountDetail;
+import com.orgsync.api.model.accounts.AccountFull;
 import com.typesafe.config.Config;
 
-public class AccountsIntegrationTest {
+public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResource> {
 
-    private static final String testKey = DbTemplate.getString("api_key");
-    private static final String host = "http://localhost:8080/api/v2";
-    private static final ApiClient client = OrgSync.newApiClient(testKey, host);
-    private static final AccountsResource resource = client.getResource(Resources.ACCOUNTS);
+    private static final List<? extends Config> configAccounts = DbTemplate.getList("users");
 
-    @Test
-    public void test() throws InterruptedException, ExecutionException {
-        ApiResponse<List<Account>> apiResponse = resource.getAccounts().get();
-        apiResponse.getResult();
+    public AccountsIntegrationTest() {
+        super(Resources.ACCOUNTS);
     }
 
     @Test
-    public void testGetAccountByEmail() throws Exception {
-        Config account = DbTemplate.getList("users").get(0);
-        ApiResponse<AccountDetail> response = resource.getAccountByEmail(account.getString("email_address")).get();
-        AccountDetail result = response.getResult();
+    public void test() throws InterruptedException, ExecutionException {
+        ApiResponse<List<Account>> apiResponse = getResource().getAccounts().get();
+        List<Account> accounts = apiResponse.getResult();
+        List<Integer> actualIds = new ArrayList<Integer>();
+
+        for (Account account : accounts) {
+            actualIds.add(account.getId());
+        }
+
+        List<Integer> expectedIds = new ArrayList<Integer>();
+
+        for (Config account : configAccounts) {
+            expectedIds.add(account.getInt("id"));
+        }
+
+        assertEquals(expectedIds, actualIds);
+    }
+
+    @Test
+    public void testGetAccount() throws Exception {
+        Config account = configAccounts.get(0);
+        AccountFull result = getResource().getAccount(account.getInt("id")).get().getResult();
 
         assertEquals(account.getString("username"), result.getUsername());
     }
 
-    @AfterClass
-    public static void after() {
-        client.destroy();
+    @Test
+    public void testGetAccountByEmail() throws Exception {
+        Config account = configAccounts.get(0);
+        ApiResponse<AccountDetail> response = getResource().getAccountByEmail(account.getString("email_address")).get();
+        AccountDetail result = response.getResult();
+
+        assertEquals(account.getInt("id"), result.getId());
+    }
+
+    @Test
+    public void testGetAccountByUsername() throws Exception {
+        Config account = configAccounts.get(0);
+        ApiResponse<AccountDetail> response = getResource().getAccountByUsername(account.getString("username")).get();
+        AccountDetail result = response.getResult();
+
+        assertEquals(account.getInt("id"), result.getId());
+    }
+
+    @Test
+    public void testGetAccountByCustomProfile() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testGetCustomProfileFields() throws Exception {
+        // TODO
+    }
+
+    @Test
+    public void testUpdateAccount() throws Exception {
+        // TODO
     }
 
 }
