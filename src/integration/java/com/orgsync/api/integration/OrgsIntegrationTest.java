@@ -2,6 +2,7 @@ package com.orgsync.api.integration;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,23 +35,10 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
     public void testGetOrgs() throws Exception {
         List<Org> orgs = getResult(getResource().getOrgs());
 
-        Set<Integer> actualIds = new HashSet<Integer>();
+        List<Config> allConfigPortals = new ArrayList<Config>(configPortals);
+        allConfigPortals.addAll(configUmbrellas);
 
-        for (Org org : orgs) {
-            actualIds.add(org.getId());
-        }
-
-        Set<Integer> expectedIds = new HashSet<Integer>();
-
-        for (Config portal : configPortals) {
-            expectedIds.add(portal.getInt("id"));
-        }
-
-        for (Config umbrella : configUmbrellas) {
-            expectedIds.add(umbrella.getInt("id"));
-        }
-
-        assertEquals(expectedIds, actualIds);
+        testContainsIds(orgs, allConfigPortals);
     }
 
     @Test
@@ -79,7 +67,6 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
 
         Set<String> expectedUsers = new HashSet<String>(config.getStringList("users"));
         assertEquals(expectedUsers, returnedUsers);
-
     }
 
     @Test

@@ -2,10 +2,7 @@ package com.orgsync.api.integration;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
 import org.junit.AfterClass;
 import org.junit.Ignore;
@@ -21,6 +18,7 @@ import com.typesafe.config.Config;
 public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResource> {
 
     private static final List<? extends Config> configAccounts = DbTemplate.getList("users");
+    private static final Config accountConfig = configAccounts.get(0);
 
     public AccountsIntegrationTest() {
         super(Resources.ACCOUNTS);
@@ -32,45 +30,30 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
     }
 
     @Test
-    public void testGetAccounts() throws InterruptedException, ExecutionException {
+    public void testGetAccounts() throws Exception {
         List<Account> accounts = getResult(getResource().getAccounts());
-        Set<Integer> actualIds = new HashSet<Integer>();
-
-        for (Account account : accounts) {
-            actualIds.add(account.getId());
-        }
-
-        Set<Integer> expectedIds = new HashSet<Integer>();
-
-        for (Config account : configAccounts) {
-            expectedIds.add(account.getInt("id"));
-        }
-
-        assertEquals(expectedIds, actualIds);
+        testContainsIds(accounts, configAccounts);
     }
 
     @Test
     public void testGetAccount() throws Exception {
-        Config account = configAccounts.get(0);
-        AccountFull result = getResult(getResource().getAccount(account.getInt("id")));
+        AccountFull result = getResult(getResource().getAccount(accountConfig.getInt("id")));
 
-        assertEquals(account.getString("username"), result.getUsername());
+        assertEquals(accountConfig.getString("username"), result.getUsername());
     }
 
     @Test
     public void testGetAccountByEmail() throws Exception {
-        Config account = configAccounts.get(0);
-        AccountDetail result = getResult(getResource().getAccountByEmail(account.getString("email_address")));
+        AccountDetail result = getResult(getResource().getAccountByEmail(accountConfig.getString("email_address")));
 
-        assertEquals(account.getInt("id"), result.getId());
+        assertEquals(accountConfig.getInt("id"), result.getId());
     }
 
     @Test
     public void testGetAccountByUsername() throws Exception {
-        Config account = configAccounts.get(0);
-        AccountDetail result = getResult(getResource().getAccountByUsername(account.getString("username")));
+        AccountDetail result = getResult(getResource().getAccountByUsername(accountConfig.getString("username")));
 
-        assertEquals(account.getInt("id"), result.getId());
+        assertEquals(accountConfig.getInt("id"), result.getId());
     }
 
     @Test

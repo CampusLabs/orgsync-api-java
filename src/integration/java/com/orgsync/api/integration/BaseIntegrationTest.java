@@ -1,14 +1,21 @@
 package com.orgsync.api.integration;
 
+import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+
+import org.hamcrest.core.IsCollectionContaining;
 
 import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.ApiClient;
 import com.orgsync.api.ApiResponse;
 import com.orgsync.api.OrgSync;
 import com.orgsync.api.Resource;
+import com.typesafe.config.Config;
 
 public class BaseIntegrationTest<T> {
 
@@ -32,6 +39,33 @@ public class BaseIntegrationTest<T> {
     public <R> R getResult(final ListenableFuture<ApiResponse<R>> future) throws InterruptedException,
             ExecutionException {
         return future.get().getResult();
+    }
+
+    public void testContainsIds(final List<? extends Object> results, final List<? extends Config> configs)
+            throws Exception {
+        List<Integer> expectedIds = getIdsForConfigs(configs);
+        List<Integer> returnedIds = getIdsForObjects(results);
+
+        assertThat(returnedIds, IsCollectionContaining.hasItems(expectedIds.toArray(new Integer[expectedIds.size()])));
+    }
+
+    public List<Integer> getIdsForConfigs(final List<? extends Config> configs) {
+        List<Integer> ids = new ArrayList<Integer>();
+        for (Config config : configs) {
+            ids.add(config.getInt("id"));
+        }
+
+        return ids;
+    }
+
+    public List<Integer> getIdsForObjects(final List<? extends Object> results) throws Exception {
+        List<Integer> ids = new ArrayList<Integer>();
+        for (Object obj : results) {
+            Integer id = (Integer) obj.getClass().getMethod("getId").invoke(obj);
+            ids.add(id);
+        }
+
+        return ids;
     }
 
     public static void cleanup(final Resource<?> resourceKey) {
