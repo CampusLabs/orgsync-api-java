@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.AfterClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.orgsync.api.OrgsResource;
@@ -61,6 +62,7 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
     }
 
     @Test
+    @Ignore("TODO")
     public void testUpdateOrg() throws Exception {
 
     }
@@ -81,11 +83,13 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
     }
 
     @Test
+    @Ignore("TODO")
     public void testAddAccounts() throws Exception {
 
     }
 
     @Test
+    @Ignore("TODO")
     public void testRemoveAccounts() throws Exception {
 
     }

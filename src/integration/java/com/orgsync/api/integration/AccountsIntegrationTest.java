@@ -8,10 +8,10 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.AfterClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.orgsync.api.AccountsResource;
-import com.orgsync.api.ApiResponse;
 import com.orgsync.api.Resources;
 import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.accounts.AccountDetail;
@@ -32,9 +32,8 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
     }
 
     @Test
-    public void test() throws InterruptedException, ExecutionException {
-        ApiResponse<List<Account>> apiResponse = getResource().getAccounts().get();
-        List<Account> accounts = apiResponse.getResult();
+    public void testGetAccounts() throws InterruptedException, ExecutionException {
+        List<Account> accounts = getResult(getResource().getAccounts());
         Set<Integer> actualIds = new HashSet<Integer>();
 
         for (Account account : accounts) {
@@ -75,16 +74,19 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
     }
 
     @Test
+    @Ignore("TODO")
     public void testGetAccountByCustomProfile() throws Exception {
         // TODO
     }
 
     @Test
+    @Ignore("TODO")
     public void testGetCustomProfileFields() throws Exception {
         // TODO
     }
 
     @Test
+    @Ignore("TODO")
     public void testUpdateAccount() throws Exception {
         // TODO
     }
