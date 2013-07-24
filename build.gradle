@@ -69,8 +69,9 @@ task addAccounts(dependsOn: 'classes', type: JavaExec) {
 }
 
 task integrationTest(type: Test) {
-  testClassesDir = sourceSets.integration.output.classesDir
-  classpath = sourceSets.main.runtimeClasspath + sourceSets.integration.runtimeClasspath
+    outputs.upToDateWhen { false }
+    testClassesDir = sourceSets.integration.output.classesDir
+    classpath = sourceSets.main.runtimeClasspath + sourceSets.integration.runtimeClasspath
 }
 
 task generateDbTemplate(dependsOn: 'classes', type: JavaExec) {
