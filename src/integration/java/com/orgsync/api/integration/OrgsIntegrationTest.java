@@ -1,26 +1,31 @@
 package com.orgsync.api.integration;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.junit.AfterClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.orgsync.api.OrgsResource;
 import com.orgsync.api.Resources;
+import com.orgsync.api.model.Success;
 import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.orgs.Org;
+import com.orgsync.api.model.orgs.OrgUpdateRequest;
 import com.typesafe.config.Config;
 
 public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
 
     private static final List<? extends Config> configPortals = DbTemplate.getList("portals");
     private static final List<? extends Config> configUmbrellas = DbTemplate.getList("umbrellas");
+
+    private static final Config testPortalConfig = configPortals.get(1);
 
     public OrgsIntegrationTest() {
         super(Resources.ORGS);
@@ -50,9 +55,26 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
     }
 
     @Test
-    @Ignore("TODO")
     public void testUpdateOrg() throws Exception {
+        int testPortalId = testPortalConfig.getInt("id");
+        String updatedShortName = "update";
 
+        Org original = getResult(getResource().getOrg(testPortalId));
+
+        assertEquals(testPortalConfig.getString("short_name"), original.getShortName());
+
+        Org updated = getResult(getResource().updateOrg(testPortalId,
+                new OrgUpdateRequest().setShortName(updatedShortName)));
+
+        assertEquals(updatedShortName, updated.getShortName());
+
+        // put it back the way it was
+        getResource().updateOrg(testPortalId,
+                new OrgUpdateRequest().setShortName(testPortalConfig.getString("short_name")));
+
+        Org reverted = getResult(getResource().getOrg(testPortalId));
+
+        assertEquals(testPortalConfig.getString("short_name"), reverted.getShortName());
     }
 
     @Test
@@ -70,14 +92,32 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
     }
 
     @Test
-    @Ignore("TODO")
-    public void testAddAccounts() throws Exception {
+    public void testAddAndRemoveAccounts() throws Exception {
+        int testPortalId = testPortalConfig.getInt("id");
 
-    }
+        List<Account> accounts = getResult(getResource().listAccounts(testPortalId));
 
-    @Test
-    @Ignore("TODO")
-    public void testRemoveAccounts() throws Exception {
+        assertTrue(accounts.isEmpty());
+
+        Config user = DbTemplate.getList("users").get(0);
+        int userId = user.getInt("id");
+
+        Success result = getResult(getResource().addAccounts(testPortalId, Collections.singletonList(userId)));
+
+        assertTrue(result.isSuccess());
+
+        accounts = getResult(getResource().listAccounts(testPortalId));
+
+        assertEquals(1, accounts.size());
+        assertEquals(user.getString("username"), accounts.get(0).getUsername());
+
+        result = getResult(getResource().removeAccounts(testPortalId, Collections.singletonList(userId)));
+
+        assertTrue(result.isSuccess());
+
+        accounts = getResult(getResource().listAccounts(testPortalId));
+
+        assertTrue(accounts.isEmpty());
 
     }
 
