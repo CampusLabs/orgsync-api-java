@@ -1,0 +1,93 @@
+package com.orgsync.api.integration;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.AfterClass;
+import org.junit.Test;
+
+import com.orgsync.api.OrgsResource;
+import com.orgsync.api.Resources;
+import com.orgsync.api.model.accounts.Account;
+import com.orgsync.api.model.orgs.Org;
+import com.typesafe.config.Config;
+
+public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
+
+    private static final List<? extends Config> configPortals = DbTemplate.getList("portals");
+    private static final List<? extends Config> configUmbrellas = DbTemplate.getList("umbrellas");
+
+    public OrgsIntegrationTest() {
+        super(Resources.ORGS);
+    }
+
+    @AfterClass
+    public static void cleanup() {
+        BaseIntegrationTest.cleanup(Resources.ORGS);
+    }
+
+    @Test
+    public void testGetOrgs() throws Exception {
+        List<Org> orgs = getResult(getResource().getOrgs());
+
+        Set<Integer> actualIds = new HashSet<Integer>();
+
+        for (Org org : orgs) {
+            actualIds.add(org.getId());
+        }
+
+        Set<Integer> expectedIds = new HashSet<Integer>();
+
+        for (Config portal : configPortals) {
+            expectedIds.add(portal.getInt("id"));
+        }
+
+        for (Config umbrella : configUmbrellas) {
+            expectedIds.add(umbrella.getInt("id"));
+        }
+
+        assertEquals(expectedIds, actualIds);
+    }
+
+    @Test
+    public void testGetOrg() throws Exception {
+        Config config = configPortals.get(0);
+        Org org = getResult(getResource().getOrg(config.getInt("id")));
+
+        assertEquals(config.getString("short_name"), org.getShortName());
+    }
+
+    @Test
+    public void testUpdateOrg() throws Exception {
+
+    }
+
+    @Test
+    public void testListAccounts() throws Exception {
+        Config config = configPortals.get(0);
+        List<Account> accounts = getResult(getResource().listAccounts(config.getInt("id")));
+
+        Set<String> returnedUsers = new HashSet<String>();
+        for (Account account : accounts) {
+            returnedUsers.add(account.getUsername());
+        }
+
+        Set<String> expectedUsers = new HashSet<String>(config.getStringList("users"));
+        assertEquals(expectedUsers, returnedUsers);
+
+    }
+
+    @Test
+    public void testAddAccounts() throws Exception {
+
+    }
+
+    @Test
+    public void testRemoveAccounts() throws Exception {
+
+    }
+
+}
