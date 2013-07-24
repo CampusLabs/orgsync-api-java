@@ -34,8 +34,6 @@ import com.orgsync.api.model.ApiError;
 
     public static final String DEFAULT_HOST = "https://api.orgsync.com/api/v2";
 
-    private static final AsyncHttpClient DEFAULT_CLIENT = new AsyncHttpClient();
-
     /** We use the naming policy to translate the json names to Java friendly names */
     private static final Gson DEFAULT_GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -52,7 +50,7 @@ import com.orgsync.api.model.ApiError;
     /* package */ApiClientImpl(final String apiKey, final String host) {
         this.host = host;
         this.apiKey = apiKey;
-        setHttpClient(DEFAULT_CLIENT);
+        setHttpClient(new AsyncHttpClient());
         this.gson = DEFAULT_GSON;
     }
 
