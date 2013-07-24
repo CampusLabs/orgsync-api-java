@@ -2,10 +2,12 @@ package com.orgsync.api.integration;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.orgsync.api.AccountsResource;
@@ -24,17 +26,22 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
         super(Resources.ACCOUNTS);
     }
 
+    @AfterClass
+    public static void cleanup() {
+        BaseIntegrationTest.cleanup(Resources.ACCOUNTS);
+    }
+
     @Test
     public void test() throws InterruptedException, ExecutionException {
         ApiResponse<List<Account>> apiResponse = getResource().getAccounts().get();
         List<Account> accounts = apiResponse.getResult();
-        List<Integer> actualIds = new ArrayList<Integer>();
+        Set<Integer> actualIds = new HashSet<Integer>();
 
         for (Account account : accounts) {
             actualIds.add(account.getId());
         }
 
-        List<Integer> expectedIds = new ArrayList<Integer>();
+        Set<Integer> expectedIds = new HashSet<Integer>();
 
         for (Config account : configAccounts) {
             expectedIds.add(account.getInt("id"));
@@ -46,7 +53,7 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
     @Test
     public void testGetAccount() throws Exception {
         Config account = configAccounts.get(0);
-        AccountFull result = getResource().getAccount(account.getInt("id")).get().getResult();
+        AccountFull result = getResult(getResource().getAccount(account.getInt("id")));
 
         assertEquals(account.getString("username"), result.getUsername());
     }
@@ -54,8 +61,7 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
     @Test
     public void testGetAccountByEmail() throws Exception {
         Config account = configAccounts.get(0);
-        ApiResponse<AccountDetail> response = getResource().getAccountByEmail(account.getString("email_address")).get();
-        AccountDetail result = response.getResult();
+        AccountDetail result = getResult(getResource().getAccountByEmail(account.getString("email_address")));
 
         assertEquals(account.getInt("id"), result.getId());
     }
@@ -63,8 +69,7 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
     @Test
     public void testGetAccountByUsername() throws Exception {
         Config account = configAccounts.get(0);
-        ApiResponse<AccountDetail> response = getResource().getAccountByUsername(account.getString("username")).get();
-        AccountDetail result = response.getResult();
+        AccountDetail result = getResult(getResource().getAccountByUsername(account.getString("username")));
 
         assertEquals(account.getInt("id"), result.getId());
     }
