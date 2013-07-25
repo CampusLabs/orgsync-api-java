@@ -2,12 +2,13 @@ package com.orgsync.api.integration;
 
 import static org.junit.Assert.assertThat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.AfterClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.orgsync.api.Resources;
@@ -73,8 +74,24 @@ public class TimesheetsIntegrationTest extends BaseIntegrationTest<TimesheetsRes
     }
 
     @Test
-    @Ignore("TODO after events...")
     public void testGetEventTimesheets() throws Exception {
+        List<? extends Config> eventsConfig = DbTemplate.getList("events");
+        Config eventConfig = eventsConfig.get(eventsConfig.size() - 1);
+
+        String dateString = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        List<Timesheet> result = getResult(getResource().getEventTimesheets(eventConfig.getInt("id"), dateString));
+
+        List<Integer> expectedIds = new ArrayList<Integer>();
+        for (Config config : timesheetsConfig) {
+            if (config.hasPath("event_title") && config.getString("event_title").equals(eventConfig.getString("title"))) {
+                expectedIds.add(config.getInt("id"));
+            }
+        }
+
+        List<Integer> ids = getIdsForObjects(result);
+
+        assertThat(ids, IsCollectionContaining.hasItems(expectedIds.toArray(new Integer[expectedIds.size()])));
 
     }
 }

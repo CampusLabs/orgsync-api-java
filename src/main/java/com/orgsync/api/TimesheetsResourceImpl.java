@@ -43,6 +43,6 @@ import com.orgsync.api.model.timesheets.Timesheet;
         String endpoint = listFor("/events/%d", eventId);
         FluentStringsMap params = new FluentStringsMap().add("occurrence", occurrenceDate);
 
-        return getResponse(RequestParams.get(endpoint, params), Timesheet.TYPE);
+        return getResponse(RequestParams.get(endpoint, params), Timesheet.LIST_TYPE);
     }
 }
