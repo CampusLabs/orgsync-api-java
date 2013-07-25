@@ -213,9 +213,9 @@ public class AccountUpdateRequest {
 
     public static final class ElementPair {
         private final int elementId;
-        private final int elementValue;
+        private final String elementValue;
 
-        public ElementPair(final int elementId, final int elementValue) {
+        public ElementPair(final int elementId, final String elementValue) {
             super();
             this.elementId = elementId;
             this.elementValue = elementValue;
@@ -225,7 +225,7 @@ public class AccountUpdateRequest {
             return elementId;
         }
 
-        public final int getElementValue() {
+        public final String getElementValue() {
             return elementValue;
         }
 
@@ -234,7 +234,7 @@ public class AccountUpdateRequest {
             final int prime = 31;
             int result = 1;
             result = prime * result + elementId;
-            result = prime * result + elementValue;
+            result = prime * result + ((elementValue == null) ? 0 : elementValue.hashCode());
             return result;
         }
 
@@ -249,7 +249,10 @@ public class AccountUpdateRequest {
             ElementPair other = (ElementPair) obj;
             if (elementId != other.elementId)
                 return false;
-            if (elementValue != other.elementValue)
+            if (elementValue == null) {
+                if (other.elementValue != null)
+                    return false;
+            } else if (!elementValue.equals(other.elementValue))
                 return false;
             return true;
         }

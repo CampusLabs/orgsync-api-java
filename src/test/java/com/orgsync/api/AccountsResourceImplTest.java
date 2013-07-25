@@ -74,7 +74,7 @@ public class AccountsResourceImplTest extends BaseResourceTest {
     public void testUpdateAccount() throws Exception {
         String firstName = "Test";
         String email = "test@orgsync.com";
-        ElementPair element = new ElementPair(37, 100);
+        ElementPair element = new ElementPair(37, "100");
         AccountUpdateRequest request = new AccountUpdateRequest().setFirstName(firstName).setEmail(email)
                 .setElement(element);
         accounts.updateAccount(3311, request);
