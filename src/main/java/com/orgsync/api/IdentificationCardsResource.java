@@ -46,7 +46,7 @@ public interface IdentificationCardsResource {
      *            the account id to get the identification card for
      * @return a future to the response with the identification card
      */
-    public ListenableFuture<ApiResponse<List<IdentificationCard>>>
+    public ListenableFuture<ApiResponse<IdentificationCard>>
             getIdentificationCardByAccount(int accountId);
 
     /**

@@ -30,7 +30,7 @@ import com.orgsync.api.model.identification_cards.IdentificationCard;
     }
 
     @Override
-    public ListenableFuture<ApiResponse<List<IdentificationCard>>> getIdentificationCardByAccount(final int accountId) {
+    public ListenableFuture<ApiResponse<IdentificationCard>> getIdentificationCardByAccount(final int accountId) {
         String endpoint = String.format("%s/account_id/%d", getEndpoint(), accountId);
         return getResponse(RequestParams.get(endpoint), IdentificationCard.TYPE);
     }
