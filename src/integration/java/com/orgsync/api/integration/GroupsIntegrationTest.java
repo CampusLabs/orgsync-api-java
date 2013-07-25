@@ -15,6 +15,7 @@ import org.junit.Test;
 import com.orgsync.api.GroupsResource;
 import com.orgsync.api.Resources;
 import com.orgsync.api.model.Success;
+import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.groups.Group;
 import com.typesafe.config.Config;
 
@@ -65,6 +66,11 @@ public class GroupsIntegrationTest extends BaseIntegrationTest<GroupsResource> {
 
         assertEquals(created, found);
 
+        String updatedName = "updated";
+        Group updated = getResult(getResource().updateGroup(created.getId(), updatedName));
+
+        assertEquals(updatedName, updated.getName());
+
         Success success = getResult(getResource().deleteGroup(found.getId()));
 
         assertTrue(success.isSuccess());
@@ -83,13 +89,14 @@ public class GroupsIntegrationTest extends BaseIntegrationTest<GroupsResource> {
         Success success = getResult(getResource().addAccountsToGroup(created.getId(), userIdList));
         assertTrue(success.isSuccess());
 
-        Group updated = getResult(getResource().getGroup(created.getId()));
-        assertEquals(userIdList, updated.getAccountIds());
+        List<Account> accounts = getResult(getResource().listAccounts(created.getId()));
+        assertEquals(1, accounts.size());
+        assertEquals(user.getInt("id"), accounts.get(0).getId());
 
         success = getResult(getResource().removeAccountsToGroup(created.getId(), userIdList));
         assertTrue(success.isSuccess());
 
-        updated = getResult(getResource().getGroup(created.getId()));
+        Group updated = getResult(getResource().getGroup(created.getId()));
         assertEquals(Collections.emptyList(), updated.getAccountIds());
 
         success = getResult(getResource().deleteGroup(created.getId()));
