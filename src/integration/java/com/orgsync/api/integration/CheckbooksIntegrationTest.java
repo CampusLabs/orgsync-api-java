@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.AfterClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.orgsync.api.ApiResponse;
@@ -38,7 +37,6 @@ public class CheckbooksIntegrationTest extends BaseIntegrationTest<CheckbooksRes
     }
 
     @Test
-    @Ignore
     public void testGetCheckbooks() throws Exception {
         List<Checkbook> checkbooks = getResult(getResource().getCheckbooks());
 
@@ -46,7 +44,6 @@ public class CheckbooksIntegrationTest extends BaseIntegrationTest<CheckbooksRes
     }
 
     @Test
-    @Ignore
     public void testGetCheckbook() throws Exception {
         Checkbook checkbook = getResult(getResource().getCheckbook(checkbookConfig.getInt("id")));
 
@@ -54,7 +51,6 @@ public class CheckbooksIntegrationTest extends BaseIntegrationTest<CheckbooksRes
     }
 
     @Test
-    @Ignore
     public void testCUDCheckbook() throws Exception {
         int portalId = portalConfig.getInt("id");
         String checkbookName = "test create";
@@ -79,7 +75,6 @@ public class CheckbooksIntegrationTest extends BaseIntegrationTest<CheckbooksRes
     }
 
     @Test
-    @Ignore
     public void testGetOrgCheckbooks() throws Exception {
         List<Checkbook> checkbooks = getResult(getResource().getOrgCheckbooks(portalConfig.getInt("id")));
 
@@ -99,7 +94,6 @@ public class CheckbooksIntegrationTest extends BaseIntegrationTest<CheckbooksRes
     }
 
     @Test
-    @Ignore
     public void testGetCheckbookEntries() throws Exception {
         List<CheckbookEntry> entries = getResult(getResource().getCheckbookEntries(checkbookConfig.getInt("id")));
 
@@ -107,7 +101,6 @@ public class CheckbooksIntegrationTest extends BaseIntegrationTest<CheckbooksRes
     }
 
     @Test
-    @Ignore
     public void testGetCheckbookEntry() throws Exception {
         Config entryConfig = checkbookConfig.getConfigList("entries").get(0);
 
