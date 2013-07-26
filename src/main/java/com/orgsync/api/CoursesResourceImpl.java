@@ -13,7 +13,7 @@ import com.orgsync.api.model.courses.CourseUpdateRequest;
 public class CoursesResourceImpl extends BaseResource implements CoursesResource {
 
     CoursesResourceImpl(final ApiClientImpl client) {
-        super(client, "/courses");
+        super(client, "/course_entries");
     }
 
     @Override

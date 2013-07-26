@@ -17,13 +17,13 @@ public class CoursesResoureImplTest extends BaseResourceTest {
     @Test
     public void testGetCourses() throws Exception {
         courses.getCourses();
-        verifyRequest(get("/courses"));
+        verifyRequest(get("/course_entries"));
     }
 
     @Test
     public void testGetCourse() throws Exception {
         courses.getCourse(123);
-        verifyRequest(get("/courses/123"));
+        verifyRequest(get("/course_entries/123"));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class CoursesResoureImplTest extends BaseResourceTest {
                 add("section", section).
                 add("account_id", "234");
 
-        verifyRequest(post("/courses", params));
+        verifyRequest(post("/course_entries", params));
     }
 
     @Test(expected = NullPointerException.class)
@@ -64,7 +64,7 @@ public class CoursesResoureImplTest extends BaseResourceTest {
         CourseUpdateRequest request = new CourseUpdateRequest().setName(updatedName);
         courses.updateCourse(345, request);
 
-        verifyRequest(put("/courses/345", new FluentStringsMap().add("name", updatedName)));
+        verifyRequest(put("/course_entries/345", new FluentStringsMap().add("name", updatedName)));
     }
 
     @Test(expected = NullPointerException.class)
@@ -75,7 +75,7 @@ public class CoursesResoureImplTest extends BaseResourceTest {
     @Test
     public void testDeleteCourse() throws Exception {
         courses.deleteCourse(789);
-        verifyRequest(delete("/courses/789"));
+        verifyRequest(delete("/course_entries/789"));
     }
 
 }
