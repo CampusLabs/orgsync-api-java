@@ -50,6 +50,18 @@ public final class Resources {
     };
 
     /**
+     * The courses resource.
+     * <p>
+     * See <a href="https://api.orgsync.com/api/docs/v2/courses"> https://api.orgsync.com/api/docs/v2/courses </a>
+     */
+    public static final Resource<CoursesResource> COURSES = new Resource<CoursesResource>() {
+        @Override
+        CoursesResource get(final ApiClientImpl client) {
+            return new CoursesResourceImpl(client);
+        }
+    };
+
+    /**
      * The events resource.
      * <p>
      * See <a href="https://api.orgsync.com/api/docs/v2/events">https://api.orgsync.com/api/docs/v2/events</a>
