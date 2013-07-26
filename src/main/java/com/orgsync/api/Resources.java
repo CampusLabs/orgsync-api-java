@@ -36,6 +36,12 @@ public final class Resources {
         }
     };
 
+    /**
+     * The classifications resource.
+     * <p>
+     * See <a href="https://api.orgsync.com/api/docs/v2/classifications">
+     * https://api.orgsync.com/api/docs/v2/classifications </a>
+     */
     public static final Resource<ClassificationsResource> CLASSIFICATIONS = new Resource<ClassificationsResource>() {
         @Override
         ClassificationsResource get(final ApiClientImpl client) {
