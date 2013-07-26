@@ -1,16 +1,15 @@
 package com.orgsync.api.integration;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.orgsync.api.IdentificationCardsResource;
 import com.orgsync.api.Resources;
-import com.orgsync.api.model.Success;
 import com.orgsync.api.model.identification_cards.IdentificationCard;
 import com.typesafe.config.Config;
 
@@ -64,17 +63,15 @@ public class IdentificationCardsIntegrationTest extends BaseIntegrationTest<Iden
 
     @Test
     public void testAddAndRemove() throws Exception {
-        Success result = getResult(getResource().removeIdentificationCardFromAccount(firstCardConfig.getInt("id")));
-        assertTrue(result.isSuccess());
+        Config userConfig = DbTemplate.getList("users").get(0);
+        int userId = userConfig.getInt("id");
+        String cardNumber = UUID.randomUUID().toString();
+        IdentificationCard card = getResult(getResource().addIdentificationCardToAccount(userId, cardNumber));
 
-        String cardNumber = firstCardConfig.getString("number");
-        IdentificationCard card = getResult(getResource().addIdentificationCardToAccount(101, cardNumber));
-
-        assertEquals(101, card.getAccountId());
+        assertEquals(userId, card.getAccountId());
         assertEquals(cardNumber, card.getNumber());
 
-        getResource().removeIdentificationCardFromAccount(101);
-        getResource().addIdentificationCardToAccount(201, cardNumber);
+        getResource().removeIdentificationCardFromAccount(userId);
     }
 
 }

@@ -29,7 +29,7 @@ public class MembershipLogsIntergrationTest extends BaseIntegrationTest<Membersh
     public void testGetMembershipLogEntries() throws Exception {
         List<MembershipLogEntry> result = getResult(getResource().getLogEntries(new MembershipLogEntryRequest()));
 
-        assertTrue(result.size() > 2);
+        assertTrue(result.size() >= 2);
     }
 
     @Test
