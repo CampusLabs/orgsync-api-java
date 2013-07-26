@@ -15,19 +15,19 @@ public class CoursesResoureImplTest extends BaseResourceTest {
     private final CoursesResourceImpl courses = new CoursesResourceImpl(client);
 
     @Test
-    public void testGetCourses() throws Exception {
-        courses.getCourses();
+    public void testGetCoursesEntries() throws Exception {
+        courses.getCourseEntries();
         verifyRequest(get("/course_entries"));
     }
 
     @Test
-    public void testGetCourse() throws Exception {
-        courses.getCourse(123);
+    public void testGetCourseEntry() throws Exception {
+        courses.getCourseEntry(123);
         verifyRequest(get("/course_entries/123"));
     }
 
     @Test
-    public void testCreateCourse() throws Exception {
+    public void testCreateCourseEntry() throws Exception {
         String name = "test name";
         String link = "http://some.test.com/link";
         String date = "2013-07-01";
@@ -40,7 +40,7 @@ public class CoursesResoureImplTest extends BaseResourceTest {
                 setLink(link).
                 setDate(date).
                 setSection(section);
-        courses.createCourse(request);
+        courses.createCourseEntry(request);
 
         FluentStringsMap params = new FluentStringsMap().
                 add("name", name).
@@ -53,28 +53,28 @@ public class CoursesResoureImplTest extends BaseResourceTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testCreateCourseNoUpdate() throws Exception {
-        courses.createCourse(null);
+    public void testCreateCourseEntryNoUpdate() throws Exception {
+        courses.createCourseEntry(null);
     }
 
     @Test
-    public void testUpdateCourse() throws Exception {
+    public void testUpdateCourseEntry() throws Exception {
         String updatedName = "new name";
 
         CourseUpdateRequest request = new CourseUpdateRequest().setName(updatedName);
-        courses.updateCourse(345, request);
+        courses.updateCourseEntry(345, request);
 
         verifyRequest(put("/course_entries/345", new FluentStringsMap().add("name", updatedName)));
     }
 
     @Test(expected = NullPointerException.class)
-    public void testUpdateCourseNoUpdate() throws Exception {
-        courses.updateCourse(567, null);
+    public void testUpdateCourseEntryNoUpdate() throws Exception {
+        courses.updateCourseEntry(567, null);
     }
 
     @Test
-    public void testDeleteCourse() throws Exception {
-        courses.deleteCourse(789);
+    public void testDeleteCourseEntry() throws Exception {
+        courses.deleteCourseEntry(789);
         verifyRequest(delete("/course_entries/789"));
     }
 

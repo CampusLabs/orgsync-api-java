@@ -25,7 +25,7 @@ public interface CoursesResource {
      * @return a future to the response with all courses
      */
     public ListenableFuture<ApiResponse<List<Course>>>
-            getCourses();
+            getCourseEntries();
 
     /**
      * Get a single course entry.
@@ -35,7 +35,7 @@ public interface CoursesResource {
      * @return a future to the response with the course
      */
     public ListenableFuture<ApiResponse<Course>>
-            getCourse(int courseId);
+            getCourseEntry(int courseId);
 
     /**
      * Create a new course entry.
@@ -45,7 +45,7 @@ public interface CoursesResource {
      * @return a future to the response with the new course
      */
     public ListenableFuture<ApiResponse<Course>>
-            createCourse(CourseUpdateRequest request);
+            createCourseEntry(CourseUpdateRequest request);
 
     /**
      * Update a single course entry.
@@ -57,7 +57,7 @@ public interface CoursesResource {
      * @return a future to a response with the updated course
      */
     public ListenableFuture<ApiResponse<Course>>
-            updateCourse(int courseId, CourseUpdateRequest request);
+            updateCourseEntry(int courseId, CourseUpdateRequest request);
 
     /**
      * Delete a course entry.
@@ -67,5 +67,5 @@ public interface CoursesResource {
      * @return a future to the response of success
      */
     public ListenableFuture<ApiResponse<Success>>
-            deleteCourse(int courseId);
+            deleteCourseEntry(int courseId);
 }

@@ -17,29 +17,29 @@ public class CoursesResourceImpl extends BaseResource implements CoursesResource
     }
 
     @Override
-    public ListenableFuture<ApiResponse<List<Course>>> getCourses() {
+    public ListenableFuture<ApiResponse<List<Course>>> getCourseEntries() {
         return list(Course.LIST_TYPE);
     }
 
     @Override
-    public ListenableFuture<ApiResponse<Course>> getCourse(final int courseId) {
+    public ListenableFuture<ApiResponse<Course>> getCourseEntry(final int courseId) {
         return show(courseId, Course.TYPE);
     }
 
     @Override
-    public ListenableFuture<ApiResponse<Course>> createCourse(final CourseUpdateRequest request) {
+    public ListenableFuture<ApiResponse<Course>> createCourseEntry(final CourseUpdateRequest request) {
         checkNotNull(request);
         return create(requestToParams(request), Course.TYPE);
     }
 
     @Override
-    public ListenableFuture<ApiResponse<Course>> updateCourse(final int courseId, final CourseUpdateRequest request) {
+    public ListenableFuture<ApiResponse<Course>> updateCourseEntry(final int courseId, final CourseUpdateRequest request) {
         checkNotNull(request);
         return update(courseId, requestToParams(request), Course.TYPE);
     }
 
     @Override
-    public ListenableFuture<ApiResponse<Success>> deleteCourse(final int courseId) {
+    public ListenableFuture<ApiResponse<Success>> deleteCourseEntry(final int courseId) {
         return delete(courseId, Success.TYPE);
     }
 
