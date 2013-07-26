@@ -36,6 +36,13 @@ public final class Resources {
         }
     };
 
+    public static final Resource<ClassificationsResource> CLASSIFICATIONS = new Resource<ClassificationsResource>() {
+        @Override
+        ClassificationsResource get(final ApiClientImpl client) {
+            return new ClassificationsResourceImpl(client);
+        }
+    };
+
     /**
      * The events resource.
      * <p>
