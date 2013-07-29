@@ -1,6 +1,5 @@
 package com.orgsync.api.model.events;
 
-import java.util.Date;
 
 /**
  * Information about a single occurence of an event.
@@ -10,16 +9,15 @@ import java.util.Date;
  */
 public class EventOccurrence {
 
-    // TODO blows up for allDay events... not full dates
-    private Date startsAt;
-    private Date endsAt;
+    private String startsAt;
+    private String endsAt;
     private boolean isAllDay;
 
-    public final Date getStartsAt() {
+    public final String getStartsAt() {
         return startsAt;
     }
 
-    public final Date getEndsAt() {
+    public final String getEndsAt() {
         return endsAt;
     }
 
@@ -63,7 +61,7 @@ public class EventOccurrence {
 
     @Override
     public String toString() {
-        return "EventOcurrence [startsAt=" + startsAt + ", endAt=" + endsAt + ", isAllDay=" + isAllDay + "]";
+        return "EventOccurrence [startsAt=" + startsAt + ", endsAt=" + endsAt + ", isAllDay=" + isAllDay + "]";
     }
 
 }
