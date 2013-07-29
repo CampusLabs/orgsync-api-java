@@ -1,7 +1,12 @@
 package com.orgsync.api.model.forms;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * A response to a single form question.
+ * A response to a single form question. The data returned from the API is very dynamic, which causes problems for our
+ * static types... for now it returns an Object that can be cast to the correct type based on the {@link FormQuestion}.
+ * See {@link #getData()} for some more info.
  * 
  * @author steffyj
  * 
@@ -16,6 +21,13 @@ public class FormResponse {
         return element;
     }
 
+    /**
+     * Get the data for this form response. Depending on the type of the question, the returned {@link Object} could
+     * either be a {@link String} (e.g. simple test field), a {@link Map} (e.g. in contact information), or a
+     * {@link List} of {@link Map}s (e.g. in a checkbox response)
+     * 
+     * @return the form data
+     */
     public final Object getData() {
         return data;
     }

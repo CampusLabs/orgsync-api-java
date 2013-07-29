@@ -1,8 +1,9 @@
 package com.orgsync.api.model.events;
 
-
 /**
- * Information about a single occurence of an event.
+ * Information about a single occurence of an event. The {@link #getStartsAt()} and {@link #getEndsAt()} responses are
+ * both {@link String}s, since the return can be either in a full UTC Date string if {@link #isAllDay()} is
+ * <code>false</code>, but a day String in the form of 'yyyy-MM-dd' if it {@link #isAllDay()}.
  * 
  * @author steffyj
  * 
