@@ -22,13 +22,6 @@ for the OrgSync server to be running against.  Here are the steps:
 * Start the OrgSync server pointing at this database
 * `gradle integrationTest` to run the tests against `localhost:8080`
 
-## TODO
-
-* Include Joda for local date?  Or just use string and let clients handle?
-* Include apache commons for toStringBuilder, equalsBuilder, etc?  Or just keep generating?
-* Models aren't versioned with the api...
-* Add timeout and retry
-
   [1]: https://circleci.com/gh/orgsync/orgsync-api-java "Build Status"
   [build status]: https://circleci.com/gh/orgsync/orgsync-api-java.png?circle-token=672ada70345a132d9351bc9692f7b157d66ae137
   [os_api]: https://api.orgsync.com/api/docs/v2
