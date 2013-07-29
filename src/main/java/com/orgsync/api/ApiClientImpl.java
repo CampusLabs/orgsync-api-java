@@ -22,7 +22,6 @@ import com.orgsync.api.model.ApiError;
  * The API client which handles returning resources and providing a uniform interface to make requests of the API and
  * translate the responses.
  * 
- * TODO this should probably be two different classes...
  * 
  * @author steffyj
  * 

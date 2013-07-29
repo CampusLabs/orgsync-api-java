@@ -21,7 +21,7 @@ public class MembershipLogEntry {
     }.getType();
 
     private int accountId;
-    private String action; // TODO enum type?
+    private String action;
     private Date createdAt;
     private int orgId;
 
