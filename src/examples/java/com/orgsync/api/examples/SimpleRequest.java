@@ -40,7 +40,7 @@ public class SimpleRequest {
             }
 
             FormsResource forms = client.getResource(Resources.FORMS);
-            ApiResponse<FormSubmission> submissionResponse = forms.getFormSubmission(3827851).get();
+            ApiResponse<FormSubmission> submissionResponse = forms.getFormSubmission(1325973).get();
             if (isSuccess(submissionResponse)) {
                 System.out.println("Recived form info: " + submissionResponse.getResult());
             }
