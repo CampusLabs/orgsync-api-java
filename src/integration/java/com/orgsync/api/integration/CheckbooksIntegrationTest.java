@@ -119,7 +119,7 @@ public class CheckbooksIntegrationTest extends BaseIntegrationTest<CheckbooksRes
 
         assertEquals(amount, entry.getAmount());
         assertEquals(description, entry.getDescription());
-        // assertEquals(checkbookId, entry.getCheckbook().getId()); TODO what do we need to do here?
+        assertEquals(checkbookId, entry.getCheckbook().getId());
 
         String updatedAmount = "19.99";
         String updatedDescription = "I updated this description";
