@@ -16,7 +16,7 @@ public class AddAccountsRequest {
     public static void main(final String[] args) throws InterruptedException,
             ExecutionException {
         String apiKey = "dd6b9d2beb614611c5eb9f56c34b743d1d86f385";
-        String host = "http://localhost:8080/api/";
+        String host = "https://api.orgsync.com/api/v2";
         ApiClient client = OrgSync.newApiClient(apiKey, host);
 
         try {
