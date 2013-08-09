@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 package com.orgsync.api;
 
 import java.io.IOException;
@@ -70,7 +70,14 @@ import com.orgsync.api.model.ApiError;
 
     @Override
     public void destroy() {
-        getHttpClient().close();
+        closeHttpClient();
+    }
+
+    private void closeHttpClient() {
+        if (getHttpClient() != null) {
+            getHttpClient().close();
+        }
+
     }
 
     @Override
@@ -85,6 +92,10 @@ import com.orgsync.api.model.ApiError;
 
     @Override
     public ApiClientImpl setHttpClient(final AsyncHttpClient client) {
+        Util.checkNotNull(client);
+
+        closeHttpClient();
+
         this.client = client;
         return this;
     }

@@ -12,10 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
 package com.orgsync.api;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -70,6 +71,20 @@ public class ApiClientImplTest {
     public void testDestroy() {
         client.destroy();
         verify(http).close();
+    }
+
+    @Test
+    public void testSetHttpClient() throws Exception {
+        AsyncHttpClient newClient = mock(AsyncHttpClient.class);
+
+        client.setHttpClient(newClient);
+
+        assertSame(newClient, client.getHttpClient());
+
+        client.destroy();
+
+        verify(http).close();
+        verify(newClient).close();
     }
 
     @Test
