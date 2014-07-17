@@ -105,3 +105,17 @@ idea {
     }
 }
 
+task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
+    from("README.md")
+    from("LICENSE")
+    from jar.outputs.files
+    into("javadoc/") {
+        from javadoc.destinationDir
+    }
+    into("examples/") {
+        from("src/examples/java")
+    }
+    into("docs/") {
+        from("docs/")
+    }
+}
