@@ -9,3 +9,7 @@ build/
 .project
 .settings/
 infinitest.filters
+
+# Idea
+.idea/
+*.iml
