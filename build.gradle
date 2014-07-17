@@ -11,6 +11,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 apply plugin: 'fatjar'
 apply plugin: 'github-pages'
 
@@ -97,3 +98,10 @@ githubPages {
     }
   }
 }
+
+idea {
+    module {
+        scopes.COMPILE.plus += configurations.integrationCompile
+    }
+}
+
