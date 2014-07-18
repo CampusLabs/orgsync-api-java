@@ -76,14 +76,14 @@ docs on the website to remain the one source of truth for the API, very little j
 for most of the model classes.  Please see the docs online for interpretation and possible values
 of each field in the models.
 
-  [api_client]: 
+  [api_client]: ../../javadoc/com/orgsync/api/ApiClient.html
   [os_api]: https://api.orgsync.com/api/docs/v2
   [generics]: http://en.wikipedia.org/wiki/Generics_in_Java
-  [get_accounts]: 
+  [get_accounts]: ../../javadoc/com/orgsync/api/AccountsResource.html#getAccount(int)
   [listenable_future]: http://sonatype.github.io/async-http-client/apidocs/reference/com/ning/http/client/ListenableFuture.html
   [async_http]: http://sonatype.github.io/async-http-client/
   [future]: http://en.wikipedia.org/wiki/Future_(programming)
-  [async]: 
-  [api_response]: 
-  [api_error]: 
+  [async]: http://en.wikipedia.org/wiki/Asynchronous_I/O
+  [api_response]: ../../javadoc/com/orgsync/api/ApiResponse.html
+  [api_error]: ../../javadoc/com/orgsync/api/model/ApiError.html
   [jul]: http://docs.oracle.com/javase/6/docs/api/java/util/List.html
