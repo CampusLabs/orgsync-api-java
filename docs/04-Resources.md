@@ -77,6 +77,7 @@ for most of the model classes.  Please see the docs online for interpretation an
 of each field in the models.
 
   [api_client]: ../../javadoc/com/orgsync/api/ApiClient.html
+  [resources]: ../../javadoc/com/orgsync/api/Resources.html
   [os_api]: https://api.orgsync.com/api/docs/v2
   [generics]: http://en.wikipedia.org/wiki/Generics_in_Java
   [get_accounts]: ../../javadoc/com/orgsync/api/AccountsResource.html#getAccount(int)

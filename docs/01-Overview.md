@@ -45,6 +45,7 @@ of the OrgSync server to test that requests and responses work as expected.
   [rest]: http://en.wikipedia.org/wiki/Representational_state_transfer
   [json]: http://en.wikipedia.org/wiki/Json
   [async_http]: http://sonatype.github.io/async-http-client/
+  [async]: http://en.wikipedia.org/wiki/Asynchronous_I/O
   [gson]: https://code.google.com/p/google-gson/
   [slf4j]: http://www.slf4j.org/
   [examples]: https://github.com/orgsync/orgsync-api-java/tree/master/src/examples/java/com/orgsync/api/examples
