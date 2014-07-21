@@ -34,38 +34,46 @@ public class AccountFull extends AccountDetail {
 
     private List<FormResponse> profileResponses;
 
+    private String aboutMe;
+
     public final List<FormResponse> getProfileResponses() {
         return profileResponses;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((profileResponses == null) ? 0 : profileResponses.hashCode());
-        return result;
+    public final String getAboutMe() {
+        return aboutMe;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (!super.equals(obj))
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AccountFull)) return false;
+        if (!super.equals(o)) return false;
+
+        AccountFull that = (AccountFull) o;
+
+        if (aboutMe != null ? !aboutMe.equals(that.aboutMe) : that.aboutMe != null) return false;
+        if (profileResponses != null ? !profileResponses.equals(that.profileResponses) : that.profileResponses != null)
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AccountFull other = (AccountFull) obj;
-        if (profileResponses == null) {
-            if (other.profileResponses != null)
-                return false;
-        } else if (!profileResponses.equals(other.profileResponses))
-            return false;
+
         return true;
     }
 
     @Override
-    public String toString() {
-        return "AccountFull [profileResponses=" + profileResponses + "]";
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (profileResponses != null ? profileResponses.hashCode() : 0);
+        result = 31 * result + (aboutMe != null ? aboutMe.hashCode() : 0);
+        return result;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AccountFull{");
+        sb.append("profileResponses=").append(profileResponses);
+        sb.append(", aboutMe='").append(aboutMe).append('\'');
+        sb.append(", super=").append(super.toString());
+        sb.append('}');
+        return sb.toString();
+    }
 }
