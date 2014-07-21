@@ -59,10 +59,12 @@ public interface CheckbooksResource {
      *            the org that owns this checkbook
      * @param name
      *            the name of the checkbook
+     * @param isReadOnly
+     *            whether or not this checkbook is read only
      * @return a future to the response of the new checkbook
      */
     public ListenableFuture<ApiResponse<Checkbook>>
-            createCheckbook(int orgId, String name);
+            createCheckbook(int orgId, String name, boolean isReadOnly);
 
     /**
      * Update the name of a given checkbook.
@@ -71,10 +73,12 @@ public interface CheckbooksResource {
      *            the id of the checkbook
      * @param name
      *            the updated name
+     * @param isReadOnly
+      *            whether or not this checkbook is read only
      * @return a future to the response of the checkbook
      */
     public ListenableFuture<ApiResponse<Checkbook>>
-            updateCheckbook(int checkbookId, String name);
+            updateCheckbook(int checkbookId, String name, boolean isReadOnly);
 
     /**
      * Delete the checkbook with the given id.
