@@ -100,12 +100,7 @@ import com.orgsync.api.model.accounts.CustomProfileField;
         checkAddField(params, "city", request.getCity());
         checkAddField(params, "state", request.getState());
         checkAddField(params, "zip", request.getZip());
-
-        if (request.getElement() != null) {
-            params.add(
-                    String.format("profile_entries[%d]", request.getElement().getElementId()),
-                    String.valueOf(request.getElement().getElementValue()));
-        }
+        addProfileFields(params, request.getProfileResponses());
 
         return params;
     }

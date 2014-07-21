@@ -15,11 +15,11 @@
 */
 package com.orgsync.api;
 
+import com.orgsync.api.model.forms.FormUpdate;
 import org.junit.Test;
 
 import com.ning.http.client.FluentStringsMap;
 import com.orgsync.api.model.accounts.AccountUpdateRequest;
-import com.orgsync.api.model.accounts.AccountUpdateRequest.ElementPair;
 
 public class AccountsResourceImplTest extends BaseResourceTest {
 
@@ -89,13 +89,18 @@ public class AccountsResourceImplTest extends BaseResourceTest {
     public void testUpdateAccount() throws Exception {
         String firstName = "Test";
         String email = "test@orgsync.com";
-        ElementPair element = new ElementPair(37, "100");
-        AccountUpdateRequest request = new AccountUpdateRequest().setFirstName(firstName).setEmail(email)
-                .setElement(element);
+        int profileField = 456;
+        String profileUpdate = "a profile update";
+
+        AccountUpdateRequest request = new AccountUpdateRequest()
+                .setFirstName(firstName).setEmail(email)
+                .addProfileUpdate(new FormUpdate(profileField, profileUpdate));
         accounts.updateAccount(3311, request);
 
-        FluentStringsMap params = new FluentStringsMap().add("first_name", firstName).add("email", email)
-                .add("profile_entries[37]", "100");
+        FluentStringsMap params = new FluentStringsMap()
+                .add("first_name", firstName)
+                .add("email", email)
+                .add(String.format("profile_responses[%d]", profileField), profileUpdate);
 
         verifyRequest(RequestParams.put("/accounts/3311", params));
     }

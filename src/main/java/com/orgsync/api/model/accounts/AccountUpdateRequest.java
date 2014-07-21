@@ -15,6 +15,11 @@
 */
 package com.orgsync.api.model.accounts;
 
+import com.orgsync.api.model.forms.FormUpdate;
+
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * A request to update an account.
  * 
@@ -24,7 +29,6 @@ package com.orgsync.api.model.accounts;
 public class AccountUpdateRequest {
 
     private String username;
-    private ElementPair element;
     private String firstName;
     private String lastName;
     private String middleInitial;
@@ -34,6 +38,7 @@ public class AccountUpdateRequest {
     private String city;
     private String state;
     private String zip;
+    private List<FormUpdate> profileResponses = new LinkedList<FormUpdate>();
 
     public final String getUsername() {
         return username;
@@ -41,15 +46,6 @@ public class AccountUpdateRequest {
 
     public final AccountUpdateRequest setUsername(final String username) {
         this.username = username;
-        return this;
-    }
-
-    public final ElementPair getElement() {
-        return element;
-    }
-
-    public final AccountUpdateRequest setElement(final ElementPair element) {
-        this.element = element;
         return this;
     }
 
@@ -134,149 +130,70 @@ public class AccountUpdateRequest {
         return this;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((address == null) ? 0 : address.hashCode());
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((element == null) ? 0 : element.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((middleInitial == null) ? 0 : middleInitial.hashCode());
-        result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-        result = prime * result + ((state == null) ? 0 : state.hashCode());
-        result = prime * result + ((username == null) ? 0 : username.hashCode());
-        result = prime * result + ((zip == null) ? 0 : zip.hashCode());
-        return result;
+    public List<FormUpdate> getProfileResponses() {
+        return profileResponses;
+    }
+
+    public AccountUpdateRequest addProfileUpdate(FormUpdate update) {
+        profileResponses.add(update);
+        return this;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AccountUpdateRequest)) return false;
+
+        AccountUpdateRequest that = (AccountUpdateRequest) o;
+
+        if (address != null ? !address.equals(that.address) : that.address != null) return false;
+        if (city != null ? !city.equals(that.city) : that.city != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
+        if (middleInitial != null ? !middleInitial.equals(that.middleInitial) : that.middleInitial != null)
             return false;
-        if (getClass() != obj.getClass())
+        if (phoneNumber != null ? !phoneNumber.equals(that.phoneNumber) : that.phoneNumber != null) return false;
+        if (profileResponses != null ? !profileResponses.equals(that.profileResponses) : that.profileResponses != null)
             return false;
-        AccountUpdateRequest other = (AccountUpdateRequest) obj;
-        if (address == null) {
-            if (other.address != null)
-                return false;
-        } else if (!address.equals(other.address))
-            return false;
-        if (city == null) {
-            if (other.city != null)
-                return false;
-        } else if (!city.equals(other.city))
-            return false;
-        if (element == null) {
-            if (other.element != null)
-                return false;
-        } else if (!element.equals(other.element))
-            return false;
-        if (email == null) {
-            if (other.email != null)
-                return false;
-        } else if (!email.equals(other.email))
-            return false;
-        if (firstName == null) {
-            if (other.firstName != null)
-                return false;
-        } else if (!firstName.equals(other.firstName))
-            return false;
-        if (lastName == null) {
-            if (other.lastName != null)
-                return false;
-        } else if (!lastName.equals(other.lastName))
-            return false;
-        if (middleInitial == null) {
-            if (other.middleInitial != null)
-                return false;
-        } else if (!middleInitial.equals(other.middleInitial))
-            return false;
-        if (phoneNumber == null) {
-            if (other.phoneNumber != null)
-                return false;
-        } else if (!phoneNumber.equals(other.phoneNumber))
-            return false;
-        if (state == null) {
-            if (other.state != null)
-                return false;
-        } else if (!state.equals(other.state))
-            return false;
-        if (username == null) {
-            if (other.username != null)
-                return false;
-        } else if (!username.equals(other.username))
-            return false;
-        if (zip == null) {
-            if (other.zip != null)
-                return false;
-        } else if (!zip.equals(other.zip))
-            return false;
+        if (state != null ? !state.equals(that.state) : that.state != null) return false;
+        if (username != null ? !username.equals(that.username) : that.username != null) return false;
+        if (zip != null ? !zip.equals(that.zip) : that.zip != null) return false;
+
         return true;
     }
 
     @Override
+    public int hashCode() {
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (middleInitial != null ? middleInitial.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (phoneNumber != null ? phoneNumber.hashCode() : 0);
+        result = 31 * result + (address != null ? address.hashCode() : 0);
+        result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        result = 31 * result + (zip != null ? zip.hashCode() : 0);
+        result = 31 * result + (profileResponses != null ? profileResponses.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
-        return "AccountUpdateRequest [username=" + username + ", elementId=" + element + ", firstName=" + firstName
-                + ", lastName=" + lastName + ", middleInitial=" + middleInitial + ", email=" + email + ", phoneNumber="
-                + phoneNumber + ", address=" + address + ", city=" + city + ", state=" + state + ", zip=" + zip + "]";
+        final StringBuilder sb = new StringBuilder("AccountUpdateRequest{");
+        sb.append("username='").append(username).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", middleInitial='").append(middleInitial).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", phoneNumber='").append(phoneNumber).append('\'');
+        sb.append(", address='").append(address).append('\'');
+        sb.append(", city='").append(city).append('\'');
+        sb.append(", state='").append(state).append('\'');
+        sb.append(", zip='").append(zip).append('\'');
+        sb.append(", profileResponses=").append(profileResponses);
+        sb.append('}');
+        return sb.toString();
     }
-
-    public static final class ElementPair {
-        private final int elementId;
-        private final String elementValue;
-
-        public ElementPair(final int elementId, final String elementValue) {
-            super();
-            this.elementId = elementId;
-            this.elementValue = elementValue;
-        }
-
-        public final int getElementId() {
-            return elementId;
-        }
-
-        public final String getElementValue() {
-            return elementValue;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + elementId;
-            result = prime * result + ((elementValue == null) ? 0 : elementValue.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(final Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            ElementPair other = (ElementPair) obj;
-            if (elementId != other.elementId)
-                return false;
-            if (elementValue == null) {
-                if (other.elementValue != null)
-                    return false;
-            } else if (!elementValue.equals(other.elementValue))
-                return false;
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return "ElementPair [elementId=" + elementId + ", elementValue=" + elementValue + "]";
-        }
-
-    }
-
 }

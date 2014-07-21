@@ -21,6 +21,7 @@ import static org.junit.Assert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.orgsync.api.model.forms.FormUpdate;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -31,7 +32,6 @@ import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.accounts.AccountDetail;
 import com.orgsync.api.model.accounts.AccountFull;
 import com.orgsync.api.model.accounts.AccountUpdateRequest;
-import com.orgsync.api.model.accounts.AccountUpdateRequest.ElementPair;
 import com.orgsync.api.model.accounts.CustomProfileField;
 import com.typesafe.config.Config;
 
@@ -121,7 +121,7 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
         AccountFull result = getResult(getResource().updateAccount(accountId,
                 new AccountUpdateRequest()
                         .setLastName(updatedLastName)
-                        .setElement(new ElementPair(profileConfig.getInt("id"), profileUpdate))));
+                        .addProfileUpdate(new FormUpdate(profileConfig.getInt("id"), profileUpdate))));
 
         assertEquals(updatedLastName, result.getLastName());
         assertEquals(profileUpdate, result.getProfileResponses().get(0).getData());
@@ -129,7 +129,7 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
         AccountFull reverted = getResult(getResource().updateAccount(accountId,
                 new AccountUpdateRequest()
                         .setLastName(accountConfig.getString("last_name"))
-                        .setElement(new ElementPair(profileConfig.getInt("id"), accountProfile.getString("data")))));
+                        .addProfileUpdate(new FormUpdate(profileConfig.getInt("id"), accountProfile.getString("data")))));
 
         assertEquals(accountConfig.getString("last_name"), reverted.getLastName());
         assertEquals(accountProfile.getString("data"), reverted.getProfileResponses().get(0).getData());
