@@ -59,6 +59,7 @@ import com.orgsync.api.model.orgs.OrgUpdateRequest;
         checkAddField(params, "alternate_id", request.getAlternateId());
         checkAddField(params, "short_name", request.getShortName());
         checkAddField(params, "is_disabled", request.getIsDisabled());
+        addProfileFields(params, request.getProfileResponses());
 
         return update(orgId, params, OrgFull.TYPE);
     }

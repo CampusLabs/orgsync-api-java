@@ -18,6 +18,7 @@ package com.orgsync.api;
 import java.util.Arrays;
 import java.util.List;
 
+import com.orgsync.api.model.forms.FormUpdate;
 import org.junit.Test;
 
 import com.ning.http.client.FluentStringsMap;
@@ -44,11 +45,20 @@ public class OrgsResourceImplTest extends BaseResourceTest {
     public void testUpdateOrganization() throws Exception {
         String alternateId = "alternate";
         String shortName = "short name";
-        OrgUpdateRequest request = new OrgUpdateRequest().setAlternateId(alternateId).setShortName(shortName);
+        int profileField = 456;
+        String profileUpdate = "a profile update";
+
+        OrgUpdateRequest request = new OrgUpdateRequest()
+                .setAlternateId(alternateId)
+                .setShortName(shortName)
+                .addProfileUpdate(new FormUpdate(profileField, profileUpdate));
 
         resource.updateOrg(1212, request);
 
-        FluentStringsMap params = new FluentStringsMap().add("alternate_id", alternateId).add("short_name", shortName);
+        FluentStringsMap params = new FluentStringsMap()
+                .add("alternate_id", alternateId)
+                .add("short_name", shortName)
+                .add(String.format("profile_responses[%d]", profileField), profileUpdate);
 
         verifyRequest(RequestParams.put("/orgs/1212", params));
     }

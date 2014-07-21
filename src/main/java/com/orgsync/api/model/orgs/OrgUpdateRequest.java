@@ -15,6 +15,12 @@
 */
 package com.orgsync.api.model.orgs;
 
+import com.orgsync.api.model.accounts.AccountUpdateRequest;
+import com.orgsync.api.model.forms.FormUpdate;
+
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * A request to update an org.
  * 
@@ -26,6 +32,7 @@ public class OrgUpdateRequest {
     private Boolean isDisabled;
     private String alternateId;
     private String shortName;
+    private List<FormUpdate> profileResponses = new LinkedList<FormUpdate>();
 
     public final Boolean getIsDisabled() {
         return isDisabled;
@@ -54,47 +61,48 @@ public class OrgUpdateRequest {
         return this;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((alternateId == null) ? 0 : alternateId.hashCode());
-        result = prime * result + ((isDisabled == null) ? 0 : isDisabled.hashCode());
-        result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
-        return result;
+    public List<FormUpdate> getProfileResponses() {
+        return profileResponses;
+    }
+
+    public OrgUpdateRequest addProfileUpdate(FormUpdate update) {
+        profileResponses.add(update);
+        return this;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrgUpdateRequest)) return false;
+
+        OrgUpdateRequest that = (OrgUpdateRequest) o;
+
+        if (alternateId != null ? !alternateId.equals(that.alternateId) : that.alternateId != null) return false;
+        if (isDisabled != null ? !isDisabled.equals(that.isDisabled) : that.isDisabled != null) return false;
+        if (profileResponses != null ? !profileResponses.equals(that.profileResponses) : that.profileResponses != null)
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        OrgUpdateRequest other = (OrgUpdateRequest) obj;
-        if (alternateId == null) {
-            if (other.alternateId != null)
-                return false;
-        } else if (!alternateId.equals(other.alternateId))
-            return false;
-        if (isDisabled == null) {
-            if (other.isDisabled != null)
-                return false;
-        } else if (!isDisabled.equals(other.isDisabled))
-            return false;
-        if (shortName == null) {
-            if (other.shortName != null)
-                return false;
-        } else if (!shortName.equals(other.shortName))
-            return false;
+        if (shortName != null ? !shortName.equals(that.shortName) : that.shortName != null) return false;
+
         return true;
     }
 
     @Override
-    public String toString() {
-        return "OrgUpdateRequest [isDisabled=" + isDisabled + ", alternateId=" + alternateId + ", shortName="
-                + shortName + "]";
+    public int hashCode() {
+        int result = isDisabled != null ? isDisabled.hashCode() : 0;
+        result = 31 * result + (alternateId != null ? alternateId.hashCode() : 0);
+        result = 31 * result + (shortName != null ? shortName.hashCode() : 0);
+        result = 31 * result + (profileResponses != null ? profileResponses.hashCode() : 0);
+        return result;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("OrgUpdateRequest{");
+        sb.append("isDisabled=").append(isDisabled);
+        sb.append(", alternateId='").append(alternateId).append('\'');
+        sb.append(", shortName='").append(shortName).append('\'');
+        sb.append(", profileResponses=").append(profileResponses);
+        sb.append('}');
+        return sb.toString();
+    }
 }

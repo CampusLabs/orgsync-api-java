@@ -18,10 +18,12 @@ package com.orgsync.api;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
+import com.orgsync.api.model.forms.FormUpdate;
 
 /**
  * <p>
@@ -88,7 +90,7 @@ import com.ning.http.client.ListenableFuture;
      * @param value
      *            the value to add if not null
      */
-    void checkAddField(final FluentStringsMap params, final String field, final Object value) {
+    /* package */void checkAddField(final FluentStringsMap params, final String field, final Object value) {
         if (value != null) {
             params.add(field, value.toString());
         }
@@ -103,6 +105,22 @@ import com.ning.http.client.ListenableFuture;
      */
     /* package */String dateToQueryParam(final Date date) {
         return dateFormat.format(date);
+    }
+
+    /**
+     * Add the profile updates (if any) to the params.
+     *
+     * @param params
+     *          the params to add the fields to
+     * @param updates
+     *          the profile updates to add
+     */
+    /* package */void addProfileFields(final FluentStringsMap params, final List<FormUpdate> updates) {
+        for(FormUpdate update : updates) {
+            params.add(
+                    String.format("profile_responses[%d]", update.getElementId()),
+                    String.valueOf(update.getElementValue()));
+        }
     }
 
     /**
