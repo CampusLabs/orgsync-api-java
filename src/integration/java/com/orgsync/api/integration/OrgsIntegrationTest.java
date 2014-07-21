@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.orgsync.api.model.orgs.OrgFull;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -64,7 +65,7 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
     @Test
     public void testGetOrg() throws Exception {
         Config config = configPortals.get(0);
-        Org org = getResult(getResource().getOrg(config.getInt("id")));
+        OrgFull org = getResult(getResource().getOrg(config.getInt("id")));
 
         assertEquals(config.getString("short_name"), org.getShortName());
     }
@@ -74,11 +75,11 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
         int testPortalId = testPortalConfig.getInt("id");
         String updatedShortName = "update";
 
-        Org original = getResult(getResource().getOrg(testPortalId));
+        OrgFull original = getResult(getResource().getOrg(testPortalId));
 
         assertEquals(testPortalConfig.getString("short_name"), original.getShortName());
 
-        Org updated = getResult(getResource().updateOrg(testPortalId,
+        OrgFull updated = getResult(getResource().updateOrg(testPortalId,
                 new OrgUpdateRequest().setShortName(updatedShortName)));
 
         assertEquals(updatedShortName, updated.getShortName());
@@ -87,7 +88,7 @@ public class OrgsIntegrationTest extends BaseIntegrationTest<OrgsResource> {
         getResource().updateOrg(testPortalId,
                 new OrgUpdateRequest().setShortName(testPortalConfig.getString("short_name")));
 
-        Org reverted = getResult(getResource().getOrg(testPortalId));
+        OrgFull reverted = getResult(getResource().getOrg(testPortalId));
 
         assertEquals(testPortalConfig.getString("short_name"), reverted.getShortName());
     }
