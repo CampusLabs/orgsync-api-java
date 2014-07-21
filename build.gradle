@@ -14,6 +14,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'fatjar'
 apply plugin: 'github-pages'
+apply plugin: 'maven'
 
 group = 'com.orgsync'
 version = '0.0.1'
