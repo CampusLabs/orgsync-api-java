@@ -194,6 +194,21 @@ import com.orgsync.api.model.forms.FormUpdate;
     }
 
     /**
+     * A standard show for a given id with params.
+     *
+     * @param id
+     *            the id to show
+     * @param params
+     *            the params to pass to this call
+     * @param type
+     *            the type of result
+     * @return the future to the response
+     */
+    <T> ListenableFuture<ApiResponse<T>> show(final int id, final FluentStringsMap params, Type type) {
+        return getResponse(RequestParams.get(showFor(id), params), type);
+    }
+
+    /**
      * Update a given id using the given params.
      * 
      * @param id

@@ -17,6 +17,7 @@ package com.orgsync.api;
 
 import java.util.List;
 
+import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.forms.Form;
 import com.orgsync.api.model.forms.FormSubmission;
@@ -47,6 +48,12 @@ import com.orgsync.api.model.forms.FormSubmission;
     @Override
     public ListenableFuture<ApiResponse<Form>> getForm(final int formId) {
         return show(formId, Form.TYPE);
+    }
+
+    @Override
+    public ListenableFuture<ApiResponse<Form>> getForm(int formId, String status) {
+        FluentStringsMap params = new FluentStringsMap().add("status", status);
+        return show(formId, params, Form.TYPE);
     }
 
     @Override
