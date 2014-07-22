@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
+import com.orgsync.api.model.orgs.OrgSnippet;
 
 /**
  * A single form submission.
@@ -39,6 +40,7 @@ public class FormSubmission {
     private List<SubmissionScore> scores;
     private List<SubmissionFiles> files;
     private List<FormResponse> responses;
+    private OrgSnippet onBehalfOf;
 
     public final int getId() {
         return id;
@@ -68,65 +70,54 @@ public class FormSubmission {
         return responses;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((files == null) ? 0 : files.hashCode());
-        result = prime * result + id;
-        result = prime * result + ((responses == null) ? 0 : responses.hashCode());
-        result = prime * result + ((scores == null) ? 0 : scores.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
-        result = prime * result + ((submittedAt == null) ? 0 : submittedAt.hashCode());
-        result = prime * result + submitterId;
-        return result;
+    public OrgSnippet getOnBehalfOf() {
+        return onBehalfOf;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        FormSubmission other = (FormSubmission) obj;
-        if (files == null) {
-            if (other.files != null)
-                return false;
-        } else if (!files.equals(other.files))
-            return false;
-        if (id != other.id)
-            return false;
-        if (responses == null) {
-            if (other.responses != null)
-                return false;
-        } else if (!responses.equals(other.responses))
-            return false;
-        if (scores == null) {
-            if (other.scores != null)
-                return false;
-        } else if (!scores.equals(other.scores))
-            return false;
-        if (status == null) {
-            if (other.status != null)
-                return false;
-        } else if (!status.equals(other.status))
-            return false;
-        if (submittedAt == null) {
-            if (other.submittedAt != null)
-                return false;
-        } else if (!submittedAt.equals(other.submittedAt))
-            return false;
-        if (submitterId != other.submitterId)
-            return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FormSubmission)) return false;
+
+        FormSubmission that = (FormSubmission) o;
+
+        if (id != that.id) return false;
+        if (submitterId != that.submitterId) return false;
+        if (files != null ? !files.equals(that.files) : that.files != null) return false;
+        if (onBehalfOf != null ? !onBehalfOf.equals(that.onBehalfOf) : that.onBehalfOf != null) return false;
+        if (responses != null ? !responses.equals(that.responses) : that.responses != null) return false;
+        if (scores != null ? !scores.equals(that.scores) : that.scores != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (submittedAt != null ? !submittedAt.equals(that.submittedAt) : that.submittedAt != null) return false;
+
         return true;
     }
 
     @Override
-    public String toString() {
-        return "FormSubmission [id=" + id + ", submitterId=" + submitterId + ", submittedAt=" + submittedAt
-                + ", status=" + status + ", scores=" + scores + ", files=" + files + ", responses=" + responses + "]";
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + submitterId;
+        result = 31 * result + (submittedAt != null ? submittedAt.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (scores != null ? scores.hashCode() : 0);
+        result = 31 * result + (files != null ? files.hashCode() : 0);
+        result = 31 * result + (responses != null ? responses.hashCode() : 0);
+        result = 31 * result + (onBehalfOf != null ? onBehalfOf.hashCode() : 0);
+        return result;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("FormSubmission{");
+        sb.append("id=").append(id);
+        sb.append(", submitterId=").append(submitterId);
+        sb.append(", submittedAt=").append(submittedAt);
+        sb.append(", status='").append(status).append('\'');
+        sb.append(", scores=").append(scores);
+        sb.append(", files=").append(files);
+        sb.append(", responses=").append(responses);
+        sb.append(", onBehalfOf=").append(onBehalfOf);
+        sb.append('}');
+        return sb.toString();
+    }
 }
