@@ -138,6 +138,7 @@ import com.orgsync.api.model.ApiError;
      */
     private Request buildRequest(final RequestParams requestParams) {
         return new RequestBuilder(requestParams.getMethod())
+                .setBody(requestParams.getBody())
                 .setUrl(toURL(requestParams.getEndpoint()))
                 .setQueryParameters(mergeParams(requestParams.getQueryParams()))
                 .build();

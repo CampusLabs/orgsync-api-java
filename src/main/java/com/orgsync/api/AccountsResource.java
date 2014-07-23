@@ -15,14 +15,15 @@
 */
 package com.orgsync.api;
 
-import java.util.List;
-
 import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.accounts.Account;
+import com.orgsync.api.model.accounts.AccountCreateRequest;
 import com.orgsync.api.model.accounts.AccountDetail;
 import com.orgsync.api.model.accounts.AccountFull;
 import com.orgsync.api.model.accounts.AccountUpdateRequest;
 import com.orgsync.api.model.accounts.CustomProfileField;
+
+import java.util.List;
 
 /**
  * <p>
@@ -107,6 +108,16 @@ public interface AccountsResource {
      */
     public ListenableFuture<ApiResponse<List<CustomProfileField>>>
             getCustomProfileFields();
+
+    /**
+     * Create an account with the given attributes.
+     *
+     * @param request
+     *              The request to make the account
+     * @return a future to a response with the created account information
+     */
+    public ListenableFuture<ApiResponse<AccountFull>>
+            createAccount(AccountCreateRequest request);
 
     /**
      * Update an account with the given {@link AccountUpdateRequest}.

@@ -233,7 +233,35 @@ import com.orgsync.api.model.forms.FormUpdate;
      * @return a future to the response of the type
      */
     <T> ListenableFuture<ApiResponse<T>> create(final FluentStringsMap params, final Type type) {
-        return getResponse(RequestParams.post(getEndpoint(), params), type);
+        return create("", params, type);
+    }
+
+    /**
+     * Create for the resource using the given post body.
+     *
+     * @param body
+     *            the body to pass in the POST
+     * @param type
+     *            the returned type
+     * @return a future to the response of the type
+     */
+    <T> ListenableFuture<ApiResponse<T>> create(final String body, final Type type) {
+        return create(body, new FluentStringsMap(), type);
+    }
+
+    /**
+     * Create for the resource using the given post body and params.
+     *
+     * @param body
+     *            the body to pass in the POST
+     * @param params
+     *            the params to create with
+     * @param type
+     *            the returned type
+     * @return a future to the response of the type
+     */
+    <T> ListenableFuture<ApiResponse<T>> create(final String body, final FluentStringsMap params, final Type type) {
+        return getResponse(RequestParams.post(getEndpoint(), body, params), type);
     }
 
     /**
