@@ -75,7 +75,11 @@ public class AccountDetail extends Account {
 
     @Override
     public String toString() {
-        return "AccountDetail [picUrl=" + picUrl + ", orgIds=" + orgIds + "]";
+        final StringBuilder sb = new StringBuilder("AccountDetail{");
+        sb.append("picUrl='").append(picUrl).append('\'');
+        sb.append(", orgIds=").append(orgIds);
+        sb.append(", super=").append(super.toString());
+        sb.append('}');
+        return sb.toString();
     }
-
 }
