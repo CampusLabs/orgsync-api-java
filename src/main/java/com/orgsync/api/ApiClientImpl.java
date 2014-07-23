@@ -48,24 +48,16 @@ import com.orgsync.api.model.ApiError;
 
     public static final String DEFAULT_HOST = "https://api.orgsync.com/api/v2";
 
-    /** We use the naming policy to translate the json names to Java friendly names */
-    private static final Gson DEFAULT_GSON = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create();
-
     private final String apiKey;
 
     private final String host;
 
     private AsyncHttpClient client;
 
-    private final Gson gson;
-
     /* package */ApiClientImpl(final String apiKey, final String host) {
         this.host = host;
         this.apiKey = apiKey;
         setHttpClient(new AsyncHttpClient());
-        this.gson = DEFAULT_GSON;
     }
 
     @Override
@@ -201,11 +193,11 @@ import com.orgsync.api.model.ApiError;
 
             if (response.getStatusCode() == 200) {
                 return (T) ApiResponseFactory
-                        .success(gson.fromJson(body, type));
+                        .success(JsonSerializer.fromJson(body, type));
             }
 
-            return (T) ApiResponseFactory.error(gson.fromJson(body,
-                    ApiError.class));
+            return (T) ApiResponseFactory
+                        .error(JsonSerializer.fromJson(body, ApiError.class));
         }
 
     }
