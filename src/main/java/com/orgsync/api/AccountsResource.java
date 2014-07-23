@@ -98,7 +98,7 @@ public interface AccountsResource {
      * @return a future to the response with a list of account details
      */
     public ListenableFuture<ApiResponse<List<AccountDetail>>>
-    getAccountsByCustomProfileResponse(int questionId, String responseQuery);
+            getAccountsByCustomProfileResponse(int questionId, String responseQuery);
 
     /**
      * Get the list of custom profile fields for an account.
