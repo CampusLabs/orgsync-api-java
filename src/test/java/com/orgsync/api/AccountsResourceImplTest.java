@@ -134,6 +134,13 @@ public class AccountsResourceImplTest extends BaseResourceTest {
     }
 
     @Test
+    public void testDeleteAccount() throws Exception {
+        int accountId = 566;
+        accounts.deleteAccount(accountId);
+        verifyRequest(RequestParams.delete("/accounts/" + accountId));
+    }
+
+    @Test
     public void testUpdateAccount() throws Exception {
         String firstName = "Test";
         String email = "test@orgsync.com";

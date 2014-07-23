@@ -16,6 +16,7 @@
 package com.orgsync.api;
 
 import com.ning.http.client.ListenableFuture;
+import com.orgsync.api.model.Success;
 import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.accounts.AccountCreateRequest;
 import com.orgsync.api.model.accounts.AccountDetail;
@@ -118,6 +119,16 @@ public interface AccountsResource {
      */
     public ListenableFuture<ApiResponse<AccountFull>>
             createAccount(AccountCreateRequest request);
+
+    /**
+     * Delete the account with the given id.
+     *
+     * @param accountId
+     *              The id of the account to delete
+     * @return a future to a response for whether or not this call was successful
+     */
+    public ListenableFuture<ApiResponse<Success>>
+            deleteAccount(int accountId);
 
     /**
      * Update an account with the given {@link AccountUpdateRequest}.

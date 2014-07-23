@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
+import com.orgsync.api.model.Success;
 import com.orgsync.api.model.accounts.*;
 
 /**
@@ -79,6 +80,11 @@ import com.orgsync.api.model.accounts.*;
     public ListenableFuture<ApiResponse<AccountFull>> createAccount(AccountCreateRequest request) {
         String body = JsonSerializer.toJson(request);
         return create(body, AccountFull.TYPE);
+    }
+
+    @Override
+    public ListenableFuture<ApiResponse<Success>> deleteAccount(int accountId) {
+        return getResponse(RequestParams.delete(showFor(accountId)), Success.TYPE);
     }
 
     @Override
