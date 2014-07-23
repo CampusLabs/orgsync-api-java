@@ -68,6 +68,13 @@ import com.orgsync.api.model.accounts.CustomProfileField;
     }
 
     @Override
+    public ListenableFuture<ApiResponse<List<AccountDetail>>> getAccountsByCustomProfileResponse(int questionId, String responseQuery) {
+        checkNotNull(responseQuery);
+        String url = String.format("%s/custom_profile/%d/%s", getEndpoint(), questionId, responseQuery);
+        return getResponse(RequestParams.get(url), AccountDetail.LIST_TYPE);
+    }
+
+    @Override
     public ListenableFuture<ApiResponse<List<CustomProfileField>>> getCustomProfileFields() {
         return getResponse(RequestParams.get(getEndpoint() + "/profile_fields"), CustomProfileField.LIST_TYPE);
     }

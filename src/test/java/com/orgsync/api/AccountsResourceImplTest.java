@@ -79,6 +79,20 @@ public class AccountsResourceImplTest extends BaseResourceTest {
     }
 
     @Test
+    public void testGetAccountsByCustomProfileResponse() throws Exception {
+        int questionId = 234;
+        String responseQuery = "test*";
+        accounts.getAccountsByCustomProfileResponse(questionId, responseQuery);
+
+        verifyRequest(RequestParams.get(String.format("/accounts/custom_profile/%d/%s", questionId, responseQuery)));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetAccountsByCustomProfileResponseWithNull() throws Exception {
+        accounts.getAccountsByCustomProfileResponse(1, null);
+    }
+
+    @Test
     public void testListCustomProfileFields() throws Exception {
         accounts.getCustomProfileFields();
 

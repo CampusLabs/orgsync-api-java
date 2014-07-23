@@ -88,6 +88,19 @@ public interface AccountsResource {
             getAccountByCustomProfile(String keyword);
 
     /**
+     * Search for an account by response to a custom profile question.
+     *
+     *
+     * @param questionId
+     *              The ID of the custom profile question to search
+     * @param responseQuery
+     *              The query for a matching response
+     * @return a future to the response with a list of account details
+     */
+    public ListenableFuture<ApiResponse<List<AccountDetail>>>
+    getAccountsByCustomProfileResponse(int questionId, String responseQuery);
+
+    /**
      * Get the list of custom profile fields for an account.
      * 
      * @return a future to the response of the custom profile fields

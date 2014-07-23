@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.orgsync.api.model.forms.FormUpdate;
@@ -82,6 +83,14 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
         AccountDetail result = getResult(getResource().getAccountByCustomProfile(profileField));
 
         assertEquals(accountConfig.getString("username"), result.getUsername());
+    }
+
+    @Test
+    public void testGetAccountsByCustomProfileResponse() throws Exception {
+        String profileField = accountConfig.getConfigList("profile").get(0).getString("data");
+        List<AccountDetail> result = getResult(getResource().getAccountsByCustomProfileResponse(1, profileField));
+
+        testContainsIds(result, Arrays.asList(accountConfig));
     }
 
     @Test
