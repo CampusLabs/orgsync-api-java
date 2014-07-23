@@ -19,7 +19,7 @@ import com.ning.http.client.FluentStringsMap;
 
 /**
  * A representation of the API requests. This includes the method, endpoint, and any query params. The various
- * {@link #get(String)}, {@link #post(String, FluentStringsMap)}, {@link #delete(String)} factory method create a
+ * {@link #get(String)}, {@link #post(String, String, FluentStringsMap)}, {@link #delete(String)} factory method create a
  * request of the given method.
  * 
  * @author steffyj
@@ -32,9 +32,11 @@ import com.ning.http.client.FluentStringsMap;
     private static final String PUT = "PUT";
     private static final String DELETE = "DELETE";
     private static final FluentStringsMap NO_PARAMS = new FluentStringsMap();
+    private static final String NO_BODY = "";
 
     private final String method;
     private final String endpoint;
+    private final String body;
     private final FluentStringsMap queryParams;
 
     /**
@@ -59,11 +61,24 @@ import com.ning.http.client.FluentStringsMap;
      */
     final static RequestParams get(final String endpoint,
             final FluentStringsMap params) {
-        return new RequestParams(GET, endpoint, params);
+        return new RequestParams(GET, endpoint, NO_BODY, params);
     }
 
     /**
-     * Create a POST request to a given endpoint with the query params.
+     * Create a POST request to a given endpoint with the given body
+     *
+     * @param endpoint
+     *            the endpoint to use
+     * @param params
+     *            the query params to pass
+     * @return the new POST request
+     */
+    final static RequestParams post(final String endpoint, final FluentStringsMap params) {
+        return post(endpoint, NO_BODY, params);
+    }
+
+    /**
+     * Create a POST request to a given endpoint with the body and query params.
      * 
      * @param endpoint
      *            the endpoint to use
@@ -71,9 +86,9 @@ import com.ning.http.client.FluentStringsMap;
      *            the query params to pass
      * @return the new POST request
      */
-    final static RequestParams post(final String endpoint,
+    final static RequestParams post(final String endpoint, final String body,
             final FluentStringsMap params) {
-        return new RequestParams(POST, endpoint, params);
+        return new RequestParams(POST, endpoint, body, params);
     }
 
     /**
@@ -86,7 +101,7 @@ import com.ning.http.client.FluentStringsMap;
      * @return the new PUT request
      */
     static RequestParams put(final String endpoint, final FluentStringsMap params) {
-        return new RequestParams(PUT, endpoint, params);
+        return new RequestParams(PUT, endpoint, NO_BODY, params);
     }
 
     /**
@@ -97,14 +112,15 @@ import com.ning.http.client.FluentStringsMap;
      * @return the new DELETE request
      */
     static RequestParams delete(final String endpoint) {
-        return new RequestParams(DELETE, endpoint, NO_PARAMS);
+        return new RequestParams(DELETE, endpoint, NO_BODY, NO_PARAMS);
     }
 
     private RequestParams(final String method, final String endpoint,
-            final FluentStringsMap queryParams) {
+            final String body, final FluentStringsMap queryParams) {
         super();
         this.method = method;
         this.endpoint = endpoint;
+        this.body = body;
         this.queryParams = queryParams;
     }
 
@@ -127,6 +143,15 @@ import com.ning.http.client.FluentStringsMap;
     }
 
     /**
+     * The body of the request (for PUT or POST).
+     *
+     * @return the body
+     */
+    public final String getBody() {
+        return body;
+    }
+
+    /**
      * The query params for the given request.
      * 
      * @return the query params
@@ -136,48 +161,37 @@ import com.ning.http.client.FluentStringsMap;
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + ((endpoint == null) ? 0 : endpoint.hashCode());
-        result = prime * result + ((method == null) ? 0 : method.hashCode());
-        result = prime * result
-                + ((queryParams == null) ? 0 : queryParams.hashCode());
-        return result;
-    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RequestParams)) return false;
 
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        RequestParams other = (RequestParams) obj;
-        if (endpoint == null) {
-            if (other.endpoint != null)
-                return false;
-        } else if (!endpoint.equals(other.endpoint))
-            return false;
-        if (method == null) {
-            if (other.method != null)
-                return false;
-        } else if (!method.equals(other.method))
-            return false;
-        if (queryParams == null) {
-            if (other.queryParams != null)
-                return false;
-        } else if (!queryParams.equals(other.queryParams))
-            return false;
+        RequestParams that = (RequestParams) o;
+
+        if (body != null ? !body.equals(that.body) : that.body != null) return false;
+        if (endpoint != null ? !endpoint.equals(that.endpoint) : that.endpoint != null) return false;
+        if (method != null ? !method.equals(that.method) : that.method != null) return false;
+        if (queryParams != null ? !queryParams.equals(that.queryParams) : that.queryParams != null) return false;
+
         return true;
     }
 
     @Override
-    public String toString() {
-        return "RequestParams [method=" + method + ", endpoint=" + endpoint
-                + ", queryParams=" + queryParams + "]";
+    public int hashCode() {
+        int result = method != null ? method.hashCode() : 0;
+        result = 31 * result + (endpoint != null ? endpoint.hashCode() : 0);
+        result = 31 * result + (body != null ? body.hashCode() : 0);
+        result = 31 * result + (queryParams != null ? queryParams.hashCode() : 0);
+        return result;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("RequestParams{");
+        sb.append("method='").append(method).append('\'');
+        sb.append(", endpoint='").append(endpoint).append('\'');
+        sb.append(", body='").append(body).append('\'');
+        sb.append(", queryParams=").append(queryParams);
+        sb.append('}');
+        return sb.toString();
+    }
 }
