@@ -15,13 +15,14 @@
 */
 package com.orgsync.api.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.orgsync.api.ApiResponse;
+import com.orgsync.api.model.Success;
+import com.orgsync.api.model.accounts.AccountAttributes;
+import com.orgsync.api.model.accounts.AccountCreateRequest;
 import com.orgsync.api.model.forms.FormUpdate;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.AfterClass;
@@ -35,6 +36,8 @@ import com.orgsync.api.model.accounts.AccountFull;
 import com.orgsync.api.model.accounts.AccountUpdateRequest;
 import com.orgsync.api.model.accounts.CustomProfileField;
 import com.typesafe.config.Config;
+
+import static org.junit.Assert.*;
 
 public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResource> {
 
@@ -109,6 +112,36 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
         }
 
         assertThat(resultNames, IsCollectionContaining.hasItems(configNames.toArray(new String[configNames.size()])));
+    }
+
+    @Test
+    public void testCreateDeleteAccount() throws Exception {
+        String username = "create" + DbTemplate.getString("sso_username_suffix");
+        String first = "Created";
+        String last = "User";
+        String email = "create@orgsync.com";
+
+        ApiResponse<AccountDetail> response = getResource().getAccountByUsername(username).get();
+        assertFalse("Should not have found user with username " + username, response.isSuccess());
+        assertEquals("Record not found", response.getError().getMessage());
+
+        AccountAttributes attrs = new AccountAttributes().setFirstName(first).setLastName(last).setEmailAddress(email);
+        AccountCreateRequest request = new AccountCreateRequest().setUsername(username).setAccountAttributes(attrs);
+
+        AccountFull result = getResult(getResource().createAccount(request));
+
+        assertEquals(username, result.getUsername());
+        assertEquals(email, result.getEmail());
+        assertEquals(first, result.getFirstName());
+        assertEquals(last, result.getLastName());
+
+        Success success = getResult(getResource().deleteAccount(result.getId()));
+
+        assertTrue("Delete was not a success!", success.isSuccess());
+
+        response = getResource().getAccountByUsername(username).get();
+        assertFalse("Should not have found user with username " + username, response.isSuccess());
+        assertEquals("Record not found", response.getError().getMessage());
     }
 
     @Test
