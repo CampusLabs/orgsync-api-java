@@ -35,6 +35,7 @@ import java.util.List;
  * 
  * <p>
  * See: <a href="https://api.orgsync.com/api/docs/v2/accounts">https://api.orgsync.com/api/docs/v2/accounts</a>
+ * See: <a href="https://orgsync.com/36548/files/496820/show">https://orgsync.com/36548/files/496820/show</a>
  * 
  * @author steffyj
  * 
