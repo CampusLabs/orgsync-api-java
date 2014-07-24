@@ -81,6 +81,22 @@ import com.orgsync.api.model.ApiError;
             return status;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof BaseResponse)) return false;
+
+            BaseResponse that = (BaseResponse) o;
+
+            if (status != that.status) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return status;
+        }
     }
 
     private static final class FailureResponse<T> extends BaseResponse implements ApiResponse<T> {
@@ -110,6 +126,7 @@ import com.orgsync.api.model.ApiError;
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof FailureResponse)) return false;
+            if (!super.equals(o)) return false;
 
             FailureResponse that = (FailureResponse) o;
 
@@ -120,7 +137,9 @@ import com.orgsync.api.model.ApiError;
 
         @Override
         public int hashCode() {
-            return error.hashCode();
+            int result = super.hashCode();
+            result = 31 * result + error.hashCode();
+            return result;
         }
     }
 
