@@ -74,6 +74,22 @@ import com.orgsync.api.model.ApiError;
             return null;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof FailureResponse)) return false;
+
+            FailureResponse that = (FailureResponse) o;
+
+            if (!error.equals(that.error)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return error.hashCode();
+        }
     }
 
     private static final class SuccessResponse<T> implements ApiResponse<T> {
