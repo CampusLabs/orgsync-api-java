@@ -20,6 +20,7 @@ import com.orgsync.api.model.accounts.AccountFull;
 
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -39,15 +40,29 @@ import java.util.concurrent.Future;
 
     @Override
     public ApiResponse<T> call() throws Exception {
-        ApiResponse<ExportsResourceImpl.ExportRequest> response = exports.requestToken(exportType).get();
+        ApiResponse<ExportsResourceImpl.ExportRequest> response = requestToken();
 
+        // We have failed to get a good token...  bail
         if (!response.isSuccess()) {
             return ApiResponseFactory.error(response);
-        } else if (response.getStatus() == 202) {
-            return ApiResponseFactory.error(response.getStatus(), new ApiError("Export already in progress!"));
         }
 
-        return ApiResponseFactory.error(response.getStatus(), new ApiError(response.getResult().getExportToken()));
+        String token = response.getResult().getExportToken();
+
+        return ApiResponseFactory.error(response.getStatus(), new ApiError(token));
     }
 
+    private ApiResponse<ExportsResourceImpl.ExportRequest> requestToken() throws ExecutionException, InterruptedException {
+        ApiResponse<ExportsResourceImpl.ExportRequest> response = exports.requestToken(exportType).get();
+
+        // 202 - Accepted means it is in progress...
+        // we don't want to have two futures working on this.
+        // return it as a failure
+        if (response.getStatus() == 202) {
+            response = ApiResponseFactory.error(response.getStatus(), new ApiError("Export already in progress!"));
+        }
+
+        // normal success or fail, return as is.
+        return response;
+    }
 }
