@@ -16,6 +16,7 @@
 package com.orgsync.api;
 
 import com.google.gson.reflect.TypeToken;
+import com.ning.http.client.FluentStringsMap;
 import com.orgsync.api.model.accounts.AccountFull;
 
 import java.lang.reflect.Type;
@@ -47,6 +48,12 @@ import java.util.concurrent.Future;
         return getResponse(RequestParams.get(url), ExportRequest.TYPE);
     }
 
+    /* package */Future<ApiResponse<RedeemRequest>> redeemToken(String token) {
+        String url = getEndpoint() + "/redeem";
+        FluentStringsMap params = new FluentStringsMap().add("export_token", token);
+        return getResponse(RequestParams.get(url, params), RedeemRequest.TYPE);
+    }
+
     /* package */static class ExportRequest {
 
         public static final Type TYPE = new TypeToken<ExportRequest>() {
@@ -60,6 +67,22 @@ import java.util.concurrent.Future;
 
         public String getExportToken() {
             return exportToken;
+        }
+    }
+
+   /* package */static class RedeemRequest {
+
+        public static final Type TYPE = new TypeToken<RedeemRequest>() {
+        }.getType();
+
+        private final String downloadUrl;
+
+        RedeemRequest(String downloadUrl) {
+            this.downloadUrl = downloadUrl;
+        }
+
+        public String getDownloadUrl() {
+            return downloadUrl;
         }
     }
 }

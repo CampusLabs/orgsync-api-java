@@ -15,6 +15,7 @@
 */
 package com.orgsync.api;
 
+import com.ning.http.client.FluentStringsMap;
 import org.junit.Test;
 
 /**
@@ -30,5 +31,13 @@ public class ExportsResourceImplTest extends BaseResourceTest {
         exports.requestToken(exportType);
 
         verifyRequest(RequestParams.get("/exports/" + exportType));
+    }
+
+    @Test
+    public void testRedeemToken() {
+        String token = "something";
+        exports.redeemToken(token);
+
+        verifyRequest(RequestParams.get("/exports/redeem", new FluentStringsMap().add("export_token", token)));
     }
 }
