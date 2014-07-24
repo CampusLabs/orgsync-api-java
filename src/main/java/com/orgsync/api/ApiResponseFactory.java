@@ -18,8 +18,8 @@ package com.orgsync.api;
 import com.orgsync.api.model.ApiError;
 
 /**
- * A factory for creating {@link ApiResponse}s. Use {@link #error(ApiError)} to create an error and use
- * {@link #success(Object)} to create a success.
+ * A factory for creating {@link ApiResponse}s. Use {@link #error(int, ApiError)} to create an error and use
+ * {@link #success(int, Object)} to create a success.
  * 
  * @author steffyj
  * 
@@ -36,8 +36,26 @@ import com.orgsync.api.model.ApiError;
      *            the error that was returned.
      * @return the api response
      */
-    /* package */static final <T> ApiResponse<T> error(final ApiError error) {
-        return new FailureResponse<T>(error);
+    /* package */static final <T> ApiResponse<T> error(final int status, final ApiError error) {
+        return new FailureResponse<T>(status, error);
+    }
+
+    /**
+     * Create an error response from the given error reponse.
+     *
+     * @param response
+     *              The existing failed response to wrap
+     * @param <T>   The type of the result
+     * @return The new error response with the correct type and the same error
+     *
+     * @throws java.lang.RuntimeException if the given response is not a failure
+     */
+    /* package */static final <T> ApiResponse<T> error(ApiResponse<?> response) {
+        if (response.isSuccess()) {
+            throw new RuntimeException("Should only be called with a failed ApiResponse!");
+        }
+
+        return error(response.getStatus(), response.getError());
     }
 
     /**
@@ -47,15 +65,29 @@ import com.orgsync.api.model.ApiError;
      *            the returned result
      * @return the api response
      */
-    /* package */static final <T> ApiResponse<T> success(final T result) {
-        return new SuccessResponse<T>(result);
+    /* package */static final <T> ApiResponse<T> success(final int status, final T result) {
+        return new SuccessResponse<T>(status, result);
     }
 
-    private static final class FailureResponse<T> implements ApiResponse<T> {
+    private static class BaseResponse  {
+
+        private final int status;
+
+        public BaseResponse(final int status) {
+            this.status = status;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+    }
+
+    private static final class FailureResponse<T> extends BaseResponse implements ApiResponse<T> {
         private final ApiError error;
 
-        public FailureResponse(final ApiError error) {
-            super();
+        public FailureResponse(final int status, final ApiError error) {
+            super(status);
             this.error = error;
         }
 
@@ -92,11 +124,11 @@ import com.orgsync.api.model.ApiError;
         }
     }
 
-    private static final class SuccessResponse<T> implements ApiResponse<T> {
+    private static final class SuccessResponse<T> extends BaseResponse implements ApiResponse<T> {
         private final T result;
 
-        public SuccessResponse(final T result) {
-            super();
+        public SuccessResponse(final int status, final T result) {
+            super(status);
             this.result = result;
         }
 

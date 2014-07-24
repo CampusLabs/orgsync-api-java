@@ -36,7 +36,7 @@ public class DataExportTaskTest {
 
     @Test
     public void testRedeemTokenFails() throws Exception {
-        ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.error(new ApiError("failed"));
+        ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.error(500, new ApiError("failed"));
         when(exports.requestToken(exportType))
                 .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.ExportRequest>>(response));
 

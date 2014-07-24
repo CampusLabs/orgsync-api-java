@@ -190,15 +190,16 @@ import com.orgsync.api.model.ApiError;
         @SuppressWarnings("unchecked")
         public T onCompleted(final Response response) throws Exception {
             String body = response.getResponseBody();
-            log.debug("Received response string: {}", body);
+            int status = response.getStatusCode();
+            log.debug("Received response with status={}, body={}", status, body);
 
-            if (response.getStatusCode() == 200) {
+            if (status >= 200 && status < 300) {
                 return (T) ApiResponseFactory
-                        .success(JsonSerializer.fromJson(body, type));
+                        .success(status, JsonSerializer.fromJson(body, type));
             }
 
             return (T) ApiResponseFactory
-                        .error(JsonSerializer.fromJson(body, ApiError.class));
+                        .error(status, JsonSerializer.fromJson(body, ApiError.class));
         }
 
     }

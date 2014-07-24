@@ -41,11 +41,11 @@ import java.util.concurrent.Future;
     public ApiResponse<T> call() throws Exception {
         ApiResponse<ExportsResourceImpl.ExportRequest> response = exports.requestToken(exportType).get();
 
-        if (response.isSuccess()) {
-            return ApiResponseFactory.error(new ApiError(response.getResult().getExportToken()));
-        } else {
-            return ApiResponseFactory.error(response.getError());
+        if (!response.isSuccess()) {
+            return ApiResponseFactory.error(response);
         }
+
+        return ApiResponseFactory.error(response.getStatus(), new ApiError(response.getResult().getExportToken()));
     }
 
 }
