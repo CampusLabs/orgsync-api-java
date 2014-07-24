@@ -130,7 +130,7 @@ import com.orgsync.api.model.ApiError;
 
             FailureResponse that = (FailureResponse) o;
 
-            if (!error.equals(that.error)) return false;
+            if (error != null ? !error.equals(that.error) : that.error != null) return false;
 
             return true;
         }
@@ -138,7 +138,7 @@ import com.orgsync.api.model.ApiError;
         @Override
         public int hashCode() {
             int result = super.hashCode();
-            result = 31 * result + error.hashCode();
+            result = 31 * result + (error != null ? error.hashCode() : 0);
             return result;
         }
     }
