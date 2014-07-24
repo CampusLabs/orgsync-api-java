@@ -52,7 +52,11 @@ import java.util.concurrent.Future;
         public static final Type TYPE = new TypeToken<ExportRequest>() {
         }.getType();
 
-        private String exportToken;
+        private final String exportToken;
+
+        ExportRequest(String exportToken) {
+            this.exportToken = exportToken;
+        }
 
         public String getExportToken() {
             return exportToken;

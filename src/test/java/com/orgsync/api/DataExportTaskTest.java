@@ -43,6 +43,16 @@ public class DataExportTaskTest {
         assertEquals(response, task.call());
     }
 
+    @Test
+    public void testExportInProgress() throws Exception {
+        ExportsResourceImpl.ExportRequest result = new ExportsResourceImpl.ExportRequest("abc123");
+        ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.success(202, result);
+        when(exports.requestToken(exportType))
+                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.ExportRequest>>(response));
+
+        assertEquals(ApiResponseFactory.error(202, new ApiError("Export already in progress!")), task.call());
+    }
+
     static final class CompletedFuture<T> implements Future<T> {
 
         private final T value;

@@ -43,6 +43,8 @@ import java.util.concurrent.Future;
 
         if (!response.isSuccess()) {
             return ApiResponseFactory.error(response);
+        } else if (response.getStatus() == 202) {
+            return ApiResponseFactory.error(response.getStatus(), new ApiError("Export already in progress!"));
         }
 
         return ApiResponseFactory.error(response.getStatus(), new ApiError(response.getResult().getExportToken()));
