@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit;
         // we don't want to have two futures working on this.
         // return it as a failure
         if (response.getStatus() == 202) {
-            response = ApiResponseFactory.error(response.getStatus(), new ApiError("Export already in progress!"));
+            response = ApiResponseFactory.error(response.getStatus(), "Export already in progress!");
         }
 
         // normal success or fail, return as is.
@@ -73,14 +73,14 @@ import java.util.concurrent.TimeUnit;
         // The 204 - No Content means something went wrong and there is nothing to get
         // This is a success...  but we should make it a failure
         if (response.getStatus() == 204) {
-            response = ApiResponseFactory.error(response.getStatus(), new ApiError("Export has failed!"));
+            response = ApiResponseFactory.error(response.getStatus(), "Export has failed!");
         }
 
         return response;
     }
 
     private BaseApiResponse<T> downloadFile(String url) {
-        return ApiResponseFactory.error(200, new ApiError(url));
+        return ApiResponseFactory.error(200, url);
     }
 
     /**

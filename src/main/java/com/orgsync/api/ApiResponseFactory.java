@@ -30,11 +30,24 @@ import com.orgsync.api.model.ApiError;
     }
 
     /**
-     * Create an api response of type error.
-     * 
-     * @param error
-     *            the error that was returned.
-     * @return the api response
+     * Create an api response error from an error message.
+     *
+     * @param status The status to return
+     * @param error the error message
+     * @param <T> The type of the expected response
+     * @return The failed api response
+     */
+    /* package */static final <T> BaseApiResponse<T> error(final int status, final String error) {
+        return new FailureResponse<T>(status, new ApiError(error));
+    }
+
+    /**
+     * Create an api response error from an ApiError.
+     *
+     * @param status The status to return
+     * @param error the error to use
+     * @param <T> The type of the expected response
+     * @return The failed api response
      */
     /* package */static final <T> BaseApiResponse<T> error(final int status, final ApiError error) {
         return new FailureResponse<T>(status, error);
@@ -154,7 +167,7 @@ import com.orgsync.api.model.ApiError;
                 response = ApiResponseFactory.success(getStatus(), f.f(getResult()));
             } catch (Exception e) {
                 e.printStackTrace();
-                response = ApiResponseFactory.error(500, new ApiError("Exception caught: " + e.getMessage()));
+                response = ApiResponseFactory.error(500, "Exception caught: " + e.getMessage());
             }
 
             return response;
@@ -166,7 +179,7 @@ import com.orgsync.api.model.ApiError;
                 return f.f(getResult());
             } catch (Exception e) {
                 e.printStackTrace();
-                return ApiResponseFactory.error(500, new ApiError("Exception caught: " + e.getMessage()));
+                return ApiResponseFactory.error(500, "Exception caught: " + e.getMessage());
             }
         }
     }
