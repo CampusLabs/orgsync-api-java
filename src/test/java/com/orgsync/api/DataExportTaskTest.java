@@ -17,6 +17,7 @@ package com.orgsync.api;
 
 import com.orgsync.api.model.ApiError;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -31,14 +32,27 @@ public class DataExportTaskTest {
 
     private final ExportsResourceImpl exports = mock(ExportsResourceImpl.class);
     private final String exportType = "test";
+    private final String exportToken = "abc123";
 
-    private final DataExportTask task = new DataExportTask(exports, exportType);
+    private class DataExportTaskTester extends DataExportTask {
+        public int blockCalls = 0;
+
+        public DataExportTaskTester(ExportsResourceImpl exports, String exportType) {
+            super(exports, exportType);
+        }
+
+        @Override
+        void block() throws InterruptedException {
+            blockCalls++;
+        }
+    };
+
+    private final DataExportTaskTester task = new DataExportTaskTester(exports, exportType);
 
     @Test
-    public void testRedeemTokenFails() throws Exception {
+    public void testRequestTokenFails() throws Exception {
         ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.error(500, new ApiError("failed"));
-        when(exports.requestToken(exportType))
-                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.ExportRequest>>(response));
+        setRequestToken(response);
 
         assertEquals(response, task.call());
     }
@@ -47,10 +61,78 @@ public class DataExportTaskTest {
     public void testExportInProgress() throws Exception {
         ExportsResourceImpl.ExportRequest result = new ExportsResourceImpl.ExportRequest("abc123");
         ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.success(202, result);
-        when(exports.requestToken(exportType))
-                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.ExportRequest>>(response));
+        setRequestToken(response);
 
         assertEquals(ApiResponseFactory.error(202, new ApiError("Export already in progress!")), task.call());
+    }
+
+    @Test
+    public void testRedeemFailure() throws Exception {
+        setSuccessfulToken();
+        int status = 500;
+        String message  = "Fail!";
+        setRedeemToken(false, status, message);
+
+        ApiResponse<Object> expected = ApiResponseFactory.error(status, new ApiError(message));
+        assertEquals(expected, task.call());
+    }
+
+    @Test
+    public void testRedeemNoContent() throws Exception {
+        setSuccessfulToken();
+        int status = 204;
+        setRedeemToken(true, status, null);
+
+        ApiResponse<Object> expected = ApiResponseFactory.error(status, new ApiError("Export has failed!"));
+        assertEquals(expected, task.call());
+    }
+
+    @Test
+    public void testRetryOnAccepted() throws Exception {
+        setSuccessfulToken();
+
+        String url = "http://some.local/url";
+        ExportsResourceImpl.RedeemRequest response = new ExportsResourceImpl.RedeemRequest(url);
+        setRedeemToken(true, 202, null)
+                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.RedeemRequest>>(ApiResponseFactory.success(200, response)));
+
+        task.call();
+
+        assertEquals(1, task.blockCalls);
+    }
+
+    @Test
+    public void testRedeemSuccess() throws Exception {
+        setSuccessfulToken();
+        String url = "http://s3.loca/my_file.json.gz";
+        setRedeemToken(true, 200, url);
+
+        // TODO obviously not right...
+        assertEquals(url, task.call().getError().getMessage());
+    }
+
+    private void setRequestToken(ApiResponse<ExportsResourceImpl.ExportRequest> response) {
+        when(exports.requestToken(exportType))
+                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.ExportRequest>>(response));
+    }
+
+    private OngoingStubbing<Future<ApiResponse<ExportsResourceImpl.RedeemRequest>>> setRedeemToken(boolean success, int status, String urlOrMessage) {
+        ExportsResourceImpl.RedeemRequest result = new ExportsResourceImpl.RedeemRequest(urlOrMessage);
+        ApiResponse<ExportsResourceImpl.RedeemRequest> response = null;
+        if (success) {
+            response = ApiResponseFactory.success(status, result);
+        } else {
+            response = ApiResponseFactory.error(status, new ApiError(urlOrMessage));
+        }
+
+        return when(exports.redeemToken(exportToken))
+                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.RedeemRequest>>(response));
+    }
+
+    private void setSuccessfulToken() {
+        ExportsResourceImpl.ExportRequest result = new ExportsResourceImpl.ExportRequest(exportToken);
+        ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.success(200, result);
+        setRequestToken(response);
     }
 
     static final class CompletedFuture<T> implements Future<T> {
