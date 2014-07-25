@@ -36,7 +36,7 @@ import com.orgsync.api.model.ApiError;
      *            the error that was returned.
      * @return the api response
      */
-    /* package */static final <T> ApiResponse<T> error(final int status, final ApiError error) {
+    /* package */static final <T> BaseApiResponse<T> error(final int status, final ApiError error) {
         return new FailureResponse<T>(status, error);
     }
 
@@ -50,7 +50,7 @@ import com.orgsync.api.model.ApiError;
      *
      * @throws java.lang.RuntimeException if the given response is not a failure
      */
-    /* package */static final <T> ApiResponse<T> error(ApiResponse<?> response) {
+    /* package */static final <T> BaseApiResponse<T> error(ApiResponse<?> response) {
         if (response.isSuccess()) {
             throw new RuntimeException("Should only be called with a failed ApiResponse!");
         }
@@ -65,41 +65,11 @@ import com.orgsync.api.model.ApiError;
      *            the returned result
      * @return the api response
      */
-    /* package */static final <T> ApiResponse<T> success(final int status, final T result) {
+    /* package */static final <T> BaseApiResponse<T> success(final int status, final T result) {
         return new SuccessResponse<T>(status, result);
     }
 
-    private static class BaseResponse  {
-
-        private final int status;
-
-        public BaseResponse(final int status) {
-            this.status = status;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof BaseResponse)) return false;
-
-            BaseResponse that = (BaseResponse) o;
-
-            if (status != that.status) return false;
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            return status;
-        }
-    }
-
-    private static final class FailureResponse<T> extends BaseResponse implements ApiResponse<T> {
+    private static final class FailureResponse<T> extends BaseApiResponse<T> implements ApiResponse<T> {
         private final ApiError error;
 
         public FailureResponse(final int status, final ApiError error) {
@@ -141,9 +111,19 @@ import com.orgsync.api.model.ApiError;
             result = 31 * result + (error != null ? error.hashCode() : 0);
             return result;
         }
+
+        @Override
+        <S> BaseApiResponse<S> map(MapFunction<T, S> f) {
+            return ApiResponseFactory.error(this);
+        }
+
+        @Override
+        <S> BaseApiResponse<S> flatMap(MapFunction<T, BaseApiResponse<S>> f) {
+            return ApiResponseFactory.error(this);
+        }
     }
 
-    private static final class SuccessResponse<T> extends BaseResponse implements ApiResponse<T> {
+    private static final class SuccessResponse<T> extends BaseApiResponse<T> implements ApiResponse<T> {
         private final T result;
 
         public SuccessResponse(final int status, final T result) {
@@ -164,6 +144,30 @@ import com.orgsync.api.model.ApiError;
         @Override
         public ApiError getError() {
             return null;
+        }
+
+        @Override
+        <S> BaseApiResponse<S> map(MapFunction<T, S> f) {
+            BaseApiResponse<S> response = null;
+
+            try {
+                response = ApiResponseFactory.success(getStatus(), f.f(getResult()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                response = ApiResponseFactory.error(500, new ApiError("Exception caught: " + e.getMessage()));
+            }
+
+            return response;
+        }
+
+        @Override
+        <S> BaseApiResponse<S> flatMap(MapFunction<T, BaseApiResponse<S>> f) {
+            try {
+                return f.f(getResult());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ApiResponseFactory.error(500, new ApiError("Exception caught: " + e.getMessage()));
+            }
         }
     }
 

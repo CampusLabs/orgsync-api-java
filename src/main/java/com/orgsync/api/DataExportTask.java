@@ -43,29 +43,13 @@ import java.util.concurrent.TimeUnit;
 
     @Override
     public ApiResponse<T> call() throws Exception {
-        ApiResponse<ExportsResourceImpl.ExportRequest> tokenResponse = requestToken();
-
-        // We have failed to get a good token...  bail
-        if (!tokenResponse.isSuccess()) {
-            return ApiResponseFactory.error(tokenResponse);
-        }
-
-        String token = tokenResponse.getResult().getExportToken();
-
-        ApiResponse<ExportsResourceImpl.RedeemRequest> downloadUrlResponse = waitForDownloadUrl(token);
-
-        // Well we didn't get a download url...  fail
-        if (!downloadUrlResponse.isSuccess()) {
-            return ApiResponseFactory.error(downloadUrlResponse);
-        }
-
-        String downloadUrl = downloadUrlResponse.getResult().getDownloadUrl();
-
-        return ApiResponseFactory.error(tokenResponse.getStatus(), new ApiError(downloadUrl));
+            return requestToken()
+                    .flatMap(fWaitForDownloadUrl())
+                    .flatMap(fDownloadFile());
     }
 
-    private ApiResponse<ExportsResourceImpl.ExportRequest> requestToken() throws ExecutionException, InterruptedException {
-        ApiResponse<ExportsResourceImpl.ExportRequest> response = exports.requestToken(exportType).get();
+    private BaseApiResponse<ExportsResourceImpl.ExportRequest> requestToken() throws Exception {
+        BaseApiResponse<ExportsResourceImpl.ExportRequest> response = (BaseApiResponse<ExportsResourceImpl.ExportRequest>) exports.requestToken(exportType).get();
 
         // 202 - Accepted means it is in progress...
         // we don't want to have two futures working on this.
@@ -78,12 +62,12 @@ import java.util.concurrent.TimeUnit;
         return response;
     }
 
-    private ApiResponse<ExportsResourceImpl.RedeemRequest> waitForDownloadUrl(String token) throws ExecutionException, InterruptedException {
-        ApiResponse<ExportsResourceImpl.RedeemRequest> response = exports.redeemToken(token).get();
+    private BaseApiResponse<ExportsResourceImpl.RedeemRequest> waitForDownloadUrl(String token) throws Exception {
+        BaseApiResponse<ExportsResourceImpl.RedeemRequest> response = (BaseApiResponse<ExportsResourceImpl.RedeemRequest>) exports.redeemToken(token).get();
 
         while (shouldRetry(response)) {
             block();
-            response = exports.redeemToken(token).get();
+            response = (BaseApiResponse<ExportsResourceImpl.RedeemRequest>) exports.redeemToken(token).get();
         }
 
         // The 204 - No Content means something went wrong and there is nothing to get
@@ -93,6 +77,10 @@ import java.util.concurrent.TimeUnit;
         }
 
         return response;
+    }
+
+    private BaseApiResponse<T> downloadFile(String url) {
+        return ApiResponseFactory.error(200, new ApiError(url));
     }
 
     /**
@@ -107,5 +95,23 @@ import java.util.concurrent.TimeUnit;
     private boolean shouldRetry(ApiResponse<ExportsResourceImpl.RedeemRequest> response) {
         // A response of 202 - Accepted means things are in progress
         return response.getStatus() == 202;
+    }
+
+    private MapFunction<ExportsResourceImpl.ExportRequest, BaseApiResponse<ExportsResourceImpl.RedeemRequest>> fWaitForDownloadUrl() {
+        return new MapFunction<ExportsResourceImpl.ExportRequest, BaseApiResponse<ExportsResourceImpl.RedeemRequest>>() {
+            @Override
+            public BaseApiResponse<ExportsResourceImpl.RedeemRequest> f(ExportsResourceImpl.ExportRequest exportRequest) throws Exception {
+                return waitForDownloadUrl(exportRequest.getExportToken());
+            }
+        };
+    }
+
+    private MapFunction<ExportsResourceImpl.RedeemRequest, BaseApiResponse<T>> fDownloadFile() {
+        return new MapFunction<ExportsResourceImpl.RedeemRequest, BaseApiResponse<T>>() {
+            @Override
+            public BaseApiResponse<T> f(ExportsResourceImpl.RedeemRequest redeemRequest) throws Exception {
+                return downloadFile(redeemRequest.getDownloadUrl());
+            }
+        };
     }
 }
