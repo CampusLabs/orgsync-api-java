@@ -18,6 +18,8 @@ package com.orgsync.api;
 import com.google.gson.reflect.TypeToken;
 import com.ning.http.client.FluentStringsMap;
 import com.orgsync.api.model.accounts.AccountFull;
+import com.orgsync.api.model.orgs.OrgFull;
+import com.orgsync.api.model.timesheets.Timesheet;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -40,7 +42,25 @@ import java.util.concurrent.Future;
 
     @Override
     public Future<ApiResponse<List<AccountFull>>> getAccounts() {
-        return executor.submit(new DataExportTask<AccountFull>(this, "accounts", getClient().getHttpClient(), AccountFull.TYPE));
+        return submitTask("accounts", AccountFull.TYPE);
+    }
+
+    @Override
+    public Future<ApiResponse<List<OrgFull>>> getOrgs() {
+        return submitTask("orgs", OrgFull.TYPE);
+    }
+
+    @Override
+    public Future<ApiResponse<List<Timesheet>>> getTimesheets() {
+        return submitTask("timesheets", Timesheet.TYPE);
+    }
+
+    private <T> Future<ApiResponse<List<T>>>submitTask(String exportType, Type type) {
+        return executor.submit(this.<T>newTask(exportType, type));
+    }
+
+    private <T> DataExportTask<T> newTask(String exportType, Type type) {
+        return new DataExportTask<T>(this, exportType, getClient().getHttpClient(), type);
     }
 
     /* package */Future<ApiResponse<ExportRequest>> requestToken(String exportType) {

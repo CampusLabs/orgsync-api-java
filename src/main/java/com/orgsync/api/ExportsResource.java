@@ -16,7 +16,10 @@
 package com.orgsync.api;
 
 import com.orgsync.api.model.accounts.AccountFull;
+import com.orgsync.api.model.orgs.OrgFull;
+import com.orgsync.api.model.timesheets.Timesheet;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -37,5 +40,19 @@ public interface ExportsResource {
      * @return A future to the response with all of the full account information
      */
     public Future<ApiResponse<List<AccountFull>>> getAccounts();
+
+    /**
+     * Get all of the detailed organization information for all orgs.
+     *
+     * @return A future to the response with all the organization info.
+     */
+    public Future<ApiResponse<List<OrgFull>>> getOrgs();
+
+    /**
+     * Get all of the timesheets.
+     *
+     * @return A future to the response with all of the timesheets
+     */
+    public Future<ApiResponse<List<Timesheet>>> getTimesheets();
 
 }
