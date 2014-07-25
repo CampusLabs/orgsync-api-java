@@ -17,18 +17,13 @@ package com.orgsync.api;
 
 import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.Response;
-import com.orgsync.api.model.ApiError;
-import com.orgsync.api.model.accounts.AccountFull;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
@@ -62,8 +57,8 @@ import java.util.zip.GZIPInputStream;
             .flatMap(fConvertToJson());
     }
 
-    private BaseApiResponse<ExportsResourceImpl.ExportRequest> requestToken() throws Exception {
-        BaseApiResponse<ExportsResourceImpl.ExportRequest> response = (BaseApiResponse<ExportsResourceImpl.ExportRequest>) exports.requestToken(exportType).get();
+    private BaseApiResponse<ExportsResourceImpl.ExportResponse> requestToken() throws Exception {
+        BaseApiResponse<ExportsResourceImpl.ExportResponse> response = (BaseApiResponse<ExportsResourceImpl.ExportResponse>) exports.requestToken(exportType).get();
 
         // 202 - Accepted means it is in progress...
         // we don't want to have two futures working on this.
@@ -76,12 +71,12 @@ import java.util.zip.GZIPInputStream;
         return response;
     }
 
-    private BaseApiResponse<ExportsResourceImpl.RedeemRequest> waitForDownloadUrl(String token) throws Exception {
-        BaseApiResponse<ExportsResourceImpl.RedeemRequest> response = (BaseApiResponse<ExportsResourceImpl.RedeemRequest>) exports.redeemToken(token).get();
+    private BaseApiResponse<ExportsResourceImpl.RedeemResponse> waitForDownloadUrl(String token) throws Exception {
+        BaseApiResponse<ExportsResourceImpl.RedeemResponse> response = (BaseApiResponse<ExportsResourceImpl.RedeemResponse>) exports.redeemToken(token).get();
 
         while (shouldRetry(response)) {
             block();
-            response = (BaseApiResponse<ExportsResourceImpl.RedeemRequest>) exports.redeemToken(token).get();
+            response = (BaseApiResponse<ExportsResourceImpl.RedeemResponse>) exports.redeemToken(token).get();
         }
 
         // The 204 - No Content means something went wrong and there is nothing to get
@@ -124,25 +119,25 @@ import java.util.zip.GZIPInputStream;
         Thread.sleep(SLEEP_TIME);
     }
 
-    private boolean shouldRetry(ApiResponse<ExportsResourceImpl.RedeemRequest> response) {
+    private boolean shouldRetry(ApiResponse<ExportsResourceImpl.RedeemResponse> response) {
         // A response of 202 - Accepted means things are in progress
         return response.getStatus() == 202;
     }
 
-    private MapFunction<ExportsResourceImpl.ExportRequest, BaseApiResponse<ExportsResourceImpl.RedeemRequest>> fWaitForDownloadUrl() {
-        return new MapFunction<ExportsResourceImpl.ExportRequest, BaseApiResponse<ExportsResourceImpl.RedeemRequest>>() {
+    private MapFunction<ExportsResourceImpl.ExportResponse, BaseApiResponse<ExportsResourceImpl.RedeemResponse>> fWaitForDownloadUrl() {
+        return new MapFunction<ExportsResourceImpl.ExportResponse, BaseApiResponse<ExportsResourceImpl.RedeemResponse>>() {
             @Override
-            public BaseApiResponse<ExportsResourceImpl.RedeemRequest> f(ExportsResourceImpl.ExportRequest exportRequest) throws Exception {
-                return waitForDownloadUrl(exportRequest.getExportToken());
+            public BaseApiResponse<ExportsResourceImpl.RedeemResponse> f(ExportsResourceImpl.ExportResponse exportResponse) throws Exception {
+                return waitForDownloadUrl(exportResponse.getExportToken());
             }
         };
     }
 
-    private MapFunction<ExportsResourceImpl.RedeemRequest, BaseApiResponse<InputStream>> fDownloadFile() {
-        return new MapFunction<ExportsResourceImpl.RedeemRequest, BaseApiResponse<InputStream>>() {
+    private MapFunction<ExportsResourceImpl.RedeemResponse, BaseApiResponse<InputStream>> fDownloadFile() {
+        return new MapFunction<ExportsResourceImpl.RedeemResponse, BaseApiResponse<InputStream>>() {
             @Override
-            public BaseApiResponse<InputStream> f(ExportsResourceImpl.RedeemRequest redeemRequest) throws Exception {
-                return downloadFile(redeemRequest.getDownloadUrl());
+            public BaseApiResponse<InputStream> f(ExportsResourceImpl.RedeemResponse redeemResponse) throws Exception {
+                return downloadFile(redeemResponse.getDownloadUrl());
             }
         };
     }

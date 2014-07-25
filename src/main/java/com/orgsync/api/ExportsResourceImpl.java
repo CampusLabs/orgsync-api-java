@@ -63,25 +63,25 @@ import java.util.concurrent.Future;
         return new DataExportTask<T>(this, exportType, getClient().getHttpClient(), type);
     }
 
-    /* package */Future<ApiResponse<ExportRequest>> requestToken(String exportType) {
+    /* package */Future<ApiResponse<ExportResponse>> requestToken(String exportType) {
         String url = String.format("%s/%s", getEndpoint(), exportType);
-        return getResponse(RequestParams.get(url), ExportRequest.TYPE);
+        return getResponse(RequestParams.get(url), ExportResponse.TYPE);
     }
 
-    /* package */Future<ApiResponse<RedeemRequest>> redeemToken(String token) {
+    /* package */Future<ApiResponse<RedeemResponse>> redeemToken(String token) {
         String url = getEndpoint() + "/redeem";
         FluentStringsMap params = new FluentStringsMap().add("export_token", token);
-        return getResponse(RequestParams.get(url, params), RedeemRequest.TYPE);
+        return getResponse(RequestParams.get(url, params), RedeemResponse.TYPE);
     }
 
-    /* package */static class ExportRequest {
+    /* package */static class ExportResponse {
 
-        public static final Type TYPE = new TypeToken<ExportRequest>() {
+        public static final Type TYPE = new TypeToken<ExportResponse>() {
         }.getType();
 
         private final String exportToken;
 
-        ExportRequest(String exportToken) {
+        ExportResponse(String exportToken) {
             this.exportToken = exportToken;
         }
 
@@ -90,14 +90,14 @@ import java.util.concurrent.Future;
         }
     }
 
-   /* package */static class RedeemRequest {
+   /* package */static class RedeemResponse {
 
-        public static final Type TYPE = new TypeToken<RedeemRequest>() {
+        public static final Type TYPE = new TypeToken<RedeemResponse>() {
         }.getType();
 
         private final String downloadUrl;
 
-        RedeemRequest(String downloadUrl) {
+        RedeemResponse(String downloadUrl) {
             this.downloadUrl = downloadUrl;
         }
 

@@ -16,9 +16,6 @@
 package com.orgsync.api;
 
 import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.ListenableFuture;
-import com.ning.http.client.RequestBuilder;
-import com.ning.http.client.Response;
 import com.orgsync.api.model.ApiError;
 import com.orgsync.api.model.accounts.AccountFull;
 import org.junit.Test;
@@ -59,7 +56,7 @@ public class DataExportTaskTest {
 
     @Test
     public void testRequestTokenFails() throws Exception {
-        ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.error(500, new ApiError("failed"));
+        ApiResponse<ExportsResourceImpl.ExportResponse> response = ApiResponseFactory.error(500, new ApiError("failed"));
         setRequestToken(response);
 
         assertEquals(response, task.call());
@@ -67,8 +64,8 @@ public class DataExportTaskTest {
 
     @Test
     public void testExportInProgress() throws Exception {
-        ExportsResourceImpl.ExportRequest result = new ExportsResourceImpl.ExportRequest("abc123");
-        ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.success(202, result);
+        ExportsResourceImpl.ExportResponse result = new ExportsResourceImpl.ExportResponse("abc123");
+        ApiResponse<ExportsResourceImpl.ExportResponse> response = ApiResponseFactory.success(202, result);
         setRequestToken(response);
 
         assertEquals(ApiResponseFactory.error(202, new ApiError("Export already in progress!")), task.call());
@@ -100,9 +97,9 @@ public class DataExportTaskTest {
         setSuccessfulToken();
 
         String url = "http://some.local/url";
-        ExportsResourceImpl.RedeemRequest response = new ExportsResourceImpl.RedeemRequest(url);
+        ExportsResourceImpl.RedeemResponse response = new ExportsResourceImpl.RedeemResponse(url);
         setRedeemToken(true, 202, null)
-                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.RedeemRequest>>(ApiResponseFactory.success(200, response)));
+                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.RedeemResponse>>(ApiResponseFactory.success(200, response)));
 
         task.call();
 
@@ -121,14 +118,14 @@ public class DataExportTaskTest {
         assertEquals(ApiResponseFactory.error(500, "Exception caught: " + message), task.call());
     }
 
-    private void setRequestToken(ApiResponse<ExportsResourceImpl.ExportRequest> response) {
+    private void setRequestToken(ApiResponse<ExportsResourceImpl.ExportResponse> response) {
         when(exports.requestToken(exportType))
-                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.ExportRequest>>(response));
+                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.ExportResponse>>(response));
     }
 
-    private OngoingStubbing<Future<ApiResponse<ExportsResourceImpl.RedeemRequest>>> setRedeemToken(boolean success, int status, String urlOrMessage) {
-        ExportsResourceImpl.RedeemRequest result = new ExportsResourceImpl.RedeemRequest(urlOrMessage);
-        ApiResponse<ExportsResourceImpl.RedeemRequest> response = null;
+    private OngoingStubbing<Future<ApiResponse<ExportsResourceImpl.RedeemResponse>>> setRedeemToken(boolean success, int status, String urlOrMessage) {
+        ExportsResourceImpl.RedeemResponse result = new ExportsResourceImpl.RedeemResponse(urlOrMessage);
+        ApiResponse<ExportsResourceImpl.RedeemResponse> response = null;
         if (success) {
             response = ApiResponseFactory.success(status, result);
         } else {
@@ -136,12 +133,12 @@ public class DataExportTaskTest {
         }
 
         return when(exports.redeemToken(exportToken))
-                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.RedeemRequest>>(response));
+                .thenReturn(new CompletedFuture<ApiResponse<ExportsResourceImpl.RedeemResponse>>(response));
     }
 
     private void setSuccessfulToken() {
-        ExportsResourceImpl.ExportRequest result = new ExportsResourceImpl.ExportRequest(exportToken);
-        ApiResponse<ExportsResourceImpl.ExportRequest> response = ApiResponseFactory.success(200, result);
+        ExportsResourceImpl.ExportResponse result = new ExportsResourceImpl.ExportResponse(exportToken);
+        ApiResponse<ExportsResourceImpl.ExportResponse> response = ApiResponseFactory.success(200, result);
         setRequestToken(response);
     }
 
