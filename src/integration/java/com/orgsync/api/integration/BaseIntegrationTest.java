@@ -15,22 +15,21 @@
 */
 package com.orgsync.api.integration;
 
-import static org.junit.Assert.assertThat;
+import com.orgsync.api.ApiClient;
+import com.orgsync.api.ApiResponse;
+import com.orgsync.api.OrgSync;
+import com.orgsync.api.Resource;
+import com.typesafe.config.Config;
+import org.hamcrest.core.IsCollectionContaining;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-import org.hamcrest.core.IsCollectionContaining;
-
-import com.ning.http.client.ListenableFuture;
-import com.orgsync.api.ApiClient;
-import com.orgsync.api.ApiResponse;
-import com.orgsync.api.OrgSync;
-import com.orgsync.api.Resource;
-import com.typesafe.config.Config;
+import static org.junit.Assert.assertThat;
 
 public class BaseIntegrationTest<T> {
 
@@ -51,7 +50,7 @@ public class BaseIntegrationTest<T> {
         return resource;
     }
 
-    public <R> R getResult(final ListenableFuture<ApiResponse<R>> future) throws InterruptedException,
+    public <R> R getResult(final Future<ApiResponse<R>> future) throws InterruptedException,
             ExecutionException {
         return future.get().getResult();
     }
