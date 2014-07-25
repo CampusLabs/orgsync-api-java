@@ -166,7 +166,6 @@ import com.orgsync.api.model.ApiError;
             try {
                 response = ApiResponseFactory.success(getStatus(), f.f(getResult()));
             } catch (Exception e) {
-                e.printStackTrace();
                 response = ApiResponseFactory.error(500, "Exception caught: " + e.getMessage());
             }
 
@@ -178,7 +177,6 @@ import com.orgsync.api.model.ApiError;
             try {
                 return f.f(getResult());
             } catch (Exception e) {
-                e.printStackTrace();
                 return ApiResponseFactory.error(500, "Exception caught: " + e.getMessage());
             }
         }

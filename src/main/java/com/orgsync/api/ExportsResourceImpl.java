@@ -40,7 +40,7 @@ import java.util.concurrent.Future;
 
     @Override
     public Future<ApiResponse<List<AccountFull>>> getAccounts() {
-        return executor.submit(new DataExportTask<List<AccountFull>>(this, "accounts"));
+        return executor.submit(new DataExportTask<AccountFull>(this, "accounts", getClient().getHttpClient(), AccountFull.TYPE));
     }
 
     /* package */Future<ApiResponse<ExportRequest>> requestToken(String exportType) {

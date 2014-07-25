@@ -15,37 +15,51 @@
 */
 package com.orgsync.api;
 
+import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.Response;
 import com.orgsync.api.model.ApiError;
 import com.orgsync.api.model.accounts.AccountFull;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
 
 /**
  * A task that handles the full life-cycle of getting an export.
  *
  * @author steffyj
  */
-/* package */class DataExportTask<T> implements Callable<ApiResponse<T>> {
+/* package */class DataExportTask<T> implements Callable<ApiResponse<List<T>>> {
 
     private static final long SLEEP_TIME = TimeUnit.MILLISECONDS.convert(10, TimeUnit.SECONDS);
 
     private final ExportsResourceImpl exports;
     private final String exportType;
+    private final AsyncHttpClient client;
+    private final Type type;
 
-    public DataExportTask(ExportsResourceImpl exports, String exportType) {
+    public DataExportTask(ExportsResourceImpl exports, String exportType, AsyncHttpClient client, Type type) {
         this.exports = exports;
         this.exportType = exportType;
+        this.client = client;
+        this.type = type;
     }
 
     @Override
-    public ApiResponse<T> call() throws Exception {
-            return requestToken()
-                    .flatMap(fWaitForDownloadUrl())
-                    .flatMap(fDownloadFile());
+    public ApiResponse<List<T>> call() throws Exception {
+        return requestToken()
+            .flatMap(fWaitForDownloadUrl())
+            .flatMap(fDownloadFile())
+            .flatMap(fDecodeInputStream())
+            .flatMap(fConvertToJson());
     }
 
     private BaseApiResponse<ExportsResourceImpl.ExportRequest> requestToken() throws Exception {
@@ -79,8 +93,26 @@ import java.util.concurrent.TimeUnit;
         return response;
     }
 
-    private BaseApiResponse<T> downloadFile(String url) {
-        return ApiResponseFactory.error(200, url);
+    private BaseApiResponse<InputStream> downloadFile(String url) throws Exception {
+        Response response = client.prepareGet(url).execute().get();
+        return ApiResponseFactory.success(200, response.getResponseBodyAsStream());
+    }
+
+    private BaseApiResponse<List<String>> decodeInputStream(InputStream stream) throws Exception {
+        GZIPInputStream gzStream = new GZIPInputStream(stream);
+        java.util.Scanner s = new java.util.Scanner(gzStream).useDelimiter("\\A");
+        String jsonLines = s.hasNext() ? s.next() : "";
+        List<String> lines = Arrays.asList(jsonLines.split("\\n"));
+        return ApiResponseFactory.success(200, lines);
+    }
+
+    private BaseApiResponse<List<T>> convertToJson(List<String> strings) {
+        List<T> objs = new LinkedList<T>();
+        for (String json : strings) {
+            objs.add((T) JsonSerializer.fromJson(json, type));
+        }
+
+        return ApiResponseFactory.success(200, objs);
     }
 
     /**
@@ -106,11 +138,29 @@ import java.util.concurrent.TimeUnit;
         };
     }
 
-    private MapFunction<ExportsResourceImpl.RedeemRequest, BaseApiResponse<T>> fDownloadFile() {
-        return new MapFunction<ExportsResourceImpl.RedeemRequest, BaseApiResponse<T>>() {
+    private MapFunction<ExportsResourceImpl.RedeemRequest, BaseApiResponse<InputStream>> fDownloadFile() {
+        return new MapFunction<ExportsResourceImpl.RedeemRequest, BaseApiResponse<InputStream>>() {
             @Override
-            public BaseApiResponse<T> f(ExportsResourceImpl.RedeemRequest redeemRequest) throws Exception {
+            public BaseApiResponse<InputStream> f(ExportsResourceImpl.RedeemRequest redeemRequest) throws Exception {
                 return downloadFile(redeemRequest.getDownloadUrl());
+            }
+        };
+    }
+
+    private MapFunction<InputStream, BaseApiResponse<List<String>>> fDecodeInputStream() {
+        return new MapFunction<InputStream, BaseApiResponse<List<String>>>() {
+            @Override
+            public BaseApiResponse<List<String>> f(InputStream inputStream) throws Exception {
+                return decodeInputStream(inputStream);
+            }
+        };
+    }
+
+    private MapFunction<List<String>, BaseApiResponse<List<T>>> fConvertToJson() {
+        return new MapFunction<List<String>, BaseApiResponse<List<T>>>() {
+            @Override
+            public BaseApiResponse<List<T>> f(List<String> strings) throws Exception {
+                return convertToJson(strings);
             }
         };
     }

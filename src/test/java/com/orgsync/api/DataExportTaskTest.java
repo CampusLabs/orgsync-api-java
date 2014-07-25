@@ -15,10 +15,16 @@
 */
 package com.orgsync.api;
 
+import com.ning.http.client.AsyncHttpClient;
+import com.ning.http.client.ListenableFuture;
+import com.ning.http.client.RequestBuilder;
+import com.ning.http.client.Response;
 import com.orgsync.api.model.ApiError;
+import com.orgsync.api.model.accounts.AccountFull;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.lang.reflect.Type;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -31,14 +37,16 @@ import static org.junit.Assert.*;
 public class DataExportTaskTest {
 
     private final ExportsResourceImpl exports = mock(ExportsResourceImpl.class);
+    private final AsyncHttpClient client = mock(AsyncHttpClient.class);
     private final String exportType = "test";
     private final String exportToken = "abc123";
+    private final Type type = AccountFull.TYPE;
 
     private class DataExportTaskTester extends DataExportTask {
         public int blockCalls = 0;
 
-        public DataExportTaskTester(ExportsResourceImpl exports, String exportType) {
-            super(exports, exportType);
+        public DataExportTaskTester(ExportsResourceImpl exports, String exportType, Type type) {
+            super(exports, exportType, client, type);
         }
 
         @Override
@@ -47,7 +55,7 @@ public class DataExportTaskTest {
         }
     };
 
-    private final DataExportTaskTester task = new DataExportTaskTester(exports, exportType);
+    private final DataExportTaskTester task = new DataExportTaskTester(exports, exportType, type);
 
     @Test
     public void testRequestTokenFails() throws Exception {
@@ -102,13 +110,15 @@ public class DataExportTaskTest {
     }
 
     @Test
-    public void testRedeemSuccess() throws Exception {
+    public void testDownloadFails() throws Exception {
         setSuccessfulToken();
-        String url = "http://s3.loca/my_file.json.gz";
+        String url = "http://s3.local/my_file.json.gz";
+        String message = "fail on download";
         setRedeemToken(true, 200, url);
 
-        // TODO obviously not right...
-        assertEquals(url, task.call().getError().getMessage());
+        when(client.prepareGet(url)).thenThrow(new RuntimeException(message));
+
+        assertEquals(ApiResponseFactory.error(500, "Exception caught: " + message), task.call());
     }
 
     private void setRequestToken(ApiResponse<ExportsResourceImpl.ExportRequest> response) {
