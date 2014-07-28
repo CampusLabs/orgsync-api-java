@@ -17,6 +17,7 @@ package com.orgsync.api;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +52,14 @@ import com.orgsync.api.model.ApiError;
     private final String apiKey;
 
     private final String host;
+    private final Properties props;
 
     private AsyncHttpClient client;
 
-    /* package */ApiClientImpl(final String apiKey, final String host) {
+    /* package */ApiClientImpl(final String apiKey, final String host, final Properties props) {
         this.host = host;
         this.apiKey = apiKey;
+        this.props = props;
         setHttpClient(new AsyncHttpClient());
     }
 
@@ -80,6 +83,10 @@ import com.orgsync.api.model.ApiError;
     @Override
     public AsyncHttpClient getHttpClient() {
         return client;
+    }
+    
+    /* package */Properties getProps() {
+        return props;
     }
 
     @Override
@@ -190,15 +197,16 @@ import com.orgsync.api.model.ApiError;
         @SuppressWarnings("unchecked")
         public T onCompleted(final Response response) throws Exception {
             String body = response.getResponseBody();
-            log.debug("Received response string: {}", body);
+            int status = response.getStatusCode();
+            log.debug("Received response with status={}, body={}", status, body);
 
-            if (response.getStatusCode() == 200) {
+            if (status >= 200 && status < 300) {
                 return (T) ApiResponseFactory
-                        .success(JsonSerializer.fromJson(body, type));
+                        .success(status, JsonSerializer.fromJson(body, type));
             }
 
             return (T) ApiResponseFactory
-                        .error(JsonSerializer.fromJson(body, ApiError.class));
+                        .error(status, JsonSerializer.fromJson(body, ApiError.class));
         }
 
     }

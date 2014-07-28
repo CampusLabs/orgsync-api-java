@@ -67,6 +67,10 @@ import com.orgsync.api.model.forms.FormUpdate;
         this.endpoint = endpoint;
     }
 
+    /* package */ApiClientImpl getClient() {
+        return client;
+    }
+
     /**
      * Get a response for the request params and type... delegate to client.
      * 

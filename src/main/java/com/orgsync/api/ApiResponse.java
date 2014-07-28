@@ -31,6 +31,13 @@ import com.orgsync.api.model.ApiError;
 public interface ApiResponse<T> {
 
     /**
+     * Get the status code that was returned from this request.
+     *
+     * @return the status code
+     */
+    public int getStatus();
+
+    /**
      * Return whether this response is a success or not. The {@link #getResult()} method only returns a value if this is
      * <code>true</code>.
      * 

@@ -90,6 +90,18 @@ public final class Resources {
     };
 
     /**
+     * The exports resource.
+     * <p>
+     * See <a href="https://orgsync.com/36548/files/496821/show">https://orgsync.com/36548/files/496821/show</a>
+     */
+    public static final Resource<ExportsResource> EXPORTS = new Resource<ExportsResource>() {
+        @Override
+        ExportsResource get(final ApiClientImpl client) {
+            return new ExportsResourceImpl(client);
+        }
+    };
+
+    /**
      * The forms resource.
      * <p>
      * See <a href="https://api.orgsync.com/api/docs/v2/forms">https://api.orgsync.com/api/docs/v2/forms</a>
