@@ -18,6 +18,7 @@ package com.orgsync.api;
 import com.ning.http.client.AsyncHttpClient;
 import com.orgsync.api.model.ApiError;
 import com.orgsync.api.model.accounts.AccountFull;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -34,7 +35,8 @@ import static org.junit.Assert.*;
 public class DataExportTaskTest {
 
     private final ExportsResourceImpl exports = mock(ExportsResourceImpl.class);
-    private final AsyncHttpClient client = mock(AsyncHttpClient.class);
+    private final ApiClientImpl client = mock(ApiClientImpl.class);
+    private final AsyncHttpClient httpClient = mock(AsyncHttpClient.class);
     private final String exportType = "test";
     private final String exportToken = "abc123";
     private final Type type = AccountFull.TYPE;
@@ -53,6 +55,11 @@ public class DataExportTaskTest {
     };
 
     private final DataExportTaskTester task = new DataExportTaskTester(exports, exportType, type);
+
+    @Before
+    public void initClient() {
+        when(client.getHttpClient()).thenReturn(httpClient);
+    }
 
     @Test
     public void testRequestTokenFails() throws Exception {
@@ -113,7 +120,7 @@ public class DataExportTaskTest {
         String message = "fail on download";
         setRedeemToken(true, 200, url);
 
-        when(client.prepareGet(url)).thenThrow(new RuntimeException(message));
+        when(httpClient.prepareGet(url)).thenThrow(new RuntimeException(message));
 
         assertEquals(ApiResponseFactory.error(500, "Exception caught: " + message), task.call());
     }

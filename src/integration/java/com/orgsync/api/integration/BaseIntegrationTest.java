@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -35,10 +36,13 @@ public class BaseIntegrationTest<T> {
 
     public static final String API_KEY = DbTemplate.getString("api_key");
     public static final String HOST = "http://localhost:8080/api/v2";
+    private static final Properties PROPS = new Properties() {{
+        put("exports.poll_interval", "1000");
+    }};
 
     private static final Map<Resource<?>, ApiClient> clients = new HashMap<Resource<?>, ApiClient>();
 
-    final ApiClient client = OrgSync.newApiClient(API_KEY, HOST);
+    final ApiClient client = OrgSync.newApiClient(API_KEY, HOST, PROPS);
     private final T resource;
 
     public BaseIntegrationTest(final Resource<T> resourceKey) {

@@ -17,6 +17,7 @@ package com.orgsync.api;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,12 +52,14 @@ import com.orgsync.api.model.ApiError;
     private final String apiKey;
 
     private final String host;
+    private final Properties props;
 
     private AsyncHttpClient client;
 
-    /* package */ApiClientImpl(final String apiKey, final String host) {
+    /* package */ApiClientImpl(final String apiKey, final String host, final Properties props) {
         this.host = host;
         this.apiKey = apiKey;
+        this.props = props;
         setHttpClient(new AsyncHttpClient());
     }
 
@@ -80,6 +83,10 @@ import com.orgsync.api.model.ApiError;
     @Override
     public AsyncHttpClient getHttpClient() {
         return client;
+    }
+    
+    /* package */Properties getProps() {
+        return props;
     }
 
     @Override

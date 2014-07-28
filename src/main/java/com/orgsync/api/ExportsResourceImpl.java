@@ -60,7 +60,7 @@ import java.util.concurrent.Future;
     }
 
     private <T> DataExportTask<T> newTask(String exportType, Type type) {
-        return new DataExportTask<T>(this, exportType, getClient().getHttpClient(), type);
+        return new DataExportTask<T>(this, exportType, getClient(), type);
     }
 
     /* package */Future<ApiResponse<ExportResponse>> requestToken(String exportType) {

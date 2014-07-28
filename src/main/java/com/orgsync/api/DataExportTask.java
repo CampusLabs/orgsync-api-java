@@ -34,14 +34,15 @@ import java.util.zip.GZIPInputStream;
  */
 /* package */class DataExportTask<T> implements Callable<ApiResponse<List<T>>> {
 
-    private static final long SLEEP_TIME = TimeUnit.MILLISECONDS.convert(10, TimeUnit.SECONDS);
+    private static final long DEFAULT_POLL_INTERVAL = TimeUnit.MILLISECONDS.convert(10, TimeUnit.SECONDS);
+    private static final String POLL_PROPERTY = "exports.poll_interval";
 
     private final ExportsResourceImpl exports;
     private final String exportType;
-    private final AsyncHttpClient client;
+    private final ApiClientImpl client;
     private final Type type;
 
-    public DataExportTask(ExportsResourceImpl exports, String exportType, AsyncHttpClient client, Type type) {
+    public DataExportTask(ExportsResourceImpl exports, String exportType, ApiClientImpl client, Type type) {
         this.exports = exports;
         this.exportType = exportType;
         this.client = client;
@@ -89,7 +90,7 @@ import java.util.zip.GZIPInputStream;
     }
 
     private BaseApiResponse<InputStream> downloadFile(String url) throws Exception {
-        Response response = client.prepareGet(url).execute().get();
+        Response response = client.getHttpClient().prepareGet(url).execute().get();
         return ApiResponseFactory.success(200, response.getResponseBodyAsStream());
     }
 
@@ -116,7 +117,20 @@ import java.util.zip.GZIPInputStream;
      * @throws InterruptedException
      */
     /* package */void block() throws InterruptedException {
-        Thread.sleep(SLEEP_TIME);
+        long pollInterval = DEFAULT_POLL_INTERVAL;
+        String pollProp = client.getProps().getProperty(POLL_PROPERTY);
+
+        if (pollProp != null) {
+            pollInterval = Long.parseLong(pollProp);
+
+            // Hack in some min so we don't DOS ourselves...
+            // TODO move this into some settings validation on ApiClient create
+            if (pollInterval < 1000) {
+                pollInterval = 1000;
+            }
+        }
+
+        Thread.sleep(pollInterval);
     }
 
     private boolean shouldRetry(ApiResponse<ExportsResourceImpl.RedeemResponse> response) {
