@@ -1,0 +1,8 @@
+machine:
+  java:
+    version: oraclejdk6
+
+general:
+  branches:
+    ignore:
+      - gh-pages
