@@ -1,11 +1,14 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
 
     dependencies {
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
         classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
         classpath 'org.ajoberstar:gradle-git:0.4.0'
+        classpath 'org.pegdown:pegdown:1.4.2'
     }
 }
 
@@ -14,6 +17,7 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'fatjar'
 apply plugin: 'github-pages'
+apply plugin: 'me.champeau.jbake'
 
 group = 'com.orgsync'
 version = '0.0.1'
@@ -55,9 +59,9 @@ dependencies {
 }
 
 javadoc {
-    options.links = [ 
-        'http://sonatype.github.io/async-http-client/apidocs/reference/', 
-        'http://download.oracle.com/javase/6/docs/api/' 
+    options.links = [
+        'http://sonatype.github.io/async-http-client/apidocs/reference/',
+        'http://download.oracle.com/javase/6/docs/api/'
     ]
 }
 
@@ -118,4 +122,9 @@ task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
     into("docs/") {
         from("docs/")
     }
+}
+
+jbake {
+    input = file('site')
+    output = file("$buildDir/site")
 }
