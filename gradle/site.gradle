@@ -1,0 +1,25 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
+        classpath 'org.pegdown:pegdown:1.4.2'
+    }
+}
+
+task('generateSite') << {
+  println 'hello'
+}
+
+jbake {
+    input = file('site')
+    output = file("$buildDir/site")
+
+    // A list of versions we want to link
+    configuration['versions'] = [
+        '0.0.1',
+        '0.2.0'
+    ]
+}

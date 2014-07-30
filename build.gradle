@@ -18,6 +18,7 @@ apply plugin: 'idea'
 apply plugin: 'fatjar'
 apply plugin: 'github-pages'
 apply plugin: 'me.champeau.jbake'
+apply from: 'gradle/site.gradle'
 
 group = 'com.orgsync'
 version = '0.0.1'
@@ -124,7 +125,3 @@ task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
     }
 }
 
-jbake {
-    input = file('site')
-    output = file("$buildDir/site")
-}
