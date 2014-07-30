@@ -15,11 +15,20 @@
 */
 package com.orgsync.api;
 
+import com.orgsync.api.model.accounts.AccountAttributes;
+import com.orgsync.api.model.accounts.AccountCreateRequest;
+import com.orgsync.api.model.forms.FormUpdate;
 import org.junit.Test;
 
 import com.ning.http.client.FluentStringsMap;
 import com.orgsync.api.model.accounts.AccountUpdateRequest;
-import com.orgsync.api.model.accounts.AccountUpdateRequest.ElementPair;
+import org.mockito.ArgumentCaptor;
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Type;
+
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 
 public class AccountsResourceImplTest extends BaseResourceTest {
 
@@ -79,6 +88,20 @@ public class AccountsResourceImplTest extends BaseResourceTest {
     }
 
     @Test
+    public void testGetAccountsByCustomProfileResponse() throws Exception {
+        int questionId = 234;
+        String responseQuery = "test*";
+        accounts.getAccountsByCustomProfileResponse(questionId, responseQuery);
+
+        verifyRequest(RequestParams.get(String.format("/accounts/custom_profile/%d/%s", questionId, responseQuery)));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetAccountsByCustomProfileResponseWithNull() throws Exception {
+        accounts.getAccountsByCustomProfileResponse(1, null);
+    }
+
+    @Test
     public void testListCustomProfileFields() throws Exception {
         accounts.getCustomProfileFields();
 
@@ -86,16 +109,53 @@ public class AccountsResourceImplTest extends BaseResourceTest {
     }
 
     @Test
+    public void testCreateAccount() throws Exception {
+        String username = "test-user";
+        String first = "First";
+        String last = "Last";
+        String email = "some.email@orgsync.com";
+
+        AccountAttributes attrs = new AccountAttributes().setEmailAddress(email).setFirstName(first).setLastName(last);
+        AccountCreateRequest request = new AccountCreateRequest().setUsername(username).setAccountAttributes(attrs);
+
+        accounts.createAccount(request);
+
+        ArgumentCaptor<RequestParams> argument = ArgumentCaptor.forClass(RequestParams.class);
+        verify(client).getResponse(argument.capture(), any(Type.class));
+
+        RequestParams params = argument.getValue();
+
+        assertEquals("POST", params.getMethod());
+        assertEquals("/accounts", params.getEndpoint());
+        assertEquals(new FluentStringsMap(), params.getQueryParams());
+
+        AccountCreateRequest json = JsonSerializer.fromJson(params.getBody(), AccountCreateRequest.class);
+        assertEquals(request, json);
+    }
+
+    @Test
+    public void testDeleteAccount() throws Exception {
+        int accountId = 566;
+        accounts.deleteAccount(accountId);
+        verifyRequest(RequestParams.delete("/accounts/" + accountId));
+    }
+
+    @Test
     public void testUpdateAccount() throws Exception {
         String firstName = "Test";
         String email = "test@orgsync.com";
-        ElementPair element = new ElementPair(37, "100");
-        AccountUpdateRequest request = new AccountUpdateRequest().setFirstName(firstName).setEmail(email)
-                .setElement(element);
+        int profileField = 456;
+        String profileUpdate = "a profile update";
+
+        AccountUpdateRequest request = new AccountUpdateRequest()
+                .setFirstName(firstName).setEmail(email)
+                .addProfileUpdate(new FormUpdate(profileField, profileUpdate));
         accounts.updateAccount(3311, request);
 
-        FluentStringsMap params = new FluentStringsMap().add("first_name", firstName).add("email", email)
-                .add("profile_entries[37]", "100");
+        FluentStringsMap params = new FluentStringsMap()
+                .add("first_name", firstName)
+                .add("email", email)
+                .add(String.format("profile_responses[%d]", profileField), profileUpdate);
 
         verifyRequest(RequestParams.put("/accounts/3311", params));
     }

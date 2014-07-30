@@ -17,6 +17,7 @@ package com.orgsync.api;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,24 +49,18 @@ import com.orgsync.api.model.ApiError;
 
     public static final String DEFAULT_HOST = "https://api.orgsync.com/api/v2";
 
-    /** We use the naming policy to translate the json names to Java friendly names */
-    private static final Gson DEFAULT_GSON = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create();
-
     private final String apiKey;
 
     private final String host;
+    private final Properties props;
 
     private AsyncHttpClient client;
 
-    private final Gson gson;
-
-    /* package */ApiClientImpl(final String apiKey, final String host) {
+    /* package */ApiClientImpl(final String apiKey, final String host, final Properties props) {
         this.host = host;
         this.apiKey = apiKey;
+        this.props = props;
         setHttpClient(new AsyncHttpClient());
-        this.gson = DEFAULT_GSON;
     }
 
     @Override
@@ -88,6 +83,10 @@ import com.orgsync.api.model.ApiError;
     @Override
     public AsyncHttpClient getHttpClient() {
         return client;
+    }
+    
+    /* package */Properties getProps() {
+        return props;
     }
 
     @Override
@@ -146,6 +145,7 @@ import com.orgsync.api.model.ApiError;
      */
     private Request buildRequest(final RequestParams requestParams) {
         return new RequestBuilder(requestParams.getMethod())
+                .setBody(requestParams.getBody())
                 .setUrl(toURL(requestParams.getEndpoint()))
                 .setQueryParameters(mergeParams(requestParams.getQueryParams()))
                 .build();
@@ -197,15 +197,16 @@ import com.orgsync.api.model.ApiError;
         @SuppressWarnings("unchecked")
         public T onCompleted(final Response response) throws Exception {
             String body = response.getResponseBody();
-            log.debug("Received response string: {}", body);
+            int status = response.getStatusCode();
+            log.debug("Received response with status={}, body={}", status, body);
 
-            if (response.getStatusCode() == 200) {
+            if (status >= 200 && status < 300) {
                 return (T) ApiResponseFactory
-                        .success(gson.fromJson(body, type));
+                        .success(status, JsonSerializer.fromJson(body, type));
             }
 
-            return (T) ApiResponseFactory.error(gson.fromJson(body,
-                    ApiError.class));
+            return (T) ApiResponseFactory
+                        .error(status, JsonSerializer.fromJson(body, ApiError.class));
         }
 
     }

@@ -15,12 +15,15 @@
 */
 package com.orgsync.api.integration;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.orgsync.api.ApiResponse;
+import com.orgsync.api.model.Success;
+import com.orgsync.api.model.accounts.AccountAttributes;
+import com.orgsync.api.model.accounts.AccountCreateRequest;
+import com.orgsync.api.model.forms.FormUpdate;
 import org.hamcrest.core.IsCollectionContaining;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -31,9 +34,10 @@ import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.accounts.AccountDetail;
 import com.orgsync.api.model.accounts.AccountFull;
 import com.orgsync.api.model.accounts.AccountUpdateRequest;
-import com.orgsync.api.model.accounts.AccountUpdateRequest.ElementPair;
 import com.orgsync.api.model.accounts.CustomProfileField;
 import com.typesafe.config.Config;
+
+import static org.junit.Assert.*;
 
 public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResource> {
 
@@ -85,6 +89,14 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
     }
 
     @Test
+    public void testGetAccountsByCustomProfileResponse() throws Exception {
+        String profileField = accountConfig.getConfigList("profile").get(0).getString("data");
+        List<AccountDetail> result = getResult(getResource().getAccountsByCustomProfileResponse(1, profileField));
+
+        testContainsIds(result, Arrays.asList(accountConfig));
+    }
+
+    @Test
     public void testGetCustomProfileFields() throws Exception {
         List<? extends Config> profileFieldsConfig = DbTemplate.getList("custom_profile");
         List<CustomProfileField> result = getResult(getResource().getCustomProfileFields());
@@ -100,6 +112,36 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
         }
 
         assertThat(resultNames, IsCollectionContaining.hasItems(configNames.toArray(new String[configNames.size()])));
+    }
+
+    @Test
+    public void testCreateDeleteAccount() throws Exception {
+        String username = "create" + DbTemplate.getString("sso_username_suffix");
+        String first = "Created";
+        String last = "User";
+        String email = "create@orgsync.com";
+
+        ApiResponse<AccountDetail> response = getResource().getAccountByUsername(username).get();
+        assertFalse("Should not have found user with username " + username, response.isSuccess());
+        assertEquals("Record not found", response.getError().getMessage());
+
+        AccountAttributes attrs = new AccountAttributes().setFirstName(first).setLastName(last).setEmailAddress(email);
+        AccountCreateRequest request = new AccountCreateRequest().setUsername(username).setAccountAttributes(attrs);
+
+        AccountFull result = getResult(getResource().createAccount(request));
+
+        assertEquals(username, result.getUsername());
+        assertEquals(email, result.getEmail());
+        assertEquals(first, result.getFirstName());
+        assertEquals(last, result.getLastName());
+
+        Success success = getResult(getResource().deleteAccount(result.getId()));
+
+        assertTrue("Delete was not a success!", success.isSuccess());
+
+        response = getResource().getAccountByUsername(username).get();
+        assertFalse("Should not have found user with username " + username, response.isSuccess());
+        assertEquals("Record not found", response.getError().getMessage());
     }
 
     @Test
@@ -121,7 +163,7 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
         AccountFull result = getResult(getResource().updateAccount(accountId,
                 new AccountUpdateRequest()
                         .setLastName(updatedLastName)
-                        .setElement(new ElementPair(profileConfig.getInt("id"), profileUpdate))));
+                        .addProfileUpdate(new FormUpdate(profileConfig.getInt("id"), profileUpdate))));
 
         assertEquals(updatedLastName, result.getLastName());
         assertEquals(profileUpdate, result.getProfileResponses().get(0).getData());
@@ -129,7 +171,7 @@ public class AccountsIntegrationTest extends BaseIntegrationTest<AccountsResourc
         AccountFull reverted = getResult(getResource().updateAccount(accountId,
                 new AccountUpdateRequest()
                         .setLastName(accountConfig.getString("last_name"))
-                        .setElement(new ElementPair(profileConfig.getInt("id"), accountProfile.getString("data")))));
+                        .addProfileUpdate(new FormUpdate(profileConfig.getInt("id"), accountProfile.getString("data")))));
 
         assertEquals(accountConfig.getString("last_name"), reverted.getLastName());
         assertEquals(accountProfile.getString("data"), reverted.getProfileResponses().get(0).getData());

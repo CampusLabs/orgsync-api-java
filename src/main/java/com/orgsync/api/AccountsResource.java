@@ -15,14 +15,16 @@
 */
 package com.orgsync.api;
 
-import java.util.List;
-
 import com.ning.http.client.ListenableFuture;
+import com.orgsync.api.model.Success;
 import com.orgsync.api.model.accounts.Account;
+import com.orgsync.api.model.accounts.AccountCreateRequest;
 import com.orgsync.api.model.accounts.AccountDetail;
 import com.orgsync.api.model.accounts.AccountFull;
 import com.orgsync.api.model.accounts.AccountUpdateRequest;
 import com.orgsync.api.model.accounts.CustomProfileField;
+
+import java.util.List;
 
 /**
  * <p>
@@ -33,6 +35,7 @@ import com.orgsync.api.model.accounts.CustomProfileField;
  * 
  * <p>
  * See: <a href="https://api.orgsync.com/api/docs/v2/accounts">https://api.orgsync.com/api/docs/v2/accounts</a>
+ * See: <a href="https://orgsync.com/36548/files/496820/show">https://orgsync.com/36548/files/496820/show</a>
  * 
  * @author steffyj
  * 
@@ -88,12 +91,45 @@ public interface AccountsResource {
             getAccountByCustomProfile(String keyword);
 
     /**
+     * Search for an account by response to a custom profile question.
+     *
+     *
+     * @param questionId
+     *              The ID of the custom profile question to search
+     * @param responseQuery
+     *              The query for a matching response
+     * @return a future to the response with a list of account details
+     */
+    public ListenableFuture<ApiResponse<List<AccountDetail>>>
+            getAccountsByCustomProfileResponse(int questionId, String responseQuery);
+
+    /**
      * Get the list of custom profile fields for an account.
      * 
      * @return a future to the response of the custom profile fields
      */
     public ListenableFuture<ApiResponse<List<CustomProfileField>>>
             getCustomProfileFields();
+
+    /**
+     * Create an account with the given attributes.
+     *
+     * @param request
+     *              The request to make the account
+     * @return a future to a response with the created account information
+     */
+    public ListenableFuture<ApiResponse<AccountFull>>
+            createAccount(AccountCreateRequest request);
+
+    /**
+     * Delete the account with the given id.
+     *
+     * @param accountId
+     *              The id of the account to delete
+     * @return a future to a response for whether or not this call was successful
+     */
+    public ListenableFuture<ApiResponse<Success>>
+            deleteAccount(int accountId);
 
     /**
      * Update an account with the given {@link AccountUpdateRequest}.

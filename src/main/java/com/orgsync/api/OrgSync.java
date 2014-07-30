@@ -15,6 +15,8 @@
  */
 package com.orgsync.api;
 
+import java.util.Properties;
+
 /**
  * <p>
  * The entry point for creating clients for the OrgSync API V2. Static factory method are available to retrieve
@@ -56,7 +58,22 @@ public final class OrgSync {
      * @return the api client
      */
     public static ApiClient newApiClient(final String apiKey, final String host) {
-        return new ApiClientImpl(apiKey, host);
+        return new ApiClientImpl(apiKey, host, new Properties());
     }
 
+    /**
+     * Create a new V2 API client with the given OrgSync API key, host, and properties.  Most clients will not need to
+     * change these values from the default.
+     *
+     * @param apiKey
+     *            the api key for your community
+     * @param host
+     *            the host to connect to
+     * @param props
+     *            the configuration properties
+     * @return the api client
+     */
+    public static ApiClient newApiClient(final String apiKey, final String host, final Properties props) {
+        return new ApiClientImpl(apiKey, host, props);
+    }
 }

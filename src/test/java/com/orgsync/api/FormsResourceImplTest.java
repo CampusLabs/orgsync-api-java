@@ -15,6 +15,7 @@
 */
 package com.orgsync.api;
 
+import com.ning.http.client.FluentStringsMap;
 import org.junit.Test;
 
 public class FormsResourceImplTest extends BaseResourceTest {
@@ -37,6 +38,12 @@ public class FormsResourceImplTest extends BaseResourceTest {
     public void testGetForm() throws Exception {
         resource.getForm(587);
         verifyRequest(RequestParams.get("/forms/587"));
+    }
+
+    @Test
+    public void testGetFormWithStatus() throws Exception {
+        resource.getForm(587, "testing");
+        verifyRequest(RequestParams.get("/forms/587", new FluentStringsMap().add("status", "testing")));
     }
 
     @Test

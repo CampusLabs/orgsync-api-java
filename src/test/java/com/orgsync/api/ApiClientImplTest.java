@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import org.junit.Before;
@@ -54,7 +55,7 @@ public class ApiClientImplTest {
     @Before
     public void setup() {
         http = mock(AsyncHttpClient.class);
-        client = new ApiClientImpl(apiKey, host).setHttpClient(http);
+        client = new ApiClientImpl(apiKey, host, new Properties()).setHttpClient(http);
     }
 
     @Test

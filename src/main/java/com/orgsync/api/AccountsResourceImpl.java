@@ -21,11 +21,8 @@ import java.util.List;
 
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
-import com.orgsync.api.model.accounts.Account;
-import com.orgsync.api.model.accounts.AccountDetail;
-import com.orgsync.api.model.accounts.AccountFull;
-import com.orgsync.api.model.accounts.AccountUpdateRequest;
-import com.orgsync.api.model.accounts.CustomProfileField;
+import com.orgsync.api.model.Success;
+import com.orgsync.api.model.accounts.*;
 
 /**
  * The implementation of the accounts resource.
@@ -68,8 +65,26 @@ import com.orgsync.api.model.accounts.CustomProfileField;
     }
 
     @Override
+    public ListenableFuture<ApiResponse<List<AccountDetail>>> getAccountsByCustomProfileResponse(int questionId, String responseQuery) {
+        checkNotNull(responseQuery);
+        String url = String.format("%s/custom_profile/%d/%s", getEndpoint(), questionId, responseQuery);
+        return getResponse(RequestParams.get(url), AccountDetail.LIST_TYPE);
+    }
+
+    @Override
     public ListenableFuture<ApiResponse<List<CustomProfileField>>> getCustomProfileFields() {
         return getResponse(RequestParams.get(getEndpoint() + "/profile_fields"), CustomProfileField.LIST_TYPE);
+    }
+
+    @Override
+    public ListenableFuture<ApiResponse<AccountFull>> createAccount(AccountCreateRequest request) {
+        String body = JsonSerializer.toJson(request);
+        return create(body, AccountFull.TYPE);
+    }
+
+    @Override
+    public ListenableFuture<ApiResponse<Success>> deleteAccount(int accountId) {
+        return getResponse(RequestParams.delete(showFor(accountId)), Success.TYPE);
     }
 
     @Override
@@ -100,12 +115,7 @@ import com.orgsync.api.model.accounts.CustomProfileField;
         checkAddField(params, "city", request.getCity());
         checkAddField(params, "state", request.getState());
         checkAddField(params, "zip", request.getZip());
-
-        if (request.getElement() != null) {
-            params.add(
-                    String.format("profile_entries[%d]", request.getElement().getElementId()),
-                    String.valueOf(request.getElement().getElementValue()));
-        }
+        addProfileFields(params, request.getProfileResponses());
 
         return params;
     }

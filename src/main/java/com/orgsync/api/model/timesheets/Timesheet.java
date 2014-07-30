@@ -45,6 +45,7 @@ public class Timesheet {
     private String description;
     private float hours;
     private String status;
+    private String attendanceStatus;
 
     public final int getId() {
         return id;
@@ -86,84 +87,67 @@ public class Timesheet {
         return status;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((account == null) ? 0 : account.hashCode());
-        result = prime * result + ((alternateOrgName == null) ? 0 : alternateOrgName.hashCode());
-        result = prime * result + ((description == null) ? 0 : description.hashCode());
-        result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
-        result = prime * result + ((event == null) ? 0 : event.hashCode());
-        result = prime * result + Float.floatToIntBits(hours);
-        result = prime * result + id;
-        result = prime * result + ((org == null) ? 0 : org.hashCode());
-        result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
-        return result;
+    public final String getAttendanceStatus() {
+        return attendanceStatus;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Timesheet)) return false;
+
+        Timesheet timesheet = (Timesheet) o;
+
+        if (Float.compare(timesheet.hours, hours) != 0) return false;
+        if (id != timesheet.id) return false;
+        if (account != null ? !account.equals(timesheet.account) : timesheet.account != null) return false;
+        if (alternateOrgName != null ? !alternateOrgName.equals(timesheet.alternateOrgName) : timesheet.alternateOrgName != null)
             return false;
-        if (getClass() != obj.getClass())
+        if (attendanceStatus != null ? !attendanceStatus.equals(timesheet.attendanceStatus) : timesheet.attendanceStatus != null)
             return false;
-        Timesheet other = (Timesheet) obj;
-        if (account == null) {
-            if (other.account != null)
-                return false;
-        } else if (!account.equals(other.account))
+        if (description != null ? !description.equals(timesheet.description) : timesheet.description != null)
             return false;
-        if (alternateOrgName == null) {
-            if (other.alternateOrgName != null)
-                return false;
-        } else if (!alternateOrgName.equals(other.alternateOrgName))
-            return false;
-        if (description == null) {
-            if (other.description != null)
-                return false;
-        } else if (!description.equals(other.description))
-            return false;
-        if (endDate == null) {
-            if (other.endDate != null)
-                return false;
-        } else if (!endDate.equals(other.endDate))
-            return false;
-        if (event == null) {
-            if (other.event != null)
-                return false;
-        } else if (!event.equals(other.event))
-            return false;
-        if (Float.floatToIntBits(hours) != Float.floatToIntBits(other.hours))
-            return false;
-        if (id != other.id)
-            return false;
-        if (org == null) {
-            if (other.org != null)
-                return false;
-        } else if (!org.equals(other.org))
-            return false;
-        if (startDate == null) {
-            if (other.startDate != null)
-                return false;
-        } else if (!startDate.equals(other.startDate))
-            return false;
-        if (status == null) {
-            if (other.status != null)
-                return false;
-        } else if (!status.equals(other.status))
-            return false;
+        if (endDate != null ? !endDate.equals(timesheet.endDate) : timesheet.endDate != null) return false;
+        if (event != null ? !event.equals(timesheet.event) : timesheet.event != null) return false;
+        if (org != null ? !org.equals(timesheet.org) : timesheet.org != null) return false;
+        if (startDate != null ? !startDate.equals(timesheet.startDate) : timesheet.startDate != null) return false;
+        if (status != null ? !status.equals(timesheet.status) : timesheet.status != null) return false;
+
         return true;
     }
 
     @Override
-    public String toString() {
-        return "Timesheet [id=" + id + ", startDate=" + startDate + ", endDate=" + endDate + ", alternateOrgName="
-                + alternateOrgName + ", account=" + account + ", org=" + org + ", event=" + event + ", description="
-                + description + ", hours=" + hours + ", status=" + status + "]";
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
+        result = 31 * result + (alternateOrgName != null ? alternateOrgName.hashCode() : 0);
+        result = 31 * result + (account != null ? account.hashCode() : 0);
+        result = 31 * result + (org != null ? org.hashCode() : 0);
+        result = 31 * result + (event != null ? event.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (hours != +0.0f ? Float.floatToIntBits(hours) : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (attendanceStatus != null ? attendanceStatus.hashCode() : 0);
+        return result;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Timesheet{");
+        sb.append("id=").append(id);
+        sb.append(", startDate='").append(startDate).append('\'');
+        sb.append(", endDate='").append(endDate).append('\'');
+        sb.append(", alternateOrgName='").append(alternateOrgName).append('\'');
+        sb.append(", account=").append(account);
+        sb.append(", org=").append(org);
+        sb.append(", event=").append(event);
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", hours=").append(hours);
+        sb.append(", status='").append(status).append('\'');
+        sb.append(", attendanceStatus='").append(attendanceStatus).append('\'');
+        sb.append(", super=").append(super.toString());
+        sb.append('}');
+        return sb.toString();
+    }
 }

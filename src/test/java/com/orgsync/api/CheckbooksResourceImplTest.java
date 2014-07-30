@@ -40,16 +40,33 @@ public class CheckbooksResourceImplTest extends BaseResourceTest {
     @Test
     public void testCreateCheckbook() throws Exception {
         String name = "testbook";
-        checkbooks.createCheckbook(3345, name);
+        boolean isReadOnly = true;
+        checkbooks.createCheckbook(3345, name, isReadOnly);
 
-        FluentStringsMap params = new FluentStringsMap().add("name", name);
+        FluentStringsMap params = new FluentStringsMap().add("name", name).add("is_read_only", "true");
+
+        verifyRequest(RequestParams.post("/orgs/3345/checkbooks", params));
+    }
+
+    @Test
+    public void testUpdateCheckbook() throws Exception {
+        String name = "updatebook";
+        boolean isReadOnly = false;
+        checkbooks.createCheckbook(3345, name, isReadOnly);
+
+        FluentStringsMap params = new FluentStringsMap().add("name", name).add("is_read_only", "false");
 
         verifyRequest(RequestParams.post("/orgs/3345/checkbooks", params));
     }
 
     @Test(expected = NullPointerException.class)
     public void testCreateCheckbookWithNull() throws Exception {
-        checkbooks.createCheckbook(123, null);
+        checkbooks.createCheckbook(123, null, true);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testUpdateCheckbookWithNull() throws Exception {
+        checkbooks.updateCheckbook(123, null, true);
     }
 
     @Test

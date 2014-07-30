@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 OrgSync
+ * Copyright 2014 OrgSync
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,48 +13,52 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 */
-package com.orgsync.api.model.accounts;
+package com.orgsync.api.model.orgs;
+
+import com.google.gson.reflect.TypeToken;
+import com.orgsync.api.model.forms.FormResponse;
+import com.orgsync.api.model.groups.Group;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-import com.google.gson.reflect.TypeToken;
-import com.orgsync.api.model.forms.FormResponse;
-
 /**
- * Full information about an account.
- * 
+ * A model with the full details of a single organization.
+ *
  * @author steffyj
- * 
  */
-public class AccountFull extends AccountDetail {
+public class OrgFull extends Org {
 
-    public static final Type TYPE = new TypeToken<AccountFull>() {
+    public static final Type TYPE = new TypeToken<OrgFull>() {
     }.getType();
 
     private List<FormResponse> profileResponses;
+    private List<Integer> accountIds;
+    private List<Group> groups;
 
-    private String aboutMe;
-
-    public final List<FormResponse> getProfileResponses() {
+    public List<FormResponse> getProfileResponses() {
         return profileResponses;
     }
 
-    public final String getAboutMe() {
-        return aboutMe;
+    public List<Integer> getAccountIds() {
+        return accountIds;
+    }
+
+    public List<Group> getGroups() {
+        return groups;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AccountFull)) return false;
+        if (!(o instanceof OrgFull)) return false;
         if (!super.equals(o)) return false;
 
-        AccountFull that = (AccountFull) o;
+        OrgFull orgFull = (OrgFull) o;
 
-        if (aboutMe != null ? !aboutMe.equals(that.aboutMe) : that.aboutMe != null) return false;
-        if (profileResponses != null ? !profileResponses.equals(that.profileResponses) : that.profileResponses != null)
-            return false;
+        if (!accountIds.equals(orgFull.accountIds)) return false;
+        if (!groups.equals(orgFull.groups)) return false;
+        if (!profileResponses.equals(orgFull.profileResponses)) return false;
 
         return true;
     }
@@ -62,16 +66,18 @@ public class AccountFull extends AccountDetail {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (profileResponses != null ? profileResponses.hashCode() : 0);
-        result = 31 * result + (aboutMe != null ? aboutMe.hashCode() : 0);
+        result = 31 * result + profileResponses.hashCode();
+        result = 31 * result + accountIds.hashCode();
+        result = 31 * result + groups.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("AccountFull{");
+        final StringBuilder sb = new StringBuilder("OrgFull{");
         sb.append("profileResponses=").append(profileResponses);
-        sb.append(", aboutMe='").append(aboutMe).append('\'');
+        sb.append(", accountIds=").append(accountIds);
+        sb.append(", groups=").append(groups);
         sb.append(", super=").append(super.toString());
         sb.append('}');
         return sb.toString();

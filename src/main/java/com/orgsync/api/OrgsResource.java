@@ -21,6 +21,7 @@ import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.Success;
 import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.orgs.Org;
+import com.orgsync.api.model.orgs.OrgFull;
 import com.orgsync.api.model.orgs.OrgUpdateRequest;
 
 /**
@@ -52,7 +53,7 @@ public interface OrgsResource {
      *            the id of the org to get
      * @return a future to the response with the org
      */
-    public ListenableFuture<ApiResponse<Org>>
+    public ListenableFuture<ApiResponse<OrgFull>>
             getOrg(int orgId);
 
     /**
@@ -64,7 +65,7 @@ public interface OrgsResource {
      *            the fields to update
      * @return a future to a response with the updated orgs
      */
-    public ListenableFuture<ApiResponse<Org>>
+    public ListenableFuture<ApiResponse<OrgFull>>
             updateOrg(int orgId, OrgUpdateRequest request);
 
     /**

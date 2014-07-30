@@ -48,20 +48,24 @@ import com.orgsync.api.model.checkbooks.CheckbookEntry;
     }
 
     @Override
-    public ListenableFuture<ApiResponse<Checkbook>> createCheckbook(final int orgId, final String name) {
+    public ListenableFuture<ApiResponse<Checkbook>> createCheckbook(final int orgId, final String name, final boolean isReadOnly) {
         checkNotNull(name);
 
         String endpoint = listFor("/orgs/%d", orgId);
-        FluentStringsMap params = new FluentStringsMap().add("name", name);
+        FluentStringsMap params = new FluentStringsMap()
+                .add("name", name)
+                .add("is_read_only", String.valueOf(isReadOnly));
 
         return getResponse(RequestParams.post(endpoint, params), Checkbook.TYPE);
     }
 
     @Override
-    public ListenableFuture<ApiResponse<Checkbook>> updateCheckbook(final int checkbookId, final String name) {
+    public ListenableFuture<ApiResponse<Checkbook>> updateCheckbook(final int checkbookId, final String name, final boolean isReadOnly) {
         checkNotNull(name);
 
-        FluentStringsMap params = new FluentStringsMap().add("name", name);
+        FluentStringsMap params = new FluentStringsMap()
+                .add("name", name)
+                .add("is_read_only", String.valueOf(isReadOnly));
 
         return update(checkbookId, params, Checkbook.TYPE);
     }

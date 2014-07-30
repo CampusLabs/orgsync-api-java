@@ -25,6 +25,7 @@ import com.ning.http.client.ListenableFuture;
 import com.orgsync.api.model.Success;
 import com.orgsync.api.model.accounts.Account;
 import com.orgsync.api.model.orgs.Org;
+import com.orgsync.api.model.orgs.OrgFull;
 import com.orgsync.api.model.orgs.OrgUpdateRequest;
 
 /**
@@ -45,12 +46,12 @@ import com.orgsync.api.model.orgs.OrgUpdateRequest;
     }
 
     @Override
-    public ListenableFuture<ApiResponse<Org>> getOrg(final int orgId) {
-        return show(orgId, Org.TYPE);
+    public ListenableFuture<ApiResponse<OrgFull>> getOrg(final int orgId) {
+        return show(orgId, OrgFull.TYPE);
     }
 
     @Override
-    public ListenableFuture<ApiResponse<Org>> updateOrg(final int orgId, final OrgUpdateRequest request) {
+    public ListenableFuture<ApiResponse<OrgFull>> updateOrg(final int orgId, final OrgUpdateRequest request) {
         checkNotNull(request);
 
         FluentStringsMap params = new FluentStringsMap();
@@ -58,8 +59,9 @@ import com.orgsync.api.model.orgs.OrgUpdateRequest;
         checkAddField(params, "alternate_id", request.getAlternateId());
         checkAddField(params, "short_name", request.getShortName());
         checkAddField(params, "is_disabled", request.getIsDisabled());
+        addProfileFields(params, request.getProfileResponses());
 
-        return update(orgId, params, Org.TYPE);
+        return update(orgId, params, OrgFull.TYPE);
     }
 
     @Override

@@ -62,6 +62,18 @@ public interface FormsResource {
             getForm(int formId);
 
     /**
+     * Get a single form.
+     *
+     * @param formId
+     *            the id of the form to get
+     * @param status
+     *            the status of the submissions to return
+     * @return a future to the response with the form
+     */
+    public ListenableFuture<ApiResponse<Form>>
+    getForm(int formId, String status);
+
+    /**
      * A the form submission with the given id.
      * 
      * @param submissionId

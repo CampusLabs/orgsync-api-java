@@ -18,10 +18,12 @@ package com.orgsync.api;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import com.ning.http.client.FluentStringsMap;
 import com.ning.http.client.ListenableFuture;
+import com.orgsync.api.model.forms.FormUpdate;
 
 /**
  * <p>
@@ -65,6 +67,10 @@ import com.ning.http.client.ListenableFuture;
         this.endpoint = endpoint;
     }
 
+    /* package */ApiClientImpl getClient() {
+        return client;
+    }
+
     /**
      * Get a response for the request params and type... delegate to client.
      * 
@@ -88,7 +94,7 @@ import com.ning.http.client.ListenableFuture;
      * @param value
      *            the value to add if not null
      */
-    void checkAddField(final FluentStringsMap params, final String field, final Object value) {
+    /* package */void checkAddField(final FluentStringsMap params, final String field, final Object value) {
         if (value != null) {
             params.add(field, value.toString());
         }
@@ -103,6 +109,22 @@ import com.ning.http.client.ListenableFuture;
      */
     /* package */String dateToQueryParam(final Date date) {
         return dateFormat.format(date);
+    }
+
+    /**
+     * Add the profile updates (if any) to the params.
+     *
+     * @param params
+     *          the params to add the fields to
+     * @param updates
+     *          the profile updates to add
+     */
+    /* package */void addProfileFields(final FluentStringsMap params, final List<FormUpdate> updates) {
+        for(FormUpdate update : updates) {
+            params.add(
+                    String.format("profile_responses[%d]", update.getElementId()),
+                    String.valueOf(update.getElementValue()));
+        }
     }
 
     /**
@@ -176,6 +198,21 @@ import com.ning.http.client.ListenableFuture;
     }
 
     /**
+     * A standard show for a given id with params.
+     *
+     * @param id
+     *            the id to show
+     * @param params
+     *            the params to pass to this call
+     * @param type
+     *            the type of result
+     * @return the future to the response
+     */
+    <T> ListenableFuture<ApiResponse<T>> show(final int id, final FluentStringsMap params, Type type) {
+        return getResponse(RequestParams.get(showFor(id), params), type);
+    }
+
+    /**
      * Update a given id using the given params.
      * 
      * @param id
@@ -200,7 +237,35 @@ import com.ning.http.client.ListenableFuture;
      * @return a future to the response of the type
      */
     <T> ListenableFuture<ApiResponse<T>> create(final FluentStringsMap params, final Type type) {
-        return getResponse(RequestParams.post(getEndpoint(), params), type);
+        return create("", params, type);
+    }
+
+    /**
+     * Create for the resource using the given post body.
+     *
+     * @param body
+     *            the body to pass in the POST
+     * @param type
+     *            the returned type
+     * @return a future to the response of the type
+     */
+    <T> ListenableFuture<ApiResponse<T>> create(final String body, final Type type) {
+        return create(body, new FluentStringsMap(), type);
+    }
+
+    /**
+     * Create for the resource using the given post body and params.
+     *
+     * @param body
+     *            the body to pass in the POST
+     * @param params
+     *            the params to create with
+     * @param type
+     *            the returned type
+     * @return a future to the response of the type
+     */
+    <T> ListenableFuture<ApiResponse<T>> create(final String body, final FluentStringsMap params, final Type type) {
+        return getResponse(RequestParams.post(getEndpoint(), body, params), type);
     }
 
     /**

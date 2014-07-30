@@ -69,16 +69,20 @@ public class CheckbooksIntegrationTest extends BaseIntegrationTest<CheckbooksRes
     public void testCUDCheckbook() throws Exception {
         int portalId = portalConfig.getInt("id");
         String checkbookName = "test create";
-        Checkbook result = getResult(getResource().createCheckbook(portalId, checkbookName));
+        boolean isReadOnly = false;
+        Checkbook result = getResult(getResource().createCheckbook(portalId, checkbookName, isReadOnly));
 
         assertEquals(checkbookName, result.getName());
         assertEquals(portalId, result.getOrg().getId());
+        assertEquals(isReadOnly, result.isReadOnly());
         assertEquals("0.0", result.getBalance());
 
         String updatedName = "updated";
-        Checkbook updated = getResult(getResource().updateCheckbook(result.getId(), updatedName));
+        boolean updateReadOnly = true;
+        Checkbook updated = getResult(getResource().updateCheckbook(result.getId(), updatedName, updateReadOnly));
 
         assertEquals(updatedName, updated.getName());
+        assertEquals(updateReadOnly, updated.isReadOnly());
 
         Success success = getResult(getResource().deleteCheckbook(result.getId()));
 
