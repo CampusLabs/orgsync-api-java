@@ -24,6 +24,10 @@ description = 'Java client for the OrgSync API'
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
 
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.10'
+}
+
 repositories {
     mavenCentral()
 }
@@ -56,9 +60,9 @@ dependencies {
 }
 
 javadoc {
-    options.links = [ 
-        'http://sonatype.github.io/async-http-client/apidocs/reference/', 
-        'http://download.oracle.com/javase/6/docs/api/' 
+    options.links = [
+        'http://sonatype.github.io/async-http-client/apidocs/reference/',
+        'http://download.oracle.com/javase/6/docs/api/'
     ]
 }
 
