@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>
+        Resources
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <!-- Le styles -->
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../../css/asciidoctor.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link href="../../../css/prettify.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="../../../favicon.ico">
+  </head>
+  <body onload="prettyPrint()">
+    <div id="wrap">
+
+
+		<!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="http://devblog.orgsync.com/orgsync-api-java/index.html">OrgSync API Java</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="http://devblog.orgsync.com/orgsync-api-java/download.html">Download</a></li>
+            <li><a href="http://devblog.orgsync.com/orgsync-api-java/documentation.html">Documentation</a></li>
+            <li><a href="https://github.com/orgsync/orgsync-api-java">Source</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class="container">
+
+
+	<div class="version">Version: 0.2.0</div>
+
+	<div class="doc-nav">
+		
+		<a href="Clients.html">Clients</a>
+		&larr;
+		
+		<a href="index.html">Contents</a>
+		
+	</div>
+
+	<hr />
+
+	<div class="page-header">
+		<h1>Resources</h1>
+	</div>
+
+	<p><h1>Working with Resources</h1><p>Once we have an <a href="../javadoc/com/orgsync/api/ApiClient.html">ApiClient</a> we can access the <a href="../javadoc/com/orgsync/api/Resources.html">Resources</a> of the API.<br/>Each resource has its own interface that should match the resources shown in the<br/><a href="https://api.orgsync.com/api/docs/v2">Orgsync API V2 docs</a>, but they all share a few common patterns which we will discuss<br/>here.</p><h2>Handling Responses</h2><p>Looking at the return type for any of the various <code>Resources</code> can be a little daunting at first.<br/>We make liberal use of Java <a href="http://en.wikipedia.org/wiki/Generics_in_Java">generics</a> to ensure as much code reuse as possible. As<br/>a result, you end up with a return type like <code>ListenableFuture&lt;ApiResponse&lt;List&lt;Account&gt;&gt;&gt;</code>. We<br/>will use this as an example for this section (and its returned by <a href="../javadoc/com/orgsync/api/AccountsResource.html#getAccount(int)">AccountsResource.getAccounts()</a>).<br/>Let's break this down into pieces.</p><h3>ListenableFuture</h3><p>The <a href="http://sonatype.github.io/async-http-client/apidocs/reference/com/ning/http/client/ListenableFuture.html">ListeneableFuture</a> type comes from the <a href="http://sonatype.github.io/async-http-client/">Async HTTP Client</a> library.<br/>A <a href="http://en.wikipedia.org/wiki/Future_(programming)">Future</a> is a concept that is used in <a href="http://en.wikipedia.org/wiki/Asynchronous_I/O">asynchronous programming</a> to allow clients<br/>to make a request, return immediately, and then get the response at a later time.</p><p>If you are unfamiliar with async APIs and would like to use this like a normal blocking API, you can<br/>simply call the <code>get()</code> method on the future, which blocks until the result is available:</p>
+<pre><code>import com.orgsync.api.AccountsResource;
+import com.orgsync.api.ApiResponse;
+import com.orgsync.api.Resources;
+
+...
+
+AccountsResource accountsResource = client.getResource(Resources.ACCOUNTS);
+
+// NOTE: Call get() immediately to use in a blocking style
+// This code doesn&#39;t need to use the ListenableFuture
+ApiResponse&lt;List&lt;Account&gt;&gt; accountsResponse = accountsResource.getAccounts().get();
+
+// work with ApiResponse of accountsResponse
+</code></pre><h2>ApiResponse</h2><p>The <a href="../javadoc/com/orgsync/api/ApiResponse.html">ApiResponse</a> class simply handles the fact that any API call can either return<br/>a successful response or an error of some sort (For instance requesting an account id that doesn't<br/>exist). Because of this, every resource returns an <code>ApiResponse</code> to handle both of these cases.</p><p>The first thing we must do is determine whether or not the call was successful. To do this, we simply<br/>call the <code>isSuccess()</code> method of the <code>ApiResponse</code>. If this returns <code>true</code>, then we can get the<br/>result with the correct type from <code>getResult()</code>. Otherwise, we had a failure, and we can get the<br/><a href="../javadoc/com/orgsync/api/model/ApiError.html">ApiError</a> by calling <code>getError()</code>. The <code>ApiError</code> has the message returned from the<br/>API, which can be retrieved using <code>getMessage()</code>. See this simple example:</p>
+<pre><code>import com.orgsync.api.ApiError;
+import com.orgsync.api.ApiResponse;
+
+... // continuing from above
+
+boolean successful = accountsResponse.isSuccess();
+
+if(successful) {
+  // successful response with accounts, lets do something with them.
+  List&lt;Account&gt; accounts = accountsResponse.getResult();
+  handleAccount(accounts);
+} else {
+  // oh no, a failure
+  ApiError error = accountsResponse.getError();
+  logger.error(&quot;Failed to retrieve accounts!  Message=&quot; + error.getMessage());
+}
+
+...
+</code></pre><h2>Models</h2><p>The final piece of the puzzle is the <code>List&lt;Account&gt;</code>. All resources return an <code>ApiResponse</code> that<br/>is either a model type, or a <a href="http://docs.oracle.com/javase/6/docs/api/java/util/List.html">java.util.List</a> of some model type. These models are based on<br/>the returned JSON that is documented in the <a href="https://api.orgsync.com/api/docs/v2">OrgSync API V2 docs</a>. Because we want the<br/>docs on the website to remain the one source of truth for the API, very little javadoc is provided<br/>for most of the model classes. Please see the docs online for interpretation and possible values<br/>of each field in the models.</p></p>
+
+	<hr />
+
+		</div>
+		<div id="push"></div>
+    </div>
+    
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">&copy; 2014 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.3.0</a></p>
+      </div>
+    </div>
+    
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../../../js/jquery-1.11.1.min.js"></script>
+    <script src="../../../js/bootstrap.min.js"></script>
+    <script src="../../../js/prettify.js"></script>
+    
+  </body>
+</html>
