@@ -1,0 +1,151 @@
+import groovy.text.SimpleTemplateEngine
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
+        classpath 'org.pegdown:pegdown:1.4.2'
+    }
+}
+
+def siteDir = 'site'
+def siteBuildDir = "$buildDir/site"
+def siteOutDir = "$buildDir/jbaked"
+def contentDir = new File(siteBuildDir, 'content')
+def docsDir = new File(contentDir, "versions/$version/docs")
+def assertVersionDir = new File(siteBuildDir, "assets/versions/$version")
+def javadocDir = new File(assertVersionDir, "javadoc")
+
+// Allow override with a property
+def siteBaseHref = {
+    try {
+        property('siteBaseHref')
+    } catch(e) {
+        'http://devblog.orgsync.com/orgsync-api-java/'
+    }
+}
+
+jbake {
+    input = file(siteBuildDir)
+    output = file(siteOutDir)
+    clearCache = true
+
+    configuration['base_href'] = siteBaseHref()
+}
+
+task copySite(type: Copy) {
+    from(file(siteDir))
+    into(siteBuildDir)
+}
+
+def pagesBinding = [
+    version: version,
+
+    // A list of older versions we want to link
+    versions: [
+       // '0.2.0'
+    ]]
+
+task convertPages(dependsOn: copySite) << {
+    contentDir.mkdir()
+    def engine = new SimpleTemplateEngine()
+
+    new File('site/pages').listFiles(
+        {dir, file-> file ==~ /.*?\.gsp/ } as FilenameFilter
+    ).each { file ->
+        def outName = file.name.replace('.gsp', '')
+        def outFile = new File(contentDir, outName)
+        def t = engine.createTemplate(file).make(pagesBinding)
+        t.writeTo(new FileWriter(outFile))
+    }
+}
+
+def findDocs() {
+    println "Running find docs"
+    new File('site/docs').listFiles().sort{ it.name }.collect { file ->
+        def pattern = ~/(\d+)-(\S+).md/
+        def match = file.name =~ pattern
+        def index = match[0][1]
+        def name = match[0][2]
+        def title = name.replaceAll('-', ' ')
+
+        [
+            file: file,
+            index: index,
+            name: name,
+            link: "${name}.html",
+            title: title
+        ]
+    }
+}
+
+def createIndex(docs, docsDir) {
+    def index = new File(docsDir, "index.md")
+    index << """
+        title=Content
+        type=post
+        status=published
+        version=$version
+        ~~~~~~
+    """.stripIndent().trim()
+    index << "\n\n"
+
+    docs.each { doc ->
+        index << " * [${doc.title}](${doc.link})\n"
+    }
+}
+
+task convertDocs(dependsOn: copySite) << {
+    docsDir.mkdirs()
+
+    def docs = findDocs()
+    docs.eachWithIndex { doc, i ->
+        def prev
+        def next
+
+        if (i > 0) {
+            prev = docs[i-1]
+        }
+        if (i < docs.size() - 1) {
+            next = docs[i+1]
+        }
+
+        def frontMatter =
+            """
+                title=${doc.title}
+                type=post
+                status=published
+                version=$version
+                prev_title=${prev?.title ?: ''}
+                prev_link=${prev?.link ?: ''}
+                next_title=${next?.title ?: ''}
+                next_link=${next?.link ?: ''}
+                ~~~~~~
+            """.stripIndent().trim()
+
+        def content = "${frontMatter}\n${doc.file.text}"
+        new File(docsDir, "${doc.name}.md") << content
+    }
+
+    createIndex(docs, docsDir)
+}
+
+task copyJavadoc(dependsOn: 'javadoc', type: Copy) {
+    from javadoc.destinationDir
+    into(file(javadocDir))
+}
+
+task copyDist(dependsOn: 'makeDist', type: Copy) {
+    from tasks['makeDist'].archivePath
+    into(file(assertVersionDir))
+}
+
+task copy
+
+jbake.dependsOn(convertPages)
+jbake.dependsOn(convertDocs)
+jbake.dependsOn(copyJavadoc)
+jbake.dependsOn(copyDist)

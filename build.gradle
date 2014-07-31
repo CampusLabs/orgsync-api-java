@@ -1,13 +1,21 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
 
     dependencies {
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
         classpath 'eu.appsatori:gradle-fatjar-plugin:0.2-rc1'
         classpath 'org.ajoberstar:gradle-git:0.4.0'
+        classpath 'org.pegdown:pegdown:1.4.2'
     }
 }
+
+group = 'com.orgsync'
+version = '0.0.1'
+
+description = 'Java client for the OrgSync API'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -15,11 +23,7 @@ apply plugin: 'idea'
 apply plugin: 'fatjar'
 apply plugin: 'github-pages'
 apply plugin: 'maven'
-
-group = 'com.orgsync'
-version = '0.0.1'
-
-description = 'Java client for the OrgSync API'
+apply plugin: 'me.champeau.jbake'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -94,16 +98,6 @@ eclipse {
     }
 }
 
-githubPages {
-  repoUri = 'https://github.com/orgsync/orgsync-api-java.git'
-
-  pages {
-    from(javadoc.outputs.files) {
-      into 'docs/javadoc'
-    }
-  }
-}
-
 idea {
     module {
         scopes.COMPILE.plus += configurations.integrationCompile
@@ -123,4 +117,16 @@ task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
     into("docs/") {
         from("docs/")
     }
+}
+
+apply from: 'gradle/site.gradle'
+
+githubPages {
+  repoUri = 'https://github.com/orgsync/orgsync-api-java.git'
+
+  pages {
+    from(jbake.output) {
+      into '.'
+    }
+  }
 }

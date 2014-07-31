@@ -8,14 +8,14 @@ stored in a system property, you could do something like this:
 
     import com.orgsync.api.ApiClient;
     import com.orgsync.api.OrgSync;
-    
+
     ...
-    
+
       String apiKey = System.getProperty(API_KEY_PROPERTY);
       ApiClient client = OrgSync.newApiClient(apiKey);
-      
+
       ...
-      
+
       client.destroy();
 
 With an instance of the `ApiClient`, you can request a resource to gain access to the API (More on this later).
@@ -44,8 +44,8 @@ use this instance:
 
 For more information on configuring the Async HTTP Client, see their [docs][async_http].
 
-  [api_client]: 
-  [os_class]: 
-  [async_client]: 
+  [api_client]: ../javadoc/com/orgsync/api/ApiClient.html
+  [os_class]: ../javadoc/com/orgsync/api/OrgSync.html
+  [async_client]: http://asynchttpclient.github.io/async-http-client/apidocs/com/ning/http/client/AsyncHttpClient.html
   [async_http]: http://sonatype.github.io/async-http-client/
-  
+
