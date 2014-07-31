@@ -1,0 +1,13 @@
+com.orgsync.api
+com.orgsync.api.model
+com.orgsync.api.model.accounts
+com.orgsync.api.model.checkbooks
+com.orgsync.api.model.classifications
+com.orgsync.api.model.courses
+com.orgsync.api.model.events
+com.orgsync.api.model.forms
+com.orgsync.api.model.groups
+com.orgsync.api.model.identification_cards
+com.orgsync.api.model.membership_logs
+com.orgsync.api.model.orgs
+com.orgsync.api.model.timesheets
