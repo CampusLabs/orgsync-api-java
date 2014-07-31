@@ -17,9 +17,6 @@ version = '0.0.1'
 
 description = 'Java client for the OrgSync API'
 
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -28,6 +25,9 @@ apply plugin: 'github-pages'
 apply plugin: 'maven'
 apply plugin: 'me.champeau.jbake'
 apply from: 'gradle/site.gradle'
+
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.10'
