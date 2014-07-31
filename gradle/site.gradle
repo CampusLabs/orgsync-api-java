@@ -1,3 +1,5 @@
+import groovy.text.SimpleTemplateEngine
+
 buildscript {
     repositories {
         jcenter()
@@ -9,17 +11,40 @@ buildscript {
     }
 }
 
-task('generateSite') << {
-  println 'hello'
+def siteDir = 'site'
+def siteBuildDir = "$buildDir/site"
+def siteOutDir = "$buildDir/jbaked"
+
+task copySite(type: Copy) {
+    from(file(siteDir))
+    into(siteBuildDir)
+}
+
+def pagesBinding = [
+    version: version,
+
+    // A list of older versions we want to link
+    versions: [
+        '0.2.0'
+    ]]
+
+task convertPages(dependsOn: copySite) << {
+    def engine = new SimpleTemplateEngine()
+
+    new File('site/pages').listFiles(
+        {dir, file-> file ==~ /.*?\.gsp/ } as FilenameFilter
+    ).toList().each { file ->
+        def outName = file.name.replace('.gsp', '')
+        def outFile = new File(siteBuildDir, "content/$outName")
+        def t = engine.createTemplate(file).make(pagesBinding)
+        t.writeTo(new FileWriter(outFile))
+    }
 }
 
 jbake {
-    input = file('site')
-    output = file("$buildDir/site")
-
-    // A list of versions we want to link
-    configuration['versions'] = [
-        '0.0.1',
-        '0.2.0'
-    ]
+    input = file(siteBuildDir)
+    output = file(siteOutDir)
+    clearCache = true
 }
+
+jbake.dependsOn(convertPages)
