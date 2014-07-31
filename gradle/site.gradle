@@ -11,6 +11,9 @@ buildscript {
     }
 }
 
+apply plugin: 'me.champeau.jbake'
+apply plugin: 'github-pages'
+
 def siteDir = 'site'
 def siteBuildDir = "$buildDir/site"
 def siteOutDir = "$buildDir/jbaked"
@@ -138,14 +141,37 @@ task copyJavadoc(dependsOn: 'javadoc', type: Copy) {
     into(file(javadocDir))
 }
 
+task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
+    from("README.md")
+    from("LICENSE")
+    from jar.outputs.files
+    into("javadoc/") {
+        from javadoc.destinationDir
+    }
+    into("examples/") {
+        from("src/examples/java")
+    }
+    into("docs/") {
+        from("site/docs/")
+    }
+}
+
 task copyDist(dependsOn: 'makeDist', type: Copy) {
     from tasks['makeDist'].archivePath
     into(file(assertVersionDir))
 }
 
-task copy
-
 jbake.dependsOn(convertPages)
 jbake.dependsOn(convertDocs)
 jbake.dependsOn(copyJavadoc)
 jbake.dependsOn(copyDist)
+
+githubPages {
+  repoUri = 'https://github.com/orgsync/orgsync-api-java.git'
+
+  pages {
+    from(jbake.output) {
+      into '.'
+    }
+  }
+}
