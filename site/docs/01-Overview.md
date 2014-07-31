@@ -49,5 +49,5 @@ of the OrgSync server to test that requests and responses work as expected.
   [gson]: https://code.google.com/p/google-gson/
   [slf4j]: http://www.slf4j.org/
   [examples]: https://github.com/orgsync/orgsync-api-java/tree/master/src/examples/java/com/orgsync/api/examples
-  [javadoc]: ../../javadoc
-  
+  [javadoc]: ../javadoc
+
