@@ -46,7 +46,7 @@ def pagesBinding = [
 
     // A list of older versions we want to link
     versions: [
-       // '0.2.0'
+        '0.0.1'
     ]]
 
 task convertPages(dependsOn: copySite) << {
