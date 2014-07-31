@@ -16,6 +16,7 @@ def siteBuildDir = "$buildDir/site"
 def siteOutDir = "$buildDir/jbaked"
 def contentDir = new File(siteBuildDir, 'content')
 def docsDir = new File(contentDir, "versions/$version/docs")
+def javadocDir = new File(siteBuildDir, "assets/versions/$version/javadoc")
 
 jbake {
     input = file(siteBuildDir)
@@ -120,5 +121,11 @@ task convertDocs(dependsOn: copySite) << {
     createIndex(docs, docsDir)
 }
 
+task copyJavadoc(dependsOn: 'javadoc', type: Copy) {
+    from javadoc.destinationDir
+    into(file(javadocDir))
+}
+
 jbake.dependsOn(convertPages)
 jbake.dependsOn(convertDocs)
+jbake.dependsOn(copyJavadoc)
