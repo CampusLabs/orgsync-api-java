@@ -11,6 +11,6 @@
 	the OrgSync V2 API.
 	</p>
 
-	<h3><a href="/download.html">Download</a></h3>
-	<h3><a href="/documentation.html">Read The Docs</a></h3>
+	<h3><a href="download.html">Download</a></h3>
+	<h3><a href="documentation.html">Read The Docs</a></h3>
 <%include "footer.gsp"%>

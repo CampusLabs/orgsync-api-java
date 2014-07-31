@@ -19,10 +19,21 @@ def docsDir = new File(contentDir, "versions/$version/docs")
 def assertVersionDir = new File(siteBuildDir, "assets/versions/$version")
 def javadocDir = new File(assertVersionDir, "javadoc")
 
+// Allow override with a property
+def siteBaseHref = {
+    try {
+        property('siteBaseHref')
+    } catch(e) {
+        'http://devblog.orgsync.com/orgsync-api-java/'
+    }
+}
+
 jbake {
     input = file(siteBuildDir)
     output = file(siteOutDir)
     clearCache = true
+
+    configuration['base_href'] = siteBaseHref()
 }
 
 task copySite(type: Copy) {

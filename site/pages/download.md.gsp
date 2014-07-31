@@ -8,11 +8,11 @@ file.  Please select one of the options below.
 
 #### Latest
 
- * [orgsync-api-java-${version}.zip](/versions/${version}/orgsync-api-java-${version}.zip)
+ * [orgsync-api-java-${version}.zip](versions/${version}/orgsync-api-java-${version}.zip)
 
 <% if (versions) { %>
 #### Older Releases
   <% versions.each { version -> %>
-  * [orgsync-api-java-${version}.zip](/versions/${version}/orgsync-api-java-${version}.zip)
+  * [orgsync-api-java-${version}.zip](versions/${version}/orgsync-api-java-${version}.zip)
   <% } %>
 <% } %>

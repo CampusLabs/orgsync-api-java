@@ -8,12 +8,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/index.html">OrgSync API Java</a>
+          <a class="navbar-brand" href="${config.base_href}index.html">OrgSync API Java</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/download.html">Download</a></li>
-            <li><a href="/documentation.html">Documentation</a></li>
+            <li><a href="${config.base_href}download.html">Download</a></li>
+            <li><a href="${config.base_href}documentation.html">Documentation</a></li>
             <li><a href="https://github.com/orgsync/orgsync-api-java">Source</a></li>
           </ul>
         </div><!--/.nav-collapse -->
