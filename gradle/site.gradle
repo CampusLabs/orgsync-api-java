@@ -29,13 +29,15 @@ def pagesBinding = [
     ]]
 
 task convertPages(dependsOn: copySite) << {
+    def contentDir = new File(siteBuildDir, 'content')
+    contentDir.mkdir()
     def engine = new SimpleTemplateEngine()
 
     new File('site/pages').listFiles(
         {dir, file-> file ==~ /.*?\.gsp/ } as FilenameFilter
     ).toList().each { file ->
         def outName = file.name.replace('.gsp', '')
-        def outFile = new File(siteBuildDir, "content/$outName")
+        def outFile = new File(contentDir, outName)
         def t = engine.createTemplate(file).make(pagesBinding)
         t.writeTo(new FileWriter(outFile))
     }
