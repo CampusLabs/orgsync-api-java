@@ -98,16 +98,6 @@ eclipse {
     }
 }
 
-githubPages {
-  repoUri = 'https://github.com/orgsync/orgsync-api-java.git'
-
-  pages {
-    from(javadoc.outputs.files) {
-      into 'docs/javadoc'
-    }
-  }
-}
-
 idea {
     module {
         scopes.COMPILE.plus += configurations.integrationCompile
@@ -130,3 +120,13 @@ task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
 }
 
 apply from: 'gradle/site.gradle'
+
+githubPages {
+  repoUri = 'https://github.com/orgsync/orgsync-api-java.git'
+
+  pages {
+    from(jbake.output) {
+      into '.'
+    }
+  }
+}
