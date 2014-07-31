@@ -24,7 +24,6 @@ apply plugin: 'fatjar'
 apply plugin: 'github-pages'
 apply plugin: 'maven'
 apply plugin: 'me.champeau.jbake'
-apply from: 'gradle/site.gradle'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -130,3 +129,4 @@ task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
     }
 }
 
+apply from: 'gradle/site.gradle'

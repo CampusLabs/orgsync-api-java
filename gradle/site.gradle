@@ -16,7 +16,8 @@ def siteBuildDir = "$buildDir/site"
 def siteOutDir = "$buildDir/jbaked"
 def contentDir = new File(siteBuildDir, 'content')
 def docsDir = new File(contentDir, "versions/$version/docs")
-def javadocDir = new File(siteBuildDir, "assets/versions/$version/javadoc")
+def assertVersionDir = new File(siteBuildDir, "assets/versions/$version")
+def javadocDir = new File(assertVersionDir, "javadoc")
 
 jbake {
     input = file(siteBuildDir)
@@ -126,6 +127,14 @@ task copyJavadoc(dependsOn: 'javadoc', type: Copy) {
     into(file(javadocDir))
 }
 
+task copyDist(dependsOn: 'makeDist', type: Copy) {
+    from tasks['makeDist'].archivePath
+    into(file(assertVersionDir))
+}
+
+task copy
+
 jbake.dependsOn(convertPages)
 jbake.dependsOn(convertDocs)
 jbake.dependsOn(copyJavadoc)
+jbake.dependsOn(copyDist)
