@@ -1,4 +1,5 @@
 import groovy.text.SimpleTemplateEngine
+import me.champeau.gradle.JBakeTask
 
 buildscript {
     repositories {
@@ -31,17 +32,11 @@ def siteBaseHref = {
     }
 }
 
-jbake {
-    input = file(siteBuildDir)
-    output = file(siteOutDir)
-    clearCache = true
-
-    configuration['base_href'] = siteBaseHref()
-}
-
 task copySite(type: Copy) {
     from(file(siteDir))
     into(siteBuildDir)
+
+    shouldRunAfter 'clean'
 }
 
 def pagesBinding = [
@@ -67,7 +62,6 @@ task convertPages(dependsOn: copySite) << {
 }
 
 def findDocs() {
-    println "Running find docs"
     new File('site/docs').listFiles().sort{ it.name }.collect { file ->
         def pattern = ~/(\d+)-(\S+).md/
         def match = file.name =~ pattern
@@ -136,35 +130,50 @@ task convertDocs(dependsOn: copySite) << {
     createIndex(docs, docsDir)
 }
 
-task copyJavadoc(dependsOn: 'javadoc', type: Copy) {
+task copyJavadoc(dependsOn: ['javadoc', 'copySite'], type: Copy) {
     from javadoc.destinationDir
     into(file(javadocDir))
 }
 
-task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
-    from("README.md")
-    from("LICENSE")
-    from jar.outputs.files
-    into("javadoc/") {
-        from javadoc.destinationDir
+task generateDocs(type: JBakeTask) {
+    dependsOn convertDocs
+    dependsOn copyJavadoc
+
+    input = file(siteBuildDir)
+    output = file(siteOutDir)
+    clearCache = true
+
+    configuration['base_href'] = siteBaseHref()
+}
+
+task makeDist(dependsOn: ['clean', 'generateDocs'], type: Zip) {
+    from('README.md')
+    from('LICENSE')
+    into('examples/') {
+        from('src/examples/java')
     }
-    into("examples/") {
-        from("src/examples/java")
-    }
-    into("docs/") {
-        from("site/docs/")
+    into('.') {
+        from(file(new File(siteOutDir, "versions/$version")))
     }
 }
 
-task copyDist(dependsOn: 'makeDist', type: Copy) {
+task copyDist(dependsOn: ['makeDist', 'copySite'], type: Copy) {
     from tasks['makeDist'].archivePath
     into(file(assertVersionDir))
 }
 
-jbake.dependsOn(convertPages)
-jbake.dependsOn(convertDocs)
-jbake.dependsOn(copyJavadoc)
-jbake.dependsOn(copyDist)
+task generateSite(type: JBakeTask) {
+    dependsOn convertPages
+    dependsOn convertDocs
+    dependsOn copyJavadoc
+    dependsOn copyDist
+
+    input = file(siteBuildDir)
+    output = file(siteOutDir)
+    clearCache = true
+
+    configuration['base_href'] = siteBaseHref()
+}
 
 githubPages {
   repoUri = 'https://github.com/orgsync/orgsync-api-java.git'
