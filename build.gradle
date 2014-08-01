@@ -21,9 +21,8 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'fatjar'
-apply plugin: 'github-pages'
 apply plugin: 'maven'
-apply plugin: 'me.champeau.jbake'
+apply from: 'gradle/publish.gradle'
 
 sourceCompatibility = 1.6
 targetCompatibility = 1.6
@@ -102,31 +101,4 @@ idea {
     module {
         scopes.COMPILE.plus += configurations.integrationCompile
     }
-}
-
-task makeDist(dependsOn: ['clean', 'javadoc'], type: Zip) {
-    from("README.md")
-    from("LICENSE")
-    from jar.outputs.files
-    into("javadoc/") {
-        from javadoc.destinationDir
-    }
-    into("examples/") {
-        from("src/examples/java")
-    }
-    into("docs/") {
-        from("docs/")
-    }
-}
-
-apply from: 'gradle/site.gradle'
-
-githubPages {
-  repoUri = 'https://github.com/orgsync/orgsync-api-java.git'
-
-  pages {
-    from(jbake.output) {
-      into '.'
-    }
-  }
 }
